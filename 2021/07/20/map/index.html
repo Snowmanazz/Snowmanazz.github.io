@@ -424,7 +424,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    488
+                    495
                 </div>
                 
 
@@ -447,9 +447,11 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="java集合"><a href="#java集合" class="headerlink" title="java集合"></a>java集合</h2><p>java集合框架图<br><img src="/2021/07/20/map/jihe.png"><br>java集合框架体系<br><img src="/2021/07/20/map/jihe2.png"></p>
-<h2 id="集合类别"><a href="#集合类别" class="headerlink" title="集合类别"></a>集合类别</h2><h5 id="Collection接口"><a href="#Collection接口" class="headerlink" title="Collection接口"></a>Collection接口</h5><p>Collection 是最基本的集合接口，一个 Collection 代表一组 Object，即 Collection 的元素, Java不提供直接继承自Collection的类，只提供继承于的子接口(如List和set)。Collection 接口存储一组不唯一，无序的对象。Collection集合方法<br><img src="/2021/07/20/map/Collection.png"></p>
+<h2 id="集合类别"><a href="#集合类别" class="headerlink" title="集合类别"></a>集合类别</h2><h3 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h3><p>Collection 是最基本的集合接口，一个 Collection 代表一组 Object，即 Collection 的元素, Java不提供直接继承自Collection的类，只提供继承于的子接口(如List和set)。Collection 接口存储一组不唯一，无序的对象。Collection集合方法<br><img src="/2021/07/20/map/Collection.png"></p>
 <h5 id="常用集合分类"><a href="#常用集合分类" class="headerlink" title="常用集合分类"></a>常用集合分类</h5><p> <strong>Collection</strong> 接口的接口 对象的集合（单列集合）<br>├——- <em><strong>List</strong></em> 接口：元素按进入先后有序保存，可重复，通过索引操作元素<br>│—————-├ <em><strong>LinkedList</strong></em> 接口实现类， 链表， 插入删除， 没有同步，查询慢，增删快，线程不安全，效率高，可以存储重复元素<br>│—————-├ <em><strong>ArrayList</strong></em> 接口实现类， 数组， 随机访问，查询慢，增删快，效率高，可以存储重复元素， 没有同步， 线程不安全<br>│—————-└ <em><strong>Vector</strong></em> 接口实现类 数组， 同步，查询快，增删慢，线程安全，效率低，可以存储重复元素<br>│ ———————-└ <em><strong>Stack</strong></em> 是Vector类的实现类<br>└——- <em><strong>Set</strong></em> 接口：hash表，不可重复，并做内部排序，不能根据索引获取元素，线程不安全，效率高，可以存储null元素， <em>元素的唯一性是靠所存储元素类型是否重写hashCode()和equals()方法来保证的，如果没有重写这两个方法，则无法保证元素的唯一性</em>。<br>├—————-└ <em><strong>HashSet</strong></em> 使用hash表（数组）存储元素<br>│————————└  <em><strong>LinkedHashSet</strong></em> 构采用链表和哈希表共同实现，链表保证了元素的顺序与存储顺序一致，哈希表保证了元素的唯一性。线程不安全，效率高。<br>└ —————- <em><strong>TreeSet</strong></em> 底层实现为二叉树，元素排好序，需要重写hashCode和equals()方法</p>
-<p> <strong>Map</strong> 接口 键值对的集合 （双列集合）<br>├——— <em><strong>Hashtable</strong></em> 接口实现类， 同步， 线程安全<br>├——— <em><strong>HashMap</strong></em> 接口实现类 ，没有同步， 线程不安全-<br>│—————–├  <em><strong>LinkedHashMap</strong></em> 双向链表和哈希表实现<br>│—————–└  <em><strong>WeakHashMap</strong></em><br>├ ——– <em><strong>TreeMap</strong></em> 红黑树对所有的key进行排序<br>└——— <em><strong>IdentifyHashMap</strong></em></p>
+<h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><p><img src="/2021/07/20/map/use.png"></p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p><img src="/2021/07/20/map/Map.png"></p>
+<h5 id="常用分类"><a href="#常用分类" class="headerlink" title="常用分类"></a>常用分类</h5><p> <strong>Map</strong> 接口 键值对的集合 （双列集合）<br>├——— <em><strong>Hashtable</strong></em> 接口实现类， 同步， 线程安全<br>├——— <em><strong>HashMap</strong></em> 接口实现类 ，没有同步， 线程不安全-<br>│—————–├  <em><strong>LinkedHashMap</strong></em> 双向链表和哈希表实现<br>│—————–└  <em><strong>WeakHashMap</strong></em><br>├ ——– <em><strong>TreeMap</strong></em> 红黑树对所有的key进行排序<br>└——— <em><strong>IdentifyHashMap</strong></em></p>
 
                 
             </div>
