@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Mysql索引, Idea">
+    <meta name="keywords" content="static关键字, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Mysql索引 | Idea</title>
+    <title>static关键字 | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Mysql索引</h1>
+                    <h1 class="description center-align post-title">static关键字</h1>
                 </div>
             </div>
         </div>
@@ -387,12 +387,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/mysql/">
-                                <span class="chip bg-color">mysql</span>
+                            <a href="/tags/static/">
+                                <span class="chip bg-color">static</span>
                             </a>
                         
-                            <a href="/tags/%E7%B4%A2%E5%BC%95/">
-                                <span class="chip bg-color">索引</span>
+                            <a href="/tags/java/">
+                                <span class="chip bg-color">java</span>
                             </a>
                         
                     </div>
@@ -407,7 +407,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2021-07-11
+                    2021-07-20
                 </div>
                 
 
@@ -416,7 +416,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.1k
+                    794
                 </div>
                 
 
@@ -438,23 +438,13 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="索引的定义"><a href="#索引的定义" class="headerlink" title="索引的定义"></a>索引的定义</h2><p>在关系数据库中，索引相当于是一种对数据库表中的一列或者是多列进行排序的一种存储结构。索引提供向存储所在表的指定列中的数据值的指针。<br>对表进行查询，一种是全盘遍历，造成大量磁盘I/O操作，时间；一种是在表中建立索引，提高效率。<br> <strong>索引分类</strong><br>1.普通索引index :加速查找<br>2.唯一索引<br>    主键索引：primary key ：加速查找+约束（不为空且唯一）<br>    唯一索引：unique：加速查找+约束 （唯一）<br>3.联合索引<br>    -primary key(id,name):联合主键索引<br>    -unique(id,name):联合唯一索引<br>    -index(id,name):联合普通索引<br>4.全文索引fulltext :用于搜索很长一篇文章的时候，效果最好。</p>
-<h2 id="常用索引结构"><a href="#常用索引结构" class="headerlink" title="常用索引结构"></a>常用索引结构</h2><p>hash类型的索引：查询单条快，范围查询慢<br>btree类型的索引：b+树，层数越多，数据量指数级增长<br> <strong>不同的存储引擎支持的索引类型也不一样</strong><br>InnoDB 支持事务，支持行级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；<br>MyISAM 不支持事务，支持表级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；<br>Memory 不支持事务，支持表级别锁定，支持 B-tree、Hash 等索引，不支持 Full-text 索引；<br>NDB 支持事务，支持行级别锁定，支持 Hash 索引，不支持 B-tree、Full-text 等索引；<br>Archive 不支持事务，支持表级别锁定，不支持 B-tree、Hash、Full-text 等索引；</p>
-<h2 id="创建-删除索引"><a href="#创建-删除索引" class="headerlink" title="创建/删除索引"></a>创建/删除索引</h2><p>查看帮助文档：<code>help index</code> <img src="/2021/07/11/secondPage/one.JPG"> <img src="/2021/07/11/secondPage/two.JPG"> </p>
-<h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><p><strong>-在创建表时就创建</strong><br><code>id int primary key</code><br><code>primary key(id)</code><br><code>index(id)</code><br><strong>-在创建表后在创建</strong><br><code>create index name on s1(name);</code><br>添加普通索引<br><code>create unique age on s1(age);</code><br>添加唯一索引<br><code>alter table s1 add primary key(id);</code><br>添加主键索引，也就是给id字段增加一个主键约束<br><code>create index name on s1(id,name);</code><br>添加普通联合索引</p>
-<h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><p><code>drop index id on s1;</code></p>
-<p><code>drop index name on s1;</code><br>删除普通索引<br>    <code>drop index age on s1; </code><br>删除唯一索引<br>    <code>alter table s1 drop primary key; </code><br>删除主键</p>
-<h2 id="测试索引"><a href="#测试索引" class="headerlink" title="测试索引"></a>测试索引</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="准备表"><a href="#准备表" class="headerlink" title="准备表"></a>准备表</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table s1(</span><br><span class="line">id int,</span><br><span class="line">name varchar(20),</span><br><span class="line">gender char(6),</span><br><span class="line">email varchar(50)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="创建存储过程，实现批量插入记录"><a href="#创建存储过程，实现批量插入记录" class="headerlink" title="创建存储过程，实现批量插入记录"></a>创建存储过程，实现批量插入记录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">delimiter $$ #声明存储过程的结束符号为$$</span><br><span class="line">create procedure auto_insert1()</span><br><span class="line">BEGIN</span><br><span class="line">    declare i int default 1;</span><br><span class="line">    while(i&lt;3000000) do</span><br><span class="line">        insert into s1 values(i,concat(&#x27;egon&#x27;,i),&#x27;male&#x27;,concat(&#x27;egon&#x27;,i,&#x27;@oldboy&#x27;));</span><br><span class="line">        set i=i+1;</span><br><span class="line">    end while;</span><br><span class="line">END $$ #$$结束</span><br><span class="line">delimiter ; #重新声明分号为结束符号</span><br></pre></td></tr></table></figure>
-<h4 id="查看存储过程"><a href="#查看存储过程" class="headerlink" title="查看存储过程"></a>查看存储过程</h4><p><code>show create procedure auto_insert1\G </code> <img src="/2021/07/11/secondPage/three.JPG"></p>
-<h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><p><code>call auto_insert1();</code><img src="/2021/07/11/secondPage/four.JPG"></p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="无索引"><a href="#无索引" class="headerlink" title="无索引"></a>无索引</h4><p><img src="/2021/07/11/secondPage/five.JPG"></p>
-<h4 id="有索引"><a href="#有索引" class="headerlink" title="有索引"></a>有索引</h4><p><img src="/2021/07/11/secondPage/six.JPG"></p>
-<h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>在表中已经有大量数据的情况下，建索引会很慢，且占用硬盘空间，插入删除更新都很慢，只有查询快<br>比如<code>create index idx on s1(id);</code>会扫描表中所有的数据，然后以id为数据项，创建索引结构，存放于硬盘的表中。建完以后，再查询就会很快了<br>需要注意的是：innodb表的索引会存放于s1.ibd文件中，而myisam表的索引则会有单独的索引文件table1.MYI</p>
-<h5 id="索引规则"><a href="#索引规则" class="headerlink" title="索引规则"></a>索引规则</h5><p> <strong>最左前缀匹配原则</strong><br>create index ix_name_email on s1(name,email,)<br>最左前缀匹配：必须按照从左到右的顺序匹配<br><code>select * from s1 where name=&#39;egon&#39;; </code>可以<br><code>select * from s1 where name=&#39;egon&#39; and email=&#39;asdf&#39;;</code> 可以<br><code>select * from s1 where email=&#39;alex@oldboy.com&#39;; </code>不可以<br>mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，</p>
-<p> <strong>=和in可以乱序</strong><br>比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序，mysql的查询优化器<br>会帮你优化成索引可以识别的形式</p>
-<p> <strong>选择区分度高的列作为索引</strong><br>区分度的公式是count(distinct col)/count(*)，表示字段不重复的比例<br> <strong>索引列不能参与计算</strong><br>保持列“干净”，比如from_unixtime(create_time) = ’2014-05-29’<br>就不能使用到索引，原因很简单，b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大。所以语句应该写成create_time = unix_timestamp(’2014-05-29’);</p>
+                <h4 id="static用途"><a href="#static用途" class="headerlink" title="static用途"></a>static用途</h4><p>可没有创建对象的情况下来进行调用（方法/变量）。因此，被static关键字修饰的方法或者变量不需要依赖于对象来进行访问，只要类被加载了，就可以通过类名去进行访问。static可以用来修饰类的成员方法、类的成员变量，另外可以编写static代码块来优化程序性能。</p>
+<h4 id="static方法"><a href="#static方法" class="headerlink" title="static方法"></a>static方法</h4><p>静态方法不需要以来任何对象就可以进行访问，因此是没有this关键字的。在静态方法中，不能访问非静态变量/方法，但在非静态方法中是可以访问静态方法/变量的<br><img src="/2021/07/20/thirdPage/one.png"></p>
+<h4 id="static变量"><a href="#static变量" class="headerlink" title="static变量"></a>static变量</h4><p>实例字段在每个实例中都有自己的一个独立“空间”，但是静态字段只有一个共享“空间”，所有实例都会共享该字段,调用实例方法必须通过一个实例变量，而调用静态方法则不需要实例变量，通过类名就可以调用。<br><img src="/2021/07/20/thirdPage/two.PNG"> <img src="/2021/07/20/thirdPage/three.PNG"></p>
+<h4 id="static代码块"><a href="#static代码块" class="headerlink" title="static代码块"></a>static代码块</h4><p>static最关键的作用就是形成代码块优化程序性能，在类初次加载时，会一次执行staic块，并且只会执行一次。 static代码块只会在类加载时执行一次。</p>
+<h5 id="代码块执行顺序"><a href="#代码块执行顺序" class="headerlink" title="代码块执行顺序"></a>代码块执行顺序</h5><p>代码块执行顺序静态代码块——&gt; 构造代码块 ——&gt; 构造函数——&gt; 普通代码块</p>
+<p>继承中代码块执行顺序：父类静态块——&gt;子类静态块——&gt;父类代码块——&gt;父类构造器——&gt;子类代码块——&gt;子类构造器<br><img src="/2021/07/20/thirdPage/four.png"> <img src="/2021/07/20/thirdPage/five.png"> <img src="/2021/07/20/thirdPage/six.png"> <img src="/2021/07/20/thirdPage/seven.png"><br>结果<br><img src="/2021/07/20/thirdPage/eight.png"><br>#####静态块特点<br>1、Java静态代码块中的代码会在类加载JVM时运行，且只被执行一次<br>2、静态块常用来执行类属性的初始化<br>3、静态块优先于各种代码块以及构造函数，如果一个类中有多个静态代码块，会按照书写顺序依次执行<br>4、静态代码块可以定义在类的任何地方中除了方法体中【这里的方法体是任何方法体】<br>5、静态代码块不能访问普通变量</p>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>1、静态元素在；类加载的时候就被初始化，创建的很早，那时还没有创建对象<br>2、静态元素存储在静态元素区中，每一个类都有自己的一个单独的区域，与别的类不冲突<br>3、静态元素区不能被GC管理，可以简单的认为静态元素常驻内存<br>4、静态元素只加载一次，供全部的类对象和类本身共享<br>5、可以理解为静态元素与对象没有关系，它属于类<br>6、由于静态元素在加载的时候可能还没有创建对象，我们可以直接通过类名直接静态元素<br>7、静态元素可以直接访问静态元素。<br>8、非静态元素可以直接方法静态元素，但是静态元素不能直接方法非静态元素<br>9、静态元素中不可以使用this，super关键字</p>
 
                 
             </div>
@@ -481,7 +471,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://snowmanazz.github.io/2021/07/11/secondPage/">http://snowmanazz.github.io/2021/07/11/secondPage/</a>
+                    <a href="http://snowmanazz.github.io/2021/07/20/thirdPage/">http://snowmanazz.github.io/2021/07/20/thirdPage/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -519,12 +509,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/mysql/">
-                                    <span class="chip bg-color">mysql</span>
+                                <a href="/tags/static/">
+                                    <span class="chip bg-color">static</span>
                                 </a>
                             
-                                <a href="/tags/%E7%B4%A2%E5%BC%95/">
-                                    <span class="chip bg-color">索引</span>
+                                <a href="/tags/java/">
+                                    <span class="chip bg-color">java</span>
                                 </a>
                             
                         </div>
@@ -574,13 +564,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2021/07/20/thirdPage/">
+                <a href="/2021/07/20/hashmap-hashtable/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="static关键字">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="hashmap hashtable">
                         
-                        <span class="card-title">static关键字</span>
+                        <span class="card-title">hashmap hashtable</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -604,12 +594,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/static/">
-                        <span class="chip bg-color">static</span>
-                    </a>
-                    
                     <a href="/tags/java/">
                         <span class="chip bg-color">java</span>
+                    </a>
+                    
+                    <a href="/tags/hashtable/">
+                        <span class="chip bg-color">hashtable</span>
+                    </a>
+                    
+                    <a href="/tags/hashmap/">
+                        <span class="chip bg-color">hashmap</span>
                     </a>
                     
                 </div>
@@ -623,13 +617,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/07/05/firstPage/">
+                <a href="/2021/07/11/secondPage/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="个人博客之旅">
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Mysql索引">
                         
-                        <span class="card-title">个人博客之旅</span>
+                        <span class="card-title">Mysql索引</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -640,7 +634,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-11
                             </span>
                         <span class="publish-author">
                             
@@ -653,8 +647,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
+                    <a href="/tags/mysql/">
+                        <span class="chip bg-color">mysql</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%B4%A2%E5%BC%95/">
+                        <span class="chip bg-color">索引</span>
                     </a>
                     
                 </div>

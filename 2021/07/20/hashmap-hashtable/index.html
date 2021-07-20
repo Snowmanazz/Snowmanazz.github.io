@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Mysql索引, Idea">
+    <meta name="keywords" content="hashmap hashtable, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Mysql索引 | Idea</title>
+    <title>hashmap hashtable | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -266,12 +266,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Mysql索引</h1>
+                    <h1 class="description center-align post-title">hashmap hashtable</h1>
                 </div>
             </div>
         </div>
@@ -387,12 +387,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/mysql/">
-                                <span class="chip bg-color">mysql</span>
+                            <a href="/tags/java/">
+                                <span class="chip bg-color">java</span>
                             </a>
                         
-                            <a href="/tags/%E7%B4%A2%E5%BC%95/">
-                                <span class="chip bg-color">索引</span>
+                            <a href="/tags/hashtable/">
+                                <span class="chip bg-color">hashtable</span>
+                            </a>
+                        
+                            <a href="/tags/hashmap/">
+                                <span class="chip bg-color">hashmap</span>
                             </a>
                         
                     </div>
@@ -407,7 +411,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2021-07-11
+                    2021-07-20
                 </div>
                 
 
@@ -416,7 +420,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.1k
+                    169
                 </div>
                 
 
@@ -438,23 +442,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="索引的定义"><a href="#索引的定义" class="headerlink" title="索引的定义"></a>索引的定义</h2><p>在关系数据库中，索引相当于是一种对数据库表中的一列或者是多列进行排序的一种存储结构。索引提供向存储所在表的指定列中的数据值的指针。<br>对表进行查询，一种是全盘遍历，造成大量磁盘I/O操作，时间；一种是在表中建立索引，提高效率。<br> <strong>索引分类</strong><br>1.普通索引index :加速查找<br>2.唯一索引<br>    主键索引：primary key ：加速查找+约束（不为空且唯一）<br>    唯一索引：unique：加速查找+约束 （唯一）<br>3.联合索引<br>    -primary key(id,name):联合主键索引<br>    -unique(id,name):联合唯一索引<br>    -index(id,name):联合普通索引<br>4.全文索引fulltext :用于搜索很长一篇文章的时候，效果最好。</p>
-<h2 id="常用索引结构"><a href="#常用索引结构" class="headerlink" title="常用索引结构"></a>常用索引结构</h2><p>hash类型的索引：查询单条快，范围查询慢<br>btree类型的索引：b+树，层数越多，数据量指数级增长<br> <strong>不同的存储引擎支持的索引类型也不一样</strong><br>InnoDB 支持事务，支持行级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；<br>MyISAM 不支持事务，支持表级别锁定，支持 B-tree、Full-text 等索引，不支持 Hash 索引；<br>Memory 不支持事务，支持表级别锁定，支持 B-tree、Hash 等索引，不支持 Full-text 索引；<br>NDB 支持事务，支持行级别锁定，支持 Hash 索引，不支持 B-tree、Full-text 等索引；<br>Archive 不支持事务，支持表级别锁定，不支持 B-tree、Hash、Full-text 等索引；</p>
-<h2 id="创建-删除索引"><a href="#创建-删除索引" class="headerlink" title="创建/删除索引"></a>创建/删除索引</h2><p>查看帮助文档：<code>help index</code> <img src="/2021/07/11/secondPage/one.JPG"> <img src="/2021/07/11/secondPage/two.JPG"> </p>
-<h4 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h4><p><strong>-在创建表时就创建</strong><br><code>id int primary key</code><br><code>primary key(id)</code><br><code>index(id)</code><br><strong>-在创建表后在创建</strong><br><code>create index name on s1(name);</code><br>添加普通索引<br><code>create unique age on s1(age);</code><br>添加唯一索引<br><code>alter table s1 add primary key(id);</code><br>添加主键索引，也就是给id字段增加一个主键约束<br><code>create index name on s1(id,name);</code><br>添加普通联合索引</p>
-<h4 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h4><p><code>drop index id on s1;</code></p>
-<p><code>drop index name on s1;</code><br>删除普通索引<br>    <code>drop index age on s1; </code><br>删除唯一索引<br>    <code>alter table s1 drop primary key; </code><br>删除主键</p>
-<h2 id="测试索引"><a href="#测试索引" class="headerlink" title="测试索引"></a>测试索引</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="准备表"><a href="#准备表" class="headerlink" title="准备表"></a>准备表</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">create table s1(</span><br><span class="line">id int,</span><br><span class="line">name varchar(20),</span><br><span class="line">gender char(6),</span><br><span class="line">email varchar(50)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<h4 id="创建存储过程，实现批量插入记录"><a href="#创建存储过程，实现批量插入记录" class="headerlink" title="创建存储过程，实现批量插入记录"></a>创建存储过程，实现批量插入记录</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">delimiter $$ #声明存储过程的结束符号为$$</span><br><span class="line">create procedure auto_insert1()</span><br><span class="line">BEGIN</span><br><span class="line">    declare i int default 1;</span><br><span class="line">    while(i&lt;3000000) do</span><br><span class="line">        insert into s1 values(i,concat(&#x27;egon&#x27;,i),&#x27;male&#x27;,concat(&#x27;egon&#x27;,i,&#x27;@oldboy&#x27;));</span><br><span class="line">        set i=i+1;</span><br><span class="line">    end while;</span><br><span class="line">END $$ #$$结束</span><br><span class="line">delimiter ; #重新声明分号为结束符号</span><br></pre></td></tr></table></figure>
-<h4 id="查看存储过程"><a href="#查看存储过程" class="headerlink" title="查看存储过程"></a>查看存储过程</h4><p><code>show create procedure auto_insert1\G </code> <img src="/2021/07/11/secondPage/three.JPG"></p>
-<h4 id="调用存储过程"><a href="#调用存储过程" class="headerlink" title="调用存储过程"></a>调用存储过程</h4><p><code>call auto_insert1();</code><img src="/2021/07/11/secondPage/four.JPG"></p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><h4 id="无索引"><a href="#无索引" class="headerlink" title="无索引"></a>无索引</h4><p><img src="/2021/07/11/secondPage/five.JPG"></p>
-<h4 id="有索引"><a href="#有索引" class="headerlink" title="有索引"></a>有索引</h4><p><img src="/2021/07/11/secondPage/six.JPG"></p>
-<h5 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h5><p>在表中已经有大量数据的情况下，建索引会很慢，且占用硬盘空间，插入删除更新都很慢，只有查询快<br>比如<code>create index idx on s1(id);</code>会扫描表中所有的数据，然后以id为数据项，创建索引结构，存放于硬盘的表中。建完以后，再查询就会很快了<br>需要注意的是：innodb表的索引会存放于s1.ibd文件中，而myisam表的索引则会有单独的索引文件table1.MYI</p>
-<h5 id="索引规则"><a href="#索引规则" class="headerlink" title="索引规则"></a>索引规则</h5><p> <strong>最左前缀匹配原则</strong><br>create index ix_name_email on s1(name,email,)<br>最左前缀匹配：必须按照从左到右的顺序匹配<br><code>select * from s1 where name=&#39;egon&#39;; </code>可以<br><code>select * from s1 where name=&#39;egon&#39; and email=&#39;asdf&#39;;</code> 可以<br><code>select * from s1 where email=&#39;alex@oldboy.com&#39;; </code>不可以<br>mysql会一直向右匹配直到遇到范围查询(&gt;、&lt;、between、like)就停止匹配，</p>
-<p> <strong>=和in可以乱序</strong><br>比如a = 1 and b = 2 and c = 3 建立(a,b,c)索引可以任意顺序，mysql的查询优化器<br>会帮你优化成索引可以识别的形式</p>
-<p> <strong>选择区分度高的列作为索引</strong><br>区分度的公式是count(distinct col)/count(*)，表示字段不重复的比例<br> <strong>索引列不能参与计算</strong><br>保持列“干净”，比如from_unixtime(create_time) = ’2014-05-29’<br>就不能使用到索引，原因很简单，b+树中存的都是数据表中的字段值，但进行检索时，需要把所有元素都应用函数才能比较，显然成本太大。所以语句应该写成create_time = unix_timestamp(’2014-05-29’);</p>
+                <h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p>HashMap继承的抽象类AbstractMap实现了Map接口,线程不安全<br><img src="/2021/07/20/hashmap-hashtable/hashmap.png"><br>线程默认非同步，多线程并发的情况下需要增加同步处理</p>
+<h5 id="HashMap-put-源码"><a href="#HashMap-put-源码" class="headerlink" title="HashMap put()源码"></a>HashMap put()源码</h5><p><img src="/2021/07/20/hashmap-hashtable/hashmapCode1.png"> <img src="/2021/07/20/hashmap-hashtable/hashmapCode2.png"><br>可以看出在HashMap中，null可以作为键，但是只能有一个null键；可以有一个或多个键所对应的值为null。</p>
+<h5 id="初始大小及扩容"><a href="#初始大小及扩容" class="headerlink" title="初始大小及扩容"></a>初始大小及扩容</h5><p>HashMap中hash数组的默认大小是16，而且一定是2的指数。</p>
+<h2 id="Hashtable"><a href="#Hashtable" class="headerlink" title="Hashtable"></a>Hashtable</h2><p>HashTable基于陈旧的Dictionary类的,线程安全<br><img src="/2021/07/20/hashmap-hashtable/hashtable.png"><br>线程同步</p>
+<h5 id="HashTable-put-源码"><a href="#HashTable-put-源码" class="headerlink" title="HashTable put()源码"></a>HashTable put()源码</h5><p><img src="/2021/07/20/hashmap-hashtable/hashtableCode.png"><br>可以看出在HashTable中，不允许键值为空。</p>
+<h5 id="初始大小及扩容-1"><a href="#初始大小及扩容-1" class="headerlink" title="初始大小及扩容"></a>初始大小及扩容</h5><p>HashTable中的hash数组初始大小是11，增加的方式是 old*2+1</p>
 
                 
             </div>
@@ -481,7 +474,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://snowmanazz.github.io/2021/07/11/secondPage/">http://snowmanazz.github.io/2021/07/11/secondPage/</a>
+                    <a href="http://snowmanazz.github.io/2021/07/20/hashmap-hashtable/">http://snowmanazz.github.io/2021/07/20/hashmap-hashtable/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -519,12 +512,16 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/mysql/">
-                                    <span class="chip bg-color">mysql</span>
+                                <a href="/tags/java/">
+                                    <span class="chip bg-color">java</span>
                                 </a>
                             
-                                <a href="/tags/%E7%B4%A2%E5%BC%95/">
-                                    <span class="chip bg-color">索引</span>
+                                <a href="/tags/hashtable/">
+                                    <span class="chip bg-color">hashtable</span>
+                                </a>
+                            
+                                <a href="/tags/hashmap/">
+                                    <span class="chip bg-color">hashmap</span>
                                 </a>
                             
                         </div>
@@ -574,13 +571,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2021/07/20/thirdPage/">
+                <a href="/2021/07/20/map/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="static关键字">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="java集合">
                         
-                        <span class="card-title">static关键字</span>
+                        <span class="card-title">java集合</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -604,12 +601,20 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/static/">
-                        <span class="chip bg-color">static</span>
-                    </a>
-                    
                     <a href="/tags/java/">
                         <span class="chip bg-color">java</span>
+                    </a>
+                    
+                    <a href="/tags/map/">
+                        <span class="chip bg-color">map</span>
+                    </a>
+                    
+                    <a href="/tags/list/">
+                        <span class="chip bg-color">list</span>
+                    </a>
+                    
+                    <a href="/tags/set/">
+                        <span class="chip bg-color">set</span>
                     </a>
                     
                 </div>
@@ -623,13 +628,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/07/05/firstPage/">
+                <a href="/2021/07/20/thirdPage/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="个人博客之旅">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="static关键字">
                         
-                        <span class="card-title">个人博客之旅</span>
+                        <span class="card-title">static关键字</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -640,7 +645,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-05
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-20
                             </span>
                         <span class="publish-author">
                             
@@ -653,8 +658,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/hexo/">
-                        <span class="chip bg-color">hexo</span>
+                    <a href="/tags/static/">
+                        <span class="chip bg-color">static</span>
+                    </a>
+                    
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
                     </a>
                     
                 </div>
