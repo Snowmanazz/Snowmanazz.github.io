@@ -424,7 +424,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    495
+                    1k
                 </div>
                 
 
@@ -448,10 +448,24 @@
             <div id="articleContent">
                 <h2 id="java集合"><a href="#java集合" class="headerlink" title="java集合"></a>java集合</h2><p>java集合框架图<br><img src="/2021/07/20/map/jihe.png"><br>java集合框架体系<br><img src="/2021/07/20/map/jihe2.png"></p>
 <h2 id="集合类别"><a href="#集合类别" class="headerlink" title="集合类别"></a>集合类别</h2><h3 id="Collection"><a href="#Collection" class="headerlink" title="Collection"></a>Collection</h3><p>Collection 是最基本的集合接口，一个 Collection 代表一组 Object，即 Collection 的元素, Java不提供直接继承自Collection的类，只提供继承于的子接口(如List和set)。Collection 接口存储一组不唯一，无序的对象。Collection集合方法<br><img src="/2021/07/20/map/Collection.png"></p>
-<h5 id="常用集合分类"><a href="#常用集合分类" class="headerlink" title="常用集合分类"></a>常用集合分类</h5><p> <strong>Collection</strong> 接口的接口 对象的集合（单列集合）<br>├——- <em><strong>List</strong></em> 接口：元素按进入先后有序保存，可重复，通过索引操作元素<br>│—————-├ <em><strong>LinkedList</strong></em> 接口实现类， 链表， 插入删除， 没有同步，查询慢，增删快，线程不安全，效率高，可以存储重复元素<br>│—————-├ <em><strong>ArrayList</strong></em> 接口实现类， 数组， 随机访问，查询慢，增删快，效率高，可以存储重复元素， 没有同步， 线程不安全<br>│—————-└ <em><strong>Vector</strong></em> 接口实现类 数组， 同步，查询快，增删慢，线程安全，效率低，可以存储重复元素<br>│ ———————-└ <em><strong>Stack</strong></em> 是Vector类的实现类<br>└——- <em><strong>Set</strong></em> 接口：hash表，不可重复，并做内部排序，不能根据索引获取元素，线程不安全，效率高，可以存储null元素， <em>元素的唯一性是靠所存储元素类型是否重写hashCode()和equals()方法来保证的，如果没有重写这两个方法，则无法保证元素的唯一性</em>。<br>├—————-└ <em><strong>HashSet</strong></em> 使用hash表（数组）存储元素<br>│————————└  <em><strong>LinkedHashSet</strong></em> 构采用链表和哈希表共同实现，链表保证了元素的顺序与存储顺序一致，哈希表保证了元素的唯一性。线程不安全，效率高。<br>└ —————- <em><strong>TreeSet</strong></em> 底层实现为二叉树，元素排好序，需要重写hashCode和equals()方法</p>
-<h5 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h5><p><img src="/2021/07/20/map/use.png"></p>
-<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p><img src="/2021/07/20/map/Map.png"></p>
-<h5 id="常用分类"><a href="#常用分类" class="headerlink" title="常用分类"></a>常用分类</h5><p> <strong>Map</strong> 接口 键值对的集合 （双列集合）<br>├——— <em><strong>Hashtable</strong></em> 接口实现类， 同步， 线程安全<br>├——— <em><strong>HashMap</strong></em> 接口实现类 ，没有同步， 线程不安全-<br>│—————–├  <em><strong>LinkedHashMap</strong></em> 双向链表和哈希表实现<br>│—————–└  <em><strong>WeakHashMap</strong></em><br>├ ——– <em><strong>TreeMap</strong></em> 红黑树对所有的key进行排序<br>└——— <em><strong>IdentifyHashMap</strong></em></p>
+<h4 id="常用集合分类"><a href="#常用集合分类" class="headerlink" title="常用集合分类"></a>常用集合分类</h4><p> <strong>Collection</strong> 接口的接口 对象的集合（单列集合）<br>├——- <em><strong>List</strong></em> 接口：元素按进入先后有序保存，可重复，通过索引操作元素<br>│—————-├ <em><strong>LinkedList</strong></em> 接口实现类， 双向链表， 没有同步，查询慢，增删快，线程不安全，效率高，可以存储重复元素<br>│—————-├ <em><strong>ArrayList</strong></em> 接口实现类， 数组， 随机访问，查询慢，增删快，效率高，可以存储重复元素， 没有同步， 线程不安全<br>│—————-└ <em><strong>Vector</strong></em> 接口实现类 数组， 同步，查询快，增删慢，线程安全，效率低，可以存储重复元素<br>│ ———————-└ <em><strong>Stack</strong></em> 是Vector类的实现类<br>└——- <em><strong>Set</strong></em> 接口：hash表，不可重复，并做内部排序，不能根据索引获取元素，线程不安全，效率高，可以存储null元素， <em>元素的唯一性是靠所存储元素类型是否重写hashCode()和equals()方法来保证的，如果没有重写这两个方法，则无法保证元素的唯一性</em>。<br>├—————-└ <em><strong>HashSet</strong></em> 使用hash表（数组）存储元素<br>│————————└  <em><strong>LinkedHashSet</strong></em> 构采用链表和哈希表共同实现，链表保证了元素的顺序与存储顺序一致，哈希表保证了元素的唯一性。线程不安全，效率高。<br>└ —————- <em><strong>TreeSet</strong></em> 底层实现为二叉树，元素排好序，需要重写hashCode和equals()方法</p>
+<h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><p><img src="/2021/07/20/map/use.png"></p>
+<h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p><img src="/2021/07/20/map/map.png"></p>
+<h4 id="常用分类"><a href="#常用分类" class="headerlink" title="常用分类"></a>常用分类</h4><p> <strong>Map</strong> 接口 键值对的集合 （双列集合）<br>├——— <em><strong>Hashtable</strong></em> 接口实现类， 同步， 线程安全<br>├——— <em><strong>HashMap</strong></em> 接口实现类 ，没有同步， 线程不安全，链表+数组+红黑树<br>│—————–├  <em><strong>LinkedHashMap</strong></em> 双向链表和哈希表实现<br>│—————–└  <em><strong>WeakHashMap</strong></em><br>├ ——– <em><strong>TreeMap</strong></em> 红黑树对所有的key进行排序<br>└——— <em><strong>IdentifyHashMap</strong></em></p>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><p> <em><strong>ArrayList</strong></em><br><img src="/2021/07/20/map/ArrayListCode1.png"><br>ArrayList扩容核心代码 <img src="/2021/07/20/map/ArrayListCode2.png"></p>
+<ul>
+<li>数组由默认构造方法生成的空数组并且第一次添加数据。此时minCapacity等于默认的容量10.而后的数组扩容才是按照当前容量的1.5倍进行扩容；</li>
+<li>当扩容量（newCapacity）大于ArrayList数组定义的最大值后会调用hugeCapacity来进行判断。如果minCapacity已经大于Integer的最大值（溢出为负数）那么抛出OutOfMemoryError（内存溢出）否则的话根据与MAX_ARRAY_SIZE的比较情况确定是返回Integer最大值还是MAX_ARRAY_SIZE。这边也可以看到ArrayList允许的最大容量就是Integer的最大值（-2的31次方~2的31次方减1）。</li>
+</ul>
+<p> <em><strong>HashMap</strong></em><br><img src="/2021/07/20/map/hashmapCode1.png"><br>table在第一次往HashMap中put元素的时候初始化。如果HashMap初始化的时候没有指定容量，那么初始化table的时候会使用默认的DEFAULT_INITIAL_CAPACITY参数，也就是16，作为table初始化时的长度。如果HashMap初始化的时候指定了容量，HashMap会把这个容量修改为2的倍数，然后创建对应长度的table。table在HashMap扩容的时候，长度会翻倍。所以table的长度肯定是2的倍数。</p>
+<p> <strong>HashMap实现原理</strong><br>HashMap类中的元素就是节点<br>HashMap通过key的hashCode来计算hash值，不同的hash值就存在数组中不同的位置，当多个元素的hash值相同时<br><img src="/2021/07/20/map/hashmapCode2.png"><br>Node类的基本属性有：</p>
+<ul>
+<li>hash：key的哈希值</li>
+<li>key：节点的key，类型和定义HashMap时的key相同</li>
+<li>value：节点的value，类型和定义HashMap时的value相同</li>
+<li>next：该节点的下一节点<br>重写equals()和hashCode()方法<br><img src="/2021/07/20/map/hashmapCode3.png"></li>
+</ul>
+<p> <strong>拉链法</strong><br>HashMap使用拉链法管理其中的每个节点。由Node节点组成链表之后，HashMap定义了一个Node数组：<img src="/2021/07/20/map/hashmapCode4.png"><br>这种数组+链表的数据结构，使得HashMap可以较为高效的管理每一个节点。<br><img src="/2021/07/20/map/hashmap.png"><br>但是JDK1.8之后，使用数组+链表+红黑树来存储数据。当同一hash值的结点数小于8时，则采用链表，否则，采用红黑树。这个重大改变，主要是提高查询速度<br><img src="/2021/07/20/map/hashmapCodePut.png"><br><img src="/2021/07/20/map/hashmapCodePut1.png"><br><img src="/2021/07/20/map/hashmapCodePut2.png"></p>
 
                 
             </div>
@@ -638,13 +652,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/07/20/hashmap-hashtable/">
+                <a href="/2021/07/20/thirdPage/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="hashmap hashtable">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="static关键字">
                         
-                        <span class="card-title">hashmap hashtable</span>
+                        <span class="card-title">static关键字</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -672,12 +686,8 @@
                         <span class="chip bg-color">java</span>
                     </a>
                     
-                    <a href="/tags/hashtable/">
-                        <span class="chip bg-color">hashtable</span>
-                    </a>
-                    
-                    <a href="/tags/hashmap/">
-                        <span class="chip bg-color">hashmap</span>
+                    <a href="/tags/static/">
+                        <span class="chip bg-color">static</span>
                     </a>
                     
                 </div>
