@@ -466,6 +466,7 @@
 <li>next：该节点的下一节点<br>重写equals()和hashCode()方法<br><img src="/2021/07/20/map/hashmapCode3.png"></li>
 </ul>
 <p> <strong>拉链法</strong><br>HashMap使用拉链法管理其中的每个节点。由Node节点组成链表之后，HashMap定义了一个Node数组：<img src="/2021/07/20/map/hashmapCode4.png"><br>这种数组+链表的数据结构，使得HashMap可以较为高效的管理每一个节点。<br><img src="/2021/07/20/map/hashmap.png"><br>但是JDK1.8之后，使用数组+链表+红黑树来存储数据。当同一hash值的结点数小于8时，则采用链表，否则，采用红黑树。这个重大改变，主要是提高查询速度<br><img src="/2021/07/20/map/hashmapCodePut.png"><br><img src="/2021/07/20/map/hashmapCodePut1.png"><br><img src="/2021/07/20/map/hashmapCodePut2.png"></p>
+<p> <em><strong>HashSet</strong></em><br>HashSet的存储方式是把HashMap中的Key作为Set的对应存储项</p>
 
                 
             </div>
