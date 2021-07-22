@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Tag: list, Idea">
+    <meta name="keywords" content="Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Tag: list | Idea</title>
+    <title>Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -326,7 +326,7 @@
                 
                 <a href="/tags/list/" title="list: 1">
                     <span class="chip center-align waves-effect waves-light
-                             chip-active "
+                             chip-default "
                             data-tagname="list" style="background-color: #F8F9F9;">list
                         <span class="tag-length">1</span>
                     </span>
@@ -383,43 +383,32 @@
 </div>
 
     
+    <link rel="stylesheet" type="text/css" href="/libs/jqcloud/jqcloud.css">
+<style type="text/css">
+    #tag-wordcloud {
+        width: 100%;
+        height: 300px;
+    }
+</style>
 
-    <article id="articles" class="container articles">
-        <div class="row tags-posts">
-            
-            
-            <div class="article tag-post col s12 m6 l4" data-tags="java, map, list, set" data-aos="fade-up">
-                <div class="card">
-                    <a href="/2021/07/20/map/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="java集合">
-                            
-                            <span class="card-title">java集合</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-20
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Snowman
-                                
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </article>
+<div class="container" data-aos="fade-up">
+    <div class="card">
+        <div id="tag-wordcloud" class="card-content"></div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/libs/jqcloud/jqcloud-1.0.4.min.js"></script>
+<script type="text/javascript">
+    
+
+    $('#tag-wordcloud').jQCloud([{"text":"java","weight":5,"link":"/tags/java/"},{"text":"Object","weight":1,"link":"/tags/Object/"},{"text":"多线程","weight":1,"link":"/tags/多线程/"},{"text":"hexo","weight":1,"link":"/tags/hexo/"},{"text":"map","weight":1,"link":"/tags/map/"},{"text":"list","weight":1,"link":"/tags/list/"},{"text":"set","weight":1,"link":"/tags/set/"},{"text":"static","weight":1,"link":"/tags/static/"},{"text":"mysql","weight":1,"link":"/tags/mysql/"},{"text":"索引","weight":1,"link":"/tags/索引/"},{"text":"设计模式","weight":1,"link":"/tags/设计模式/"}], {
+        autoResize: true
+    });
+</script>
+
+    
+
 </main>
-
-
 
 
     <footer class="page-footer bg-color">
