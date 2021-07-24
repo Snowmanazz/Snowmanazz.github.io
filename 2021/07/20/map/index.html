@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.1k
+                    2k
                 </div>
                 
 
@@ -408,11 +408,13 @@
 <h4 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h4><p><img src="/2021/07/20/map/use.png"></p>
 <h3 id="Map"><a href="#Map" class="headerlink" title="Map"></a>Map</h3><p><img src="/2021/07/20/map/map.png"></p>
 <h4 id="常用分类"><a href="#常用分类" class="headerlink" title="常用分类"></a>常用分类</h4><p> <strong>Map</strong> 接口 键值对的集合 （双列集合）<br>├——— <em><strong>Hashtable</strong></em> 接口实现类，数组+链表， 同步， 线程安全<br>├——— <em><strong>HashMap</strong></em> 接口实现类 ，没有同步， 线程不安全，djk1.8后链表+数组+红黑树<br>│—————–├  <em><strong>LinkedHashMap</strong></em> 双向链表和哈希表实现<br>│—————–└  <em><strong>WeakHashMap</strong></em><br>├ ——– <em><strong>TreeMap</strong></em> 红黑树对所有的key进行排序<br>└——— <em><strong>IdentifyHashMap</strong></em></p>
-<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><h4 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h4><p><img src="/2021/07/20/map/ArrayListCode1.png"><br>ArrayList扩容核心代码 <img src="/2021/07/20/map/ArrayListCode2.png"></p>
+<h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3><h4 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList"></a>ArrayList</h4><p>List list = Collections.synchronizedList(new ArrayList(…))，实现线程同步，代替Vector<br><img src="/2021/07/20/map/ArrayListCode1.png"><br>ArrayList扩容核心代码 <img src="/2021/07/20/map/ArrayListCode2.png"></p>
 <ul>
 <li>数组由默认构造方法生成的空数组并且第一次添加数据。此时minCapacity等于默认的容量10.而后的数组扩容才是按照当前容量的1.5倍进行扩容；</li>
-<li>当扩容量（newCapacity）大于ArrayList数组定义的最大值后会调用hugeCapacity来进行判断。如果minCapacity已经大于Integer的最大值（溢出为负数）那么抛出OutOfMemoryError（内存溢出）否则的话根据与MAX_ARRAY_SIZE的比较情况确定是返回Integer最大值还是MAX_ARRAY_SIZE。这边也可以看到ArrayList允许的最大容量就是Integer的最大值（-2的31次方~2的31次方减1）。<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><img src="/2021/07/20/map/hashmapCode1.png"><br>table在第一次往HashMap中put元素的时候初始化。如果HashMap初始化的时候没有指定容量，那么初始化table的时候会使用默认的DEFAULT_INITIAL_CAPACITY参数，也就是16，作为table初始化时的长度。如果HashMap初始化的时候指定了容量，HashMap会把这个容量修改为2的倍数，然后创建对应长度的table。table在HashMap扩容的时候，长度会翻倍。所以table的长度肯定是2的倍数。</li>
+<li>当扩容量（newCapacity）大于ArrayList数组定义的最大值后会调用hugeCapacity来进行判断。如果minCapacity已经大于Integer的最大值（溢出为负数）那么抛出OutOfMemoryError（内存溢出）否则的话根据与MAX_ARRAY_SIZE的比较情况确定是返回Integer最大值还是MAX_ARRAY_SIZE。这边也可以看到ArrayList允许的最大容量就是Integer的最大值（-2的31次方~2的31次方减1）。</li>
 </ul>
+<h4 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h4><p>双向链表，查询用Arralist，增删多用LinkedList </p>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><p><img src="/2021/07/20/map/hashmapCode1.png"><br>table在第一次往HashMap中put元素的时候初始化。如果HashMap初始化的时候没有指定容量，那么初始化table的时候会使用默认的DEFAULT_INITIAL_CAPACITY参数，也就是16，作为table初始化时的长度。如果HashMap初始化的时候指定了容量，HashMap会把这个容量修改为2的倍数，然后创建对应长度的table。table在HashMap扩容的时候（如果长度达到了容器*转载因子（默认是0.75）），长度会翻倍。所以table的长度肯定是2的倍数。</p>
 <h5 id="HashMap实现原理"><a href="#HashMap实现原理" class="headerlink" title="HashMap实现原理"></a>HashMap实现原理</h5><p>HashMap类中的元素就是节点<br>HashMap通过key的hashCode来计算hash值，不同的hash值就存在数组中不同的位置，当多个元素的hash值相同时<br><img src="/2021/07/20/map/hashmapCode2.png"><br>Node类的基本属性有：</p>
 <ul>
 <li>hash：key的哈希值</li>
@@ -422,7 +424,32 @@
 </ul>
 <h5 id="拉链法"><a href="#拉链法" class="headerlink" title="拉链法"></a>拉链法</h5><p>HashMap使用拉链法管理其中的每个节点。由Node节点(key、value、hash、next)组成链表之后，HashMap定义了一个Node数组：<img src="/2021/07/20/map/hashmapCode4.png"><br>这种数组+链表的数据结构，使得HashMap可以较为高效的管理每一个节点。<br><img src="/2021/07/20/map/hashmap.png"><br>但是JDK1.8之后，使用数组+链表+红黑树来存储数据。当同一hash值的结点数小于8时，则采用链表，否则，采用红黑树。这个重大改变，主要是提高查询速度<br><img src="/2021/07/20/map/hashmapCodePut.png"><br><img src="/2021/07/20/map/hashmapCodePut1.png"><br><img src="/2021/07/20/map/hashmapCodePut2.png"></p>
 <h4 id="HashSet"><a href="#HashSet" class="headerlink" title="HashSet"></a>HashSet</h4><p>HashSet的存储方式是把HashMap中的Key作为Set的对应存储项,原理和hashMap一样。</p>
-<h4 id="treeMap"><a href="#treeMap" class="headerlink" title="treeMap"></a>treeMap</h4><p>TreeMap底层是由红黑树实现的</p>
+<h4 id="HashTable"><a href="#HashTable" class="headerlink" title="HashTable"></a>HashTable</h4><p>底层是数组+链表 初始容量11，扩容翻倍+1，存储结构与实现基本与hashMap类似。</p>
+<h4 id="treeMap"><a href="#treeMap" class="headerlink" title="treeMap"></a>treeMap</h4><p>TreeMap底层是由红黑树实现的，是有序的。</p>
+<h4 id="ConCurrentHashMap"><a href="#ConCurrentHashMap" class="headerlink" title="ConCurrentHashMap"></a>ConCurrentHashMap</h4><p>底层与HashMap一样，采用散列表+红黑树<br>Hashtable是在每个方法上都加上了Synchronized完成同步，效率低下。<br>ConcurrentHashMap通过在部分加锁和利用CAS算法来实现同步,CAS算法也可以认为是乐观锁的一种<br>get方法是非阻塞，无锁的。重写Node类，通过volatile修饰next来实现每次获取都是最新设置的值</p>
+<h4 id="ConcurrentHashMap源码"><a href="#ConcurrentHashMap源码" class="headerlink" title="ConcurrentHashMap源码"></a>ConcurrentHashMap源码</h4><p>put方法<br><img src="/2021/07/20/map/concurrenthashmapCode.png"><br><img src="/2021/07/20/map/concurrenthashmapCode2.png"><br><img src="/2021/07/20/map/concurrenthashmapCode3.png"><br>get方法<br><img src="/2021/07/20/map/concurrenthashmapCode4.png"></p>
+<h5 id="CAS算法和volatile关键字"><a href="#CAS算法和volatile关键字" class="headerlink" title="CAS算法和volatile关键字"></a>CAS算法和volatile关键字</h5><p>CAS是一种无锁算法，三个操作数（内存值V，旧的预期值A，要修改的新值B）<br>当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么也不做（当多个线程使用CAS更新一个变量时，只有一个线程能更新变量的值，其他的线程都会失败，失败的线程不会被挂起，而是可以再次尝试）<br>volatile仅仅用来保证该变量对所有线程的可见性，但不保证原子性。</p>
+<ul>
+<li>保证对所有线程的可见性，就是说但这个变量被修改了，所有的线程都会知道变量被修改了</li>
+<li>不保证原子性，修改变量是在JVM中分为几步，但在这几步中它是不安全的</li>
+</ul>
+<h5 id="ConCurrentHashMap特点"><a href="#ConCurrentHashMap特点" class="headerlink" title="ConCurrentHashMap特点"></a>ConCurrentHashMap特点</h5><p> +ConCurrentHashMap支持高并发的访问和更新，它是线程安全的<br> +检索操作不用加锁，get方法是非阻塞的<br> +key和value都不允许为null</p>
+<h3 id="散列表"><a href="#散列表" class="headerlink" title="散列表"></a>散列表</h3><p>链表和数组都是按顺序存储的，相当于是有序的。这样就会导致一个缺点，访问某个元素就要访问所有的元素，会加大时间复杂度。散列表就可以改变这种情况。</p>
+<h4 id="hash表原理"><a href="#hash表原理" class="headerlink" title="hash表原理"></a>hash表原理</h4><p>散列表为每个对象计算出一个整数，称为散列码。根据这些计算出来的整数(散列码)保存在对应的位置上。<br>可能会遇到散列码相同，这种情况叫做散列冲突，是不可避免的。<br>如果散列表太满，需要再散列，创建新的散列表，将原有的元素插入新表中。<br>转载因子（load factor）（默认值0.75）决定 什么时候创建新的表。如果表中元素超过了75%，则按照两倍的表再散列。</p>
+<h3 id="红黑树"><a href="#红黑树" class="headerlink" title="红黑树"></a>红黑树</h3><p>JDK1.8 散列表的链表太满就会转换成红黑树存储。TreeSet和TreeMap底层都是红黑树。<br>红黑树是基于 2-3树 基于平衡树的结构。2-3树结构<br><img src="/2021/07/20/map/2-3Tree.png"><br>2-3树保持树的平衡十分复杂，需要大量的交换节点。</p>
+<h4 id="红黑树结构"><a href="#红黑树结构" class="headerlink" title="红黑树结构"></a>红黑树结构</h4><p><img src="/2021/07/20/map/rbTree.png"><br>红黑树取代2-3树交换节点的方法:</p>
+<ul>
+<li>旋转：顺时针和逆时针</li>
+<li>反色：交换红黑的颜色</li>
+</ul>
+<p>另外，红黑树还有一些约束：</p>
+<ul>
+<li>红黑树是二叉搜索树。</li>
+<li>根节点是黑色。</li>
+<li>每个叶子节点都是黑色的空节点（NIL节点）。</li>
+<li>每个红色节点的两个子节点都是黑色。(从每个叶子到根的所有路径上不能有两个连续的红色节点)</li>
+<li>从任一节点到其每个叶子的所有路径都包含相同数目的黑色节点(每一条树链上的黑色节点数量必须相等)。</li>
+</ul>
 
                 
             </div>
