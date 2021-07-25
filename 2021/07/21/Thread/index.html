@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3.3k
+                    3.4k
                 </div>
                 
 
@@ -433,7 +433,7 @@
 </ul>
 <h3 id="切换线程状态的方法"><a href="#切换线程状态的方法" class="headerlink" title="切换线程状态的方法"></a>切换线程状态的方法</h3><p><img src="/2021/07/21/Thread/tansfer.png"><br> <strong>sleep() 运行-&gt;阻塞</strong><br>Thread类的方法当前线程调用sleep方法会进入计时等待状态（阻塞线程），但不释放对象锁，等时间到了，进入的是就绪状态而并非是运行状态。<br><img src="/2021/07/21/Thread/sleep.png"></p>
 <p> <strong>yield() 运行-&gt;就绪</strong><br>Thread类的方法。当前线程调用yield方法会，都是暂停当前正在执行的线程对象，不会释放资源锁，不会让线程进入阻塞状态，而是让线程重回就绪状态（yield 方法只能使同优先级或更高优先级的线程有执行的机会）<br><img src="/2021/07/21/Thread/yield.png"></p>
-<p> <strong>join()</strong><br>join() 方法等待调用join方法的线程结束之后，程序再继续执行，其他线程无法运行，必须等待此线程完成之后才可以继续执行,执行完之后释放锁。<br><img src="/2021/07/21/Thread/join.png"></p>
+<p> <strong>join()</strong><br>join() 方法等待调用join方法的线程结束之后，程序再继续执行，其他线程（阻塞状态）无法运行，必须等待此线程完成之后才可以继续执行,执行完之后释放锁。<br><img src="/2021/07/21/Thread/join.png"></p>
 <p> <strong>wait() 运行-&gt;等待 和notify() 等待-&gt;就绪-&gt;运行（需要等其他线程执行完）</strong><br>Object类的方法。wait 过程中线程会释放对象锁，只有当其他线程调用 notify 才能唤醒此线程，然后等其他线程执行完后执行。wait 使用时必须先获取对象锁，即必须在 synchronized 修饰的代码块中使用<br><img src="/2021/07/21/Thread/wait.png"></p>
 <p> <strong>interrupt()</strong><br>一般使用的是interrupt来 <em><strong>请求</strong></em>终止线程(并不是真正的中断)<br>interrupt不会真正停止一个线程，它仅仅是给这个线程发了一个信号告诉它，它应该要结束了。具体到底中断还是继续运行，应该由被通知的线程自己处理。interrupt方法压根是不会对线程的状态造成影响的，它仅仅设置一个标志位罢了。</p>
 <h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>使用多线程的主要原因是提高系统的资源利用率。</p>
@@ -461,7 +461,7 @@
 <li>如果涉及到对线程的控制（比如一次能使用多少个线程，当前线程触发的条件是否依赖其他线程的结果），我们可以考虑CountDownLatch/Semaphore等等</li>
 <li>如果synchronized无法满足，我们可以考虑lock包下的类</li>
 </ul>
-<h4 id="原子性和可见性"><a href="#原子性和可见性" class="headerlink" title="原子性和可见性"></a>原子性和可见性</h4><p> <strong>原子性</strong><br>如果操作是原子性的，那么就可以说线程安全了(因为没有中间的三部环节，一步到位【原子性】<br>JDK中有atomic包提供给我们实现原子性操作 （atomicxxx）既有原子性也有可见性<br> <img src="/2021/07/21/Thread/atomic1.png"><br> <img src="/2021/07/21/Thread/atomic.png"></p>
+<h4 id="原子性和可见性"><a href="#原子性和可见性" class="headerlink" title="原子性和可见性"></a>原子性和可见性</h4><p> <strong>原子性</strong><br>如果操作是原子性的，那么就可以说线程安全了(因为没有中间的三部环节，一步到位【原子性】<br>JDK中有atomic包提供给我们实现原子性操作 （atomicxxx）既有原子性也有可见性。<br>Atomic包里的类基本都是使用Unsafe实现的包装类，核心操作是CAS原子操作；<br> <img src="/2021/07/21/Thread/atomic1.png"><br> <img src="/2021/07/21/Thread/atomic.png"></p>
 <p> <strong>可见性</strong><br>对于可见性，Java提供了一个关键字：volatile 。volatile轻量级的同步机制，仅用来保证该变量对所有线程的可见性，但不保证原子性</p>
 <ul>
 <li>一旦你完成写入，任何访问这个字段的线程将会得到最新的值</li>
@@ -474,35 +474,38 @@
 <li>该变量不会纳入到不变性条件中(该变量是可变的)</li>
 <li>在访问变量的时候不需要加锁</li>
 </ul>
-<h4 id="线程封闭"><a href="#线程封闭" class="headerlink" title="线程封闭"></a>线程封闭</h4><p>多线程的环境下，只要我们不使用成员变量(不共享数据),那么就不会出现线程安全的问题<br> <strong>ThreadLocal设计的目的就是为了能够在当前线程中有属于自己的变量，并不是为了解决并发或者共享变量的问题</strong><br>ThreadLocal提供了线程的局部变量，每个线程都可以通过set()和get()来对这个局部变量进行操作，但不会和其他线程的局部变量进行冲突，实现线程数据的隔离。也就是说往ThreadLocal中填充的变量属于当前线程，该变量对其他线程而言是隔离的。</p>
-<h4 id="ThreadLocal作用"><a href="#ThreadLocal作用" class="headerlink" title="ThreadLocal作用"></a>ThreadLocal作用</h4><p>最常用的就是管理数据库的连接。ThreadLocal能够实现当前线程的操作都是用同一个Connection，保证了事务！</p>
+<h4 id="线程封闭"><a href="#线程封闭" class="headerlink" title="线程封闭"></a>线程封闭</h4><p>多线程的环境下，只要我们不使用成员变量(不共享数据),那么就不会出现线程安全的问题<br> <strong>ThreadLocal设计的目的就是为了能够在当前线程中有属于自己的变量，并不是为了解决并发或者共享变量的问题</strong><br>ThreadLocal提供了线程的局部变量（牺牲空间），每个线程都可以通过set()和get()来对这个局部变量进行操作，但不会和其他线程的局部变量进行冲突，实现线程数据的隔离。也就是说往ThreadLocal中填充的变量属于当前线程，该变量对其他线程而言是隔离的。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fsmly/p/11020641.html">ThreadLocal详解</a><br> <strong>ThreadLocal作用</strong><br>最常用的就是管理数据库的连接。ThreadLocal能够实现当前线程的操作都是用同一个Connection，保证了事务！</p>
 <h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><p>不可变的对象一定是线程安全的<br>共享的变量都是可变的，正由于是可变的才会出现线程安全问题。如果该状态是不可变的，那么随便多个线程访问都是没有问题的！<br> <em><strong>final仅仅是不能修改该变量的引用，但是引用里边的数据是可以改的!</strong></em><br>不可变的对象引用在使用的时候还是需要加锁的。不可变对象的条件：</p>
 <ul>
 <li>对象创建后状态就不能修改</li>
 <li>对象所有的域都是final修饰的</li>
 <li>对象是正确创建的(没有this引用逸出)</li>
 </ul>
-<h3 id="加锁机制"><a href="#加锁机制" class="headerlink" title="加锁机制"></a>加锁机制</h3><h4 id="synchronized锁"><a href="#synchronized锁" class="headerlink" title="synchronized锁"></a>synchronized锁</h4><p>synchronized是Java的一个关键字，它能够将代码块(方法)锁起来。</p>
+<h3 id="加锁机制"><a href="#加锁机制" class="headerlink" title="加锁机制"></a>加锁机制</h3><h4 id="synchronized同步锁"><a href="#synchronized同步锁" class="headerlink" title="synchronized同步锁"></a>synchronized同步锁</h4><p>synchronized是Java的一个关键字，它能够将代码块(方法)锁起来。（牺牲时间）</p>
 <ul>
 <li>synchronized是一种互斥锁，一次只能允许一个线程进入被锁住的代码块。</li>
-<li>synchronized是一种内置锁/监视器锁，Java中每个对象都有一个内置锁(监视器,也可以理解成锁标记)，而synchronized就是使用对象的内置锁(监视器)来将代码块(方法)锁定。<br>synchronized 保证了线程的原子性也保证了可见性。<br><img src="/2021/07/21/Thread/synchronized.png"><br>synchronized一般用来修饰：</li>
-<li>修饰普通方法（获取对象锁）</li>
-<li>修饰代码块（获取对象锁）</li>
-<li>修饰静态方法（获取类锁，类的字节码文件对象）<br>获取了类锁的线程和获取了对象锁的线程是不冲突的。</li>
+<li>synchronized是一种内置锁/监视器锁，Java中每个对象都有一个内置锁(监视器,也可以理解成锁标记)，而synchronized就是使用对象的内置锁(监视器)来将代码块(方法)锁定。</li>
+<li>synchronized内置锁 是一种 对象锁（锁的是对象而非引用变量），作用粒度是对象 ，可以用来实现对 临界资源的同步互斥访问 ，是 可重入 的。其可重入最大的作用是避免死锁。如果子类同步方法调用了父类同步方法，如没有可重入的特性，则会发生死锁。<br>synchronized 保证了线程的原子性、可见性、有序性。<br><img src="/2021/07/21/Thread/synchronized.png"></li>
+</ul>
+<p>synchronized一般用来修饰：</p>
+<ul>
+<li>修饰普通方法（获取对象锁(this)）</li>
+<li>修饰代码块（获取代码块中实例对象的锁）</li>
+<li>修饰静态方法（获取class类锁，类的字节码文件对象,调用静态方法就会锁住静态方法所在类）<br>获取了类锁的线程和获取了对象锁的线程是不冲突的。</li>
 </ul>
 <p> <strong>锁的释放</strong></p>
 <ul>
 <li>当方法(代码块)执行完毕后会自动释放锁，不需要做任何的操作。</li>
 <li>当一个线程执行的代码出现异常时，其所持有的锁会自动释放。</li>
 </ul>
-<h4 id="Lock显示锁"><a href="#Lock显示锁" class="headerlink" title="Lock显示锁"></a>Lock显示锁</h4><ul>
+<h4 id="JUC-java-util-concurrent-中的锁"><a href="#JUC-java-util-concurrent-中的锁" class="headerlink" title="JUC(java.util.concurrent)中的锁"></a>JUC(java.util.concurrent)中的锁</h4><h5 id="CAS和Unsafe"><a href="#CAS和Unsafe" class="headerlink" title="CAS和Unsafe"></a>CAS和Unsafe</h5><h5 id="Lock显示锁"><a href="#Lock显示锁" class="headerlink" title="Lock显示锁"></a>Lock显示锁</h5><ul>
 <li>Lock方式来获取锁支持中断、超时不获取、是非阻塞的</li>
 <li>提高了语义化，哪里加锁，哪里解锁都得写出来</li>
 <li>Lock显式锁可以给我们带来很好的灵活性，但同时我们必须手动释放锁</li>
 <li>支持Condition条件对象</li>
 <li>允许多个读线程同时访问共享资源：</li>
 </ul>
-<p> <strong>ReentrantLock</strong>(互斥锁)<br>比synchronized更有伸缩性(灵活)<br>支持公平锁(是相对公平的)<br>使用时最标准用法是在try之前调用lock方法，在finally代码块释放锁<br><img src="/2021/07/21/Thread/reentrantlock"></p>
+<p> <strong>ReentrantLock</strong>(互斥锁,重入锁，加锁lock()，释放锁unlock())<br>比synchronized更有伸缩性(灵活)<br>支持公平锁(是相对公平的)<br>使用时最标准用法是在try之前调用lock方法，在finally代码块释放锁<br><img src="/2021/07/21/Thread/reentrantlock.png"></p>
 <h5 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h5><p>AbstractQueuedSynchronizer,在juc（java.util.concurrent）包中<br>AQS是ReentrantLock的基础，AQS是构建锁、同步器的框架</p>
 <ul>
 <li>AQS其实就是一个可以给我们实现锁的框架</li>
@@ -516,7 +519,7 @@
 <p> <strong>使用volatile修饰实现线程可见性</strong><br> <strong>修改state状态值时使用CAS算法来实现</strong></p>
 <h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>线程池可以看做是线程的集合。在没有任务时线程处于空闲状态，当请求到来：线程池给这个请求分配一个空闲的线程，任务完成后回到线程池中等待下次任务(而不是销毁)。这样就实现了线程的重用。</p>
 <h4 id="JDK提供的线程池API"><a href="#JDK提供的线程池API" class="headerlink" title="JDK提供的线程池API"></a>JDK提供的线程池API</h4><p>JDK给我们提供了Excutor框架来使用线程池，它是线程池的基础。</p>
-
+<h5 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h5>
                 
             </div>
             <hr/>
