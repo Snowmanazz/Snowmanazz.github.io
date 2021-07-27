@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2k
+                    1.8k
                 </div>
                 
 
@@ -414,7 +414,7 @@
 <li>当扩容量（newCapacity）大于ArrayList数组定义的最大值后会调用hugeCapacity来进行判断。如果minCapacity已经大于Integer的最大值（溢出为负数）那么抛出OutOfMemoryError（内存溢出）否则的话根据与MAX_ARRAY_SIZE的比较情况确定是返回Integer最大值还是MAX_ARRAY_SIZE。这边也可以看到ArrayList允许的最大容量就是Integer的最大值（-2的31次方~2的31次方减1）。</li>
 </ul>
 <h4 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h4><p>双向链表，查询用Arralist，增删多用LinkedList </p>
-<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><p><img src="/2021/07/20/map/hashmapCode1.png"><br>table在第一次往HashMap中put元素的时候初始化。如果HashMap初始化的时候没有指定容量，那么初始化table的时候会使用默认的DEFAULT_INITIAL_CAPACITY参数，也就是16，作为table初始化时的长度。如果HashMap初始化的时候指定了容量，HashMap会把这个容量修改为2的倍数，然后创建对应长度的table。table在HashMap扩容的时候（如果长度达到了容器*转载因子（默认是0.75）），长度会翻倍。所以table的长度肯定是2的倍数。</p>
+<h4 id="HashMap参考"><a href="#HashMap参考" class="headerlink" title="HashMap参考"></a>HashMap<a target="_blank" rel="noopener" href="https://yuanrengu.com/2020/ba184259.html">参考</a></h4><p><img src="/2021/07/20/map/hashmapCode1.png"><br>Collections.synchronizedMap () 使hashmap线程安全。<br>table在第一次往HashMap中put元素的时候初始化。如果HashMap初始化的时候没有指定容量，那么初始化table的时候会使用默认的DEFAULT_INITIAL_CAPACITY参数，也就是16，作为table初始化时的长度。如果HashMap初始化的时候指定了容量，HashMap会把这个容量修改为2的倍数，然后创建对应长度的table。table在HashMap扩容的时候（如果长度达到了容器*转载因子（默认是0.75）），长度会翻倍。所以table的长度肯定是2的倍数。</p>
 <h5 id="HashMap实现原理"><a href="#HashMap实现原理" class="headerlink" title="HashMap实现原理"></a>HashMap实现原理</h5><p>HashMap类中的元素就是节点<br>HashMap通过key的hashCode来计算hash值，不同的hash值就存在数组中不同的位置，当多个元素的hash值相同时<br><img src="/2021/07/20/map/hashmapCode2.png"><br>Node类的基本属性有：</p>
 <ul>
 <li>hash：key的哈希值</li>
@@ -428,11 +428,6 @@
 <h4 id="treeMap"><a href="#treeMap" class="headerlink" title="treeMap"></a>treeMap</h4><p>TreeMap底层是由红黑树实现的，是有序的。</p>
 <h4 id="ConCurrentHashMap"><a href="#ConCurrentHashMap" class="headerlink" title="ConCurrentHashMap"></a>ConCurrentHashMap</h4><p>底层与HashMap一样，采用散列表+红黑树<br>Hashtable是在每个方法上都加上了Synchronized完成同步，效率低下。<br>ConcurrentHashMap通过在部分加锁和利用CAS算法来实现同步,CAS算法也可以认为是乐观锁的一种<br>get方法是非阻塞，无锁的。重写Node类，通过volatile修饰next来实现每次获取都是最新设置的值</p>
 <h4 id="ConcurrentHashMap源码"><a href="#ConcurrentHashMap源码" class="headerlink" title="ConcurrentHashMap源码"></a>ConcurrentHashMap源码</h4><p>put方法<br><img src="/2021/07/20/map/concurrenthashmapCode.png"><br><img src="/2021/07/20/map/concurrenthashmapCode2.png"><br><img src="/2021/07/20/map/concurrenthashmapCode3.png"><br>get方法<br><img src="/2021/07/20/map/concurrenthashmapCode4.png"></p>
-<h5 id="CAS算法和volatile关键字"><a href="#CAS算法和volatile关键字" class="headerlink" title="CAS算法和volatile关键字"></a>CAS算法和volatile关键字</h5><p>CAS是一种无锁算法，三个操作数（内存值V，旧的预期值A，要修改的新值B）<br>当且仅当预期值A和内存值V相同时，将内存值V修改为B，否则什么也不做（当多个线程使用CAS更新一个变量时，只有一个线程能更新变量的值，其他的线程都会失败，失败的线程不会被挂起，而是可以再次尝试）<br>volatile仅仅用来保证该变量对所有线程的可见性，但不保证原子性。</p>
-<ul>
-<li>保证对所有线程的可见性，就是说但这个变量被修改了，所有的线程都会知道变量被修改了</li>
-<li>不保证原子性，修改变量是在JVM中分为几步，但在这几步中它是不安全的</li>
-</ul>
 <h5 id="ConCurrentHashMap特点"><a href="#ConCurrentHashMap特点" class="headerlink" title="ConCurrentHashMap特点"></a>ConCurrentHashMap特点</h5><p> +ConCurrentHashMap支持高并发的访问和更新，它是线程安全的<br> +检索操作不用加锁，get方法是非阻塞的<br> +key和value都不允许为null</p>
 <h3 id="散列表"><a href="#散列表" class="headerlink" title="散列表"></a>散列表</h3><p>链表和数组都是按顺序存储的，相当于是有序的。这样就会导致一个缺点，访问某个元素就要访问所有的元素，会加大时间复杂度。散列表就可以改变这种情况。</p>
 <h4 id="hash表原理"><a href="#hash表原理" class="headerlink" title="hash表原理"></a>hash表原理</h4><p>散列表为每个对象计算出一个整数，称为散列码。根据这些计算出来的整数(散列码)保存在对应的位置上。<br>可能会遇到散列码相同，这种情况叫做散列冲突，是不可避免的。<br>如果散列表太满，需要再散列，创建新的散列表，将原有的元素插入新表中。<br>转载因子（load factor）（默认值0.75）决定 什么时候创建新的表。如果表中元素超过了75%，则按照两倍的表再散列。</p>
