@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    544
+                    679
                 </div>
                 
 
@@ -405,10 +405,12 @@
 <ul>
 <li>启动一个java程序时，一个JVM实例就产生了，任何一个拥有main函数的class都可以作为JVM的起点</li>
 <li>main()作为程序初始线程的起点，启动其他线程.JVM有两种线程，一种守护线程，一种非守护线程。</li>
-<li>当程序中的所有非守护线程都终止时，JVM退出；若安全管理允许，也可以用Runtime类或者System.exit()退出<h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><h3 id="模型图"><a href="#模型图" class="headerlink" title="模型图"></a>模型图</h3><img src="/2021/07/30/JVM/jvm.jpg"><br>JVM划分为 程序计数器、虚拟机栈、本地方法栈、方法区、堆<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4>程序计数器是线程私有的。每个线程都有一个独立的计数器，记录的是虚拟机字节码指令的地址，java执行时候，依靠程序计数器才能知道下一步怎么走，比如判断、循环、跳出等语句。</li>
+<li>当程序中的所有非守护线程都终止时，JVM退出；若安全管理允许，也可以用Runtime类或者System.exit()退出<h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><h3 id="模型图"><a href="#模型图" class="headerlink" title="模型图"></a>模型图</h3><img src="/2021/07/30/JVM/jvm.jpg"><br>JVM划分为 程序计数器、虚拟机栈、本地方法栈、方法区、堆<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4>程序计数器是线程私有的。每个线程都有一个独立的计数器，记录的是虚拟机字节码指令的地址，JVM虚拟机读取程序计数器值来决定下一条执行的字节码指令 ，比如：分支、循环、跳转、异常处理和线程恢复等。</li>
 </ul>
-<h4 id="java虚拟机栈"><a href="#java虚拟机栈" class="headerlink" title="java虚拟机栈"></a>java虚拟机栈</h4><p>虚拟机栈也是线程私有的，存储的是局部变量。每个方法的调用到完毕，对应一个栈帧再虚拟机栈中入栈和出栈。局部变量的内存会在编译期间分配。</p>
-
+<h4 id="java虚拟机栈"><a href="#java虚拟机栈" class="headerlink" title="java虚拟机栈"></a>java虚拟机栈</h4><p>虚拟机栈也是线程私有的，存储的是局部变量。每个方法的调用到完毕，对应一个栈帧再虚拟机栈中入栈和出栈。局部变量的内存会在编译期间分配。虚拟机栈为虚拟机执行java方法（字节码）服务</p>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>和java虚拟机栈差不多，但是他是为本地（native）方法服务的</p>
+<h4 id="java堆"><a href="#java堆" class="headerlink" title="java堆"></a>java堆</h4><p>java堆内存最大，是被所有线程共享的一块内存区域，所有对象实例和数组都在堆上分配内存。java堆是垃圾收集器管理的内存区域，也被称为GC堆。既可以是固定大小，也可以是可扩展的</p>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4>
                 
             </div>
             <hr/>
@@ -523,18 +525,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2021/07/30/JVM/">
+                <a href="/2021/07/31/volatile/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="深入理解JAVA虚拟机">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="深入了解volatile">
                         
-                        <span class="card-title">深入理解JAVA虚拟机</span>
+                        <span class="card-title">深入了解volatile</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -544,9 +545,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-30
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-31
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -555,16 +556,19 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/java/">
-                        <span class="chip bg-color">java</span>
+                    <a href="/tags/volatile/">
+                        <span class="chip bg-color">volatile</span>
                     </a>
                     
-                    <a href="/tags/JVM/">
-                        <span class="chip bg-color">JVM</span>
+                    <a href="/tags/%E5%B9%B6%E5%8F%91/">
+                        <span class="chip bg-color">并发</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                        <span class="chip bg-color">线程</span>
                     </a>
                     
                 </div>

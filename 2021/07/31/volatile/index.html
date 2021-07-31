@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Thread, Idea">
+    <meta name="keywords" content="深入了解volatile, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Thread | Idea</title>
+    <title>深入了解volatile | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -222,12 +222,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Thread</h1>
+                    <h1 class="description center-align post-title">深入了解volatile</h1>
                 </div>
             </div>
         </div>
@@ -343,12 +343,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/java/">
-                                <span class="chip bg-color">java</span>
+                            <a href="/tags/volatile/">
+                                <span class="chip bg-color">volatile</span>
                             </a>
                         
-                            <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
-                                <span class="chip bg-color">多线程</span>
+                            <a href="/tags/%E5%B9%B6%E5%8F%91/">
+                                <span class="chip bg-color">并发</span>
+                            </a>
+                        
+                            <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                                <span class="chip bg-color">线程</span>
                             </a>
                         
                     </div>
@@ -363,7 +367,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2021-07-21
+                    2021-07-31
                 </div>
                 
 
@@ -372,7 +376,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    4.4k
+                    570
                 </div>
                 
 
@@ -394,149 +398,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><p>进程是程序的一次执行，进程是一个程序及其数据在处理机上顺序执行时所发生的活动，进程是具有独立功能的程序在一个数据集合上运行的过程，它是系统进行资源分配和调度的一个独立单位<br>进程实现多处理机环境下的进程调度，分派，切换时，都需要花费较大的时间和空间开销。<br>引入线程主要是为了提高系统的执行效率，减少处理机的空转时间和调度切换的时间，以及便于系统管理，使得OS具有更好的并发性。</p>
-<h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><p>线程作为资源调度的基本单位，是程序的执行单元，是程序使用CPU的最基本单位。<br>线程有3个基本状态： <strong>执行、就绪、阻塞</strong><br>线程有5种基本操作： <strong>派生、阻塞、激活、 调度、 结束</strong><br> <strong>线程的特点：</strong></p>
+                <h2 id="volatile的应用"><a href="#volatile的应用" class="headerlink" title="volatile的应用"></a>volatile的应用</h2><p>volatile是轻量级的synchronized，保证了共享变量的可见性。</p>
+<h3 id="volatile定义"><a href="#volatile定义" class="headerlink" title="volatile定义"></a>volatile定义</h3><p>java允许多线程访问共享变量，为了确保共享变量准确和一致的更新，线程应该通过排他锁获得该变量</p>
+<h3 id="volatile原理"><a href="#volatile原理" class="headerlink" title="volatile原理"></a>volatile原理</h3><p>有volatile修饰的共享变量在进行写操作的时候会多出一行汇编代码，lock前缀指令</p>
 <ul>
-<li>JVM允许多个线程并发执行</li>
-<li>线程有优先级，优先级高的先执行</li>
-<li>线程还有守护线程</li>
-<li>初始化时。优先级是平等的</li>
-<li>JVM启动时，会有一个main线程启动，通常没有守护线程。</li>
-<li>线程结束的两种情况<ul>
-<li>执行退出exit方法</li>
-<li>run方法执行完或者抛出异常</li>
+<li>lock指令会将当前处理器缓存的数据写到系统内存</li>
+<li>这个回写操作会使其他CPU里缓存了该内存地址的数据无效<br>为了提高处理速度，处理器不会直接和内存进行通信，而是将系统内存的数据读到内部缓存后再进行操作。声明了volatile变量后，JVM会像处理器发送一条Lock前缀的指令，将这个变量所在缓存行的数据写到系统内存。在多线程下， 为了保证处理器的缓存是一致的，就会实现缓存一致协议，每个处理器通过嗅探在总线上传播的数据来检查自己的缓存值是不是过期了，当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置为无效状态，当处理器再对这个数据进行操作时，就会重新从系统内存读到缓存行中。</li>
 </ul>
-</li>
-<li>创建多线程的三种方法：<ul>
-<li>继承Tread，重写run方法（简单好用，this获取当前线程）</li>
-<li>实现Runnable接口，重写run方法（适合多线程共享同一个资源，访问当前线程，则使用Thread.currentThread()）</li>
-<li>实现Callable接口，实现Call方法（适合多线程共享同一个资源，访问当前线程，则使用Thread.currentThread()）</li>
-</ul>
-</li>
-</ul>
-<p> <strong>Thread和Runnable没有太大的区别！Runabout在多线程处理同一资源时更加方便<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhaojianting/article/details/97664370">深入了解点这里</a></strong></p>
-<h3 id="Thread代码分析"><a href="#Thread代码分析" class="headerlink" title="Thread代码分析"></a>Thread代码分析</h3><p> <strong>继承Thread，重写run方法</strong><br><img src="/2021/07/21/Thread/thread1.png"><br> <strong>实现Runnable，重写run方法</strong><br><img src="/2021/07/21/Thread/myrunnable.png"><br>Callable和Runnable一样，但是Runnable没有返回值，不能抛出受检查的异常，而Callable可以。<br>一般我们使用实现Runnable接口，可以避免java中的单继承的限制，应该将并发运行任务和运行机制解耦，因此我们选择实现Runnable接口这种方式。</p>
-<h3 id="run-和start-区别"><a href="#run-和start-区别" class="headerlink" title="run()和start()区别"></a>run()和start()区别</h3><ul>
-<li>run():仅仅是封装被线程执行的代码，直接调用是普通方法</li>
-<li>start():首先启动了线程，然后再由jvm去调用该线程的run()方法。<br>jvm虚拟机的启动是多线程的。不仅仅是启动main线程，还至少会启动垃圾回收线程的。</li>
-</ul>
-<h3 id="Thread源码分析"><a href="#Thread源码分析" class="headerlink" title="Thread源码分析"></a>Thread源码分析</h3><p>前面代码中使用了Thread.currentThread()用来获取线程。格式都是[Thread-x,x,main])<br><img src="/2021/07/21/Thread/threadCode.png"> <img src="/2021/07/21/Thread/threadCode2.png"></p>
-<h3 id="守护线程"><a href="#守护线程" class="headerlink" title="守护线程"></a>守护线程</h3><p>在 <strong>线程启动之前设置守护线程</strong> 方法是setDaemon(boolean on)<br><img src="/2021/07/21/Thread/shouhu.png"><br>守护线程是为其他线程服务的 （垃圾回收线程就是守护线程），守护线程拥有自动结束自己生命周期的特性；使用守护线程时不要访问共享资源，容易挂掉。<br>在JVM中，所有非守护线程都执行完毕后，无论有没有守护线程，虚拟机都会自动退出。</p>
-<h3 id="优先级线程"><a href="#优先级线程" class="headerlink" title="优先级线程"></a>优先级线程</h3><p>设置优先级方法setPriority()是一个本地(navite)的方法(Java提供的优先级默认是5，最低是1，最高是10)<br>线程优先级高仅仅表示线程获取的CPU时间片的几率高，但这不是一个确定的因素！线程的优先级是高度依赖于操作系统的，Windows和Linux就有所区别(Linux下优先级被忽略了)</p>
-<h3 id="线程生命周期"><a href="#线程生命周期" class="headerlink" title="线程生命周期"></a>线程生命周期</h3><p>线程的几个基本的状态</p>
+<h3 id="volatile使用优化"><a href="#volatile使用优化" class="headerlink" title="volatile使用优化"></a>volatile使用优化</h3><p>JDK7的并发包下新增了一个队列集合类LinkedTransferQueue，以追加字节的方式来优化队列入队和出队<br>LInkTransferQueue使用一个内部类定义头尾节点（PaddedAtomicReference）<br>使用一个内部类将共享变量追加到64字节。因为大部分处理器的缓存的高速缓存行时64个字节宽，不支持部分填充缓存行， 如果队列的头尾节点都不足64字节，就会被读到同一个高速缓存中， 当处理器修改头节点时，就会锁住整个缓存行，那么其他处理器就不能访问尾节点，会影响入队和出队的效率。<br>不能追加64字节的情况：</p>
 <ul>
-<li>new 新建的一个线程，还没开始运行</li>
-<li>runnable 线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于可运行线程池中，等待被线程调度选中，获取CPU的使用权，此时处于就绪状态（ready）。就绪状态的线程在获得CPU时间片后变为运行中状态。</li>
-<li>block 线程阻塞于锁，暂时不活动，</li>
-<li>timed_waiting 超时等待，一定时间后会自动返回</li>
-<li>terminated 线程执行完毕</li>
+<li>缓存行不是64字节的处理器</li>
+<li>共享变量不被频繁的写</li>
 </ul>
-<h3 id="切换线程状态的方法"><a href="#切换线程状态的方法" class="headerlink" title="切换线程状态的方法"></a>切换线程状态的方法</h3><p><img src="/2021/07/21/Thread/tansfer.png"><br> <strong>sleep() 运行-&gt;阻塞</strong><br>Thread类的方法当前线程调用sleep方法会进入计时等待状态（阻塞线程），但不释放对象锁，等时间到了，进入的是就绪状态而并非是运行状态。<br><img src="/2021/07/21/Thread/sleep.png"></p>
-<p> <strong>yield() 运行-&gt;就绪</strong><br>Thread类的方法。当前线程调用yield方法会，都是暂停当前正在执行的线程对象，不会释放资源锁，不会让线程进入阻塞状态，而是让线程重回就绪状态（yield 方法只能使同优先级或更高优先级的线程有执行的机会）<br><img src="/2021/07/21/Thread/yield.png"></p>
-<p> <strong>join()</strong><br>join() 方法等待调用join方法的线程结束之后，程序再继续执行，其他线程（阻塞状态）无法运行，必须等待此线程完成之后才可以继续执行,执行完之后释放锁。<br><img src="/2021/07/21/Thread/join.png"></p>
-<p> <strong>wait() 运行-&gt;等待 和notify() 等待-&gt;就绪-&gt;运行（需要等其他线程执行完）</strong><br>Object类的方法。wait 过程中线程会释放对象锁，只有当其他线程调用 notify 才能唤醒此线程，然后等其他线程执行完后执行。wait 使用时必须先获取对象锁，即必须在 synchronized 修饰的代码块中使用<br><img src="/2021/07/21/Thread/wait.png"></p>
-<p> <strong>interrupt()</strong><br>一般使用的是interrupt来 <em><strong>请求</strong></em>终止线程(并不是真正的中断)<br>interrupt不会真正停止一个线程，它仅仅是给这个线程发了一个信号告诉它，它应该要结束了。具体到底中断还是继续运行，应该由被通知的线程自己处理。interrupt方法压根是不会对线程的状态造成影响的，它仅仅设置一个标志位罢了。</p>
-<h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>使用多线程的主要原因是提高系统的资源利用率。</p>
-<h3 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h3><p>多线程中，线程时交替并行的，一般会使用多个线程执行相同的代码，其中可能会有共同的变量或者一些组合操作，就很容易出现问题。<br>例如： 在多线程中执行++count：</p>
-<ul>
-<li>++count实际上的操作是这样的</li>
-</ul>
-<ul>
-<li>读取count的值（将count加载到寄存器）</li>
-<li>将值+1</li>
-<li>将计算结果写入count<br>可能AB两个线程同时读取count的值，都执行++，但是最后count的结果变成9。</li>
-</ul>
-<p>能使用JDK提供的线程安全机制，就使用JDK的。</p>
-<h3 id="性能问题"><a href="#性能问题" class="headerlink" title="性能问题"></a>性能问题</h3><p>设计多线程 的目的是为了 <strong>提高应用程序的使用率</strong>,但是不合理使用，会降低效率，甚至造成死锁。</p>
-<h3 id="如何让线程安全"><a href="#如何让线程安全" class="headerlink" title="如何让线程安全"></a>如何让线程安全</h3><p>如果不是线程安全的，我们可以做什么东西来使我们的程序变得线程安全。</p>
-<ul>
-<li>没有共享变量</li>
-<li>使用final使该引用变量不可变</li>
-<li>加锁或者使用JDK提供的类</li>
-</ul>
-<ul>
-<li>如果是集合，我们可以考虑一下juc包下的集合类。</li>
-<li>如果是数值/对象，我们可以考虑一下atomic包下的类。</li>
-<li>如果是涉及到线程的重复利用，我们可以考虑一下是否要用线程池。</li>
-<li>如果涉及到对线程的控制（比如一次能使用多少个线程，当前线程触发的条件是否依赖其他线程的结果），我们可以考虑CountDownLatch/Semaphore等等</li>
-<li>如果synchronized无法满足，我们可以考虑lock包下的类</li>
-</ul>
-<h4 id="原子性和可见性"><a href="#原子性和可见性" class="headerlink" title="原子性和可见性"></a>原子性和可见性</h4><p> <strong>原子性</strong><br>如果操作是原子性的，那么就可以说线程安全了(因为没有中间的三部环节，一步到位【原子性】<br>JDK中有atomic包提供给我们实现原子性操作 （atomicxxx）既有原子性也有可见性。<br>Atomic包里的类基本都是使用Unsafe实现的包装类，核心操作是CAS原子操作；<br> <img src="/2021/07/21/Thread/atomic1.png"><br> <img src="/2021/07/21/Thread/atomic.png"></p>
-<p> <strong>可见性</strong><br>对于可见性，Java提供了一个关键字：volatile 。volatile轻量级的同步机制，仅用来保证该变量对所有线程的可见性，但不保证原子性</p>
-<ul>
-<li>一旦你完成写入，任何访问这个字段的线程将会得到最新的值</li>
-<li>在写入前，会保证所有之前发生的事已经发生</li>
-<li>volatile可以防止重排序 (重排序指的就是：程序执行的时候，CPU、编译器可能会对执行顺序做一些调整），声明了volatile，那么CPU、编译器就会知道这个变量是共享的，不会被缓存在寄存器或者其他不可见的地方。</li>
-</ul>
-<p> <strong>volatile大多用于标志位上(判断操作)</strong></p>
-<ul>
-<li>修改变量时不依赖变量的当前值(volatile是不保证原子性的)</li>
-<li>该变量不会纳入到不变性条件中(该变量是可变的)</li>
-<li>在访问变量的时候不需要加锁</li>
-</ul>
-<h4 id="线程封闭"><a href="#线程封闭" class="headerlink" title="线程封闭"></a>线程封闭</h4><p>多线程的环境下，只要我们不使用成员变量(不共享数据),那么就不会出现线程安全的问题<br> <strong>ThreadLocal设计的目的就是为了能够在当前线程中有属于自己的变量，并不是为了解决并发或者共享变量的问题</strong><br>ThreadLocal提供了线程的局部变量（牺牲空间），每个线程都可以通过set()和get()来对这个局部变量进行操作，但不会和其他线程的局部变量进行冲突，实现线程数据的隔离。也就是说往ThreadLocal中填充的变量属于当前线程，该变量对其他线程而言是隔离的。<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/fsmly/p/11020641.html">ThreadLocal详解</a><br> <strong>ThreadLocal作用</strong><br>最常用的就是管理数据库的连接。ThreadLocal能够实现当前线程的操作都是用同一个Connection，保证了事务！</p>
-<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><p>不可变的对象一定是线程安全的<br>共享的变量都是可变的，正由于是可变的才会出现线程安全问题。如果该状态是不可变的，那么随便多个线程访问都是没有问题的！<br> <em><strong>final仅仅是不能修改该变量的引用，但是引用里边的数据是可以改的!</strong></em><br>不可变的对象引用在使用的时候还是需要加锁的。不可变对象的条件：</p>
-<ul>
-<li>对象创建后状态就不能修改</li>
-<li>对象所有的域都是final修饰的</li>
-<li>对象是正确创建的(没有this引用逸出)</li>
-</ul>
-<h3 id="加锁机制"><a href="#加锁机制" class="headerlink" title="加锁机制"></a>加锁机制</h3><p>锁-是为了解决并发操作引起的脏读、数据不一致的问题。</p>
-<h4 id="synchronized同步锁"><a href="#synchronized同步锁" class="headerlink" title="synchronized同步锁"></a>synchronized同步锁</h4><p>synchronized是Java的一个关键字，它能够将代码块(方法)锁起来。（牺牲时间）</p>
-<ul>
-<li>synchronized是一种互斥锁，一次只能允许一个线程进入被锁住的代码块。</li>
-<li>synchronized是一种内置锁/监视器锁，Java中每个对象都有一个内置锁(监视器,也可以理解成锁标记)，而synchronized就是使用对象的内置锁(监视器)来将代码块(方法)锁定。</li>
-<li>synchronized内置锁 是一种 对象锁（锁的是对象而非引用变量），作用粒度是对象 ，可以用来实现对 临界资源的同步互斥访问 ，是 可重入 的。其可重入最大的作用是避免死锁。如果子类同步方法调用了父类同步方法，如没有可重入的特性，则会发生死锁。<br>Synchronized的语义底层是通过一个monitor(内置锁)的对象来完成，其实wait/notify等方法也依赖于monitor对象，这就是为什么只有在同步的块或者方法中才能调用wait/notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常的原因。<br>synchronized 保证了线程的原子性、可见性、有序性。<br><img src="/2021/07/21/Thread/synchronized.png"></li>
-</ul>
-<p>synchronized一般用来修饰：</p>
-<ul>
-<li>修饰普通方法（获取对象锁(this)）</li>
-<li>修饰代码块（获取代码块中实例对象的锁）</li>
-<li>修饰静态方法（获取class类锁，类的字节码文件对象,调用静态方法就会锁住静态方法所在类）<br>获取了类锁的线程和获取了对象锁的线程是不冲突的。<br><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_39736597/article/details/113679974">synchronized锁优化</a><br><a target="_blank" rel="noopener" href="https://github.com/farmerjohngit/myblog/issues/12">synchronized底层原理</a><br><img src="/2021/07/21/Thread/synchronizedticket.png"></li>
-</ul>
-<p> <strong>锁的释放</strong></p>
-<ul>
-<li>当方法(代码块)执行完毕后会自动释放锁，不需要做任何的操作。</li>
-<li>当一个线程执行的代码出现异常时，其所持有的锁会自动释放。</li>
-</ul>
-<h4 id="JUC-java-util-concurrent-中的锁"><a href="#JUC-java-util-concurrent-中的锁" class="headerlink" title="JUC(java.util.concurrent)中的锁"></a>JUC(java.util.concurrent)中的锁</h4><h5 id="CAS和Unsafe"><a href="#CAS和Unsafe" class="headerlink" title="CAS和Unsafe"></a>CAS和Unsafe</h5><p>Unsafe简单讲一下这个类。Java无法直接访问底层操作系统，而是通过本地（native）方法来访问。不过尽管如此，JVM还是开了一个后门，JDK中有一个类Unsafe，它提供了硬件级别的原子操作。可以用来直接操控内存和线程。比如说获取某个属性在内存中的位置，比如说修改对象的字段值。</p>
-<p>CAS，Compare and Swap即比较并交换，java.util.concurrent包全完建立在CAS之上，没有CAS也就没有此包。<br>CAS有三个操作数：内存值V、旧的预期值A、要修改的值B，当且仅当预期值A和内存值V相同时，将内存值修改为B并返回true，否则什么都不做并返回false。CAS也是通过Unsafe实现的。<br>由CAS分析AtomicInteger原理，java.util.concurrent.atomic包下的原子操作类都是基于CAS实现的，下面先分析一下AtomicInteger类变量的定义：<br><img src="/2021/07/21/Thread/cas.png"><br>AtomicInteger中getAndIncrement是如何实现的，比如常用的andAndGet方法：<br><img src="/2021/07/21/Thread/casadd.png"><br>getIntVolatile方法-&gt;获取obj对象内存地址上偏移量offSet地址上属性的int值<br>compareAndSwapInt方法-&gt;设置obj对象内存地址上偏移量offSet地址上属性的值，如果当前属性值为A，则改为B返回true，否则返回false。<br>这段代码再不加锁的情况下通过CAS实现线程安全：</p>
-<ul>
-<li>AtomicInteger中value原始值为3，即主内存中AtomicInteger的value为3，根据Java内存模型，线程1和线程2各自持有一份value的副本，值为3.</li>
-<li>线程1运行到第三行获取到当前的value为3，线程切换。</li>
-<li>线程2开始运行，获取value为3，利用CAS对比内存中的值也为3，比较成功，修改内存，此时内存中的value改变比如说4，线程切换。</li>
-<li>线程1恢复运行，利用CAS比较发现自己的value为3，内存中的value为4，得到一个重要的结论-&gt;此时value正在被另外一个线程修改，所以我不能去修改。</li>
-<li>线程1的compareAndSet失败，循环判断，因为value是volatile修饰的，所以它具备可见性的特性，线程2对于value的改变能被线程1看到，只要线程1发现当前获取的value是4，内存中的value也是4，说明线程2对于value的修改已经完毕并且线程1可以尝试去修改它。</li>
-<li>最后说一点，比如说此时线程3也准备修改value了，因为比较-交换是一个原子操作不可被打断，线程3修改了value，线程1进行compareAndSet的时候必然返回false，这样线程1会继续循环去获取最新的value并进行compareAndSet，直至获取的value和内存中value一致为止。</li>
-</ul>
-<p> <strong>CAS漏洞ABA</strong><br>存在这一一个逻辑漏洞：如果一个变量初次读取的时候是A值，并且在准备赋值的时候检查到它仍然是A值，那我们就能说明它的值没有被其它线程修改过了吗？如果这段期间它的值曾经被改成了B，然后又改回A，那么CAS操作就会误认为它从来没有被修改过。这个漏洞称为CAS操作的ABA问题。java.util.concurrent包为了解决这个问题，提供了一个带有标记性的原子引用类AtomicStampedRenference，它可以通过控制变量值的版本来保证CAS的正确性</p>
-<h5 id="Lock显示锁"><a href="#Lock显示锁" class="headerlink" title="Lock显示锁"></a>Lock显示锁</h5><ul>
-<li>Lock方式来获取锁支持中断、超时不获取、是非阻塞的</li>
-<li>提高了语义化，哪里加锁，哪里解锁都得写出来</li>
-<li>Lock显式锁可以给我们带来很好的灵活性，但同时我们必须手动释放锁</li>
-<li>支持Condition条件对象</li>
-<li>允许多个读线程同时访问共享资源：</li>
-</ul>
-<p> <strong>ReentrantLock</strong>(互斥锁,重入锁，加锁lock()，释放锁unlock())</p>
-<ul>
-<li>比synchronized更有伸缩性(灵活)</li>
-<li>支持公平锁(是相对公平的)</li>
-<li>使用时最标准用法是在try之前调用lock方法，在finally代码块释放锁<br><img src="/2021/07/21/Thread/reentrantlock.png"></li>
-</ul>
-<h5 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h5><p>AbstractQueuedSynchronizer,在juc（java.util.concurrent）包中<br>AQS是ReentrantLock的基础，AQS是构建锁、同步器的框架</p>
-<ul>
-<li>AQS其实就是一个可以给我们实现锁的框架</li>
-<li>内部实现的关键是：先进先出的队列、state状态</li>
-<li>定义了内部类ConditionObject</li>
-<li>拥有两种线程模式</li>
-<li>独占模式</li>
-<li>共享模式</li>
-<li>在LOCK包中的相关锁(常用的有ReentrantLock、 ReadWriteLock)都是基于AQS来构建</li>
-</ul>
-<p> <strong>使用volatile修饰实现线程可见性</strong><br> <strong>修改state状态值时使用CAS算法来实现</strong></p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>线程池可以看做是线程的集合。在没有任务时线程处于空闲状态，当请求到来：线程池给这个请求分配一个空闲的线程，任务完成后回到线程池中等待下次任务(而不是销毁)。这样就实现了线程的重用。</p>
-<h4 id="JDK提供的线程池API"><a href="#JDK提供的线程池API" class="headerlink" title="JDK提供的线程池API"></a>JDK提供的线程池API</h4><p>JDK给我们提供了Excutor框架来使用线程池，它是线程池的基础。（当我们的任务需要返回值的时，我们可以使用Callable）</p>
-<h5 id="ThreadPoolExecutor"><a href="#ThreadPoolExecutor" class="headerlink" title="ThreadPoolExecutor"></a>ThreadPoolExecutor</h5>
+
                 
             </div>
             <hr/>
@@ -562,7 +436,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://snowmanazz.github.io/2021/07/21/Thread/">http://snowmanazz.github.io/2021/07/21/Thread/</a>
+                    <a href="http://snowmanazz.github.io/2021/07/31/volatile/">http://snowmanazz.github.io/2021/07/31/volatile/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -600,12 +474,16 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/java/">
-                                    <span class="chip bg-color">java</span>
+                                <a href="/tags/volatile/">
+                                    <span class="chip bg-color">volatile</span>
                                 </a>
                             
-                                <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
-                                    <span class="chip bg-color">多线程</span>
+                                <a href="/tags/%E5%B9%B6%E5%8F%91/">
+                                    <span class="chip bg-color">并发</span>
+                                </a>
+                            
+                                <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                                    <span class="chip bg-color">线程</span>
                                 </a>
                             
                         </div>
@@ -651,17 +529,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2021/07/27/mysql/">
+                <a href="/2021/07/31/volatile/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="mysql">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="深入了解volatile">
                         
-                        <span class="card-title">mysql</span>
+                        <span class="card-title">深入了解volatile</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -671,9 +550,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-07-27
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-31
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -682,11 +561,20 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/mysql/">
-                        <span class="chip bg-color">mysql</span>
+                    <a href="/tags/volatile/">
+                        <span class="chip bg-color">volatile</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%B9%B6%E5%8F%91/">
+                        <span class="chip bg-color">并发</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BA%BF%E7%A8%8B/">
+                        <span class="chip bg-color">线程</span>
                     </a>
                     
                 </div>
@@ -700,13 +588,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/07/21/Object/">
+                <a href="/2021/07/30/JVM/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="Object对象">
+                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="深入理解JAVA虚拟机">
                         
-                        <span class="card-title">Object对象</span>
+                        <span class="card-title">深入理解JAVA虚拟机</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -717,7 +605,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-21
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-30
                             </span>
                         <span class="publish-author">
                             
@@ -734,8 +622,8 @@
                         <span class="chip bg-color">java</span>
                     </a>
                     
-                    <a href="/tags/Object/">
-                        <span class="chip bg-color">Object</span>
+                    <a href="/tags/JVM/">
+                        <span class="chip bg-color">JVM</span>
                     </a>
                     
                 </div>
