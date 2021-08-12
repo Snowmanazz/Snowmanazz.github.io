@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    4.4k
+                    4.5k
                 </div>
                 
 
@@ -509,7 +509,11 @@
 <li>线程1的compareAndSet失败，循环判断，因为value是volatile修饰的，所以它具备可见性的特性，线程2对于value的改变能被线程1看到，只要线程1发现当前获取的value是4，内存中的value也是4，说明线程2对于value的修改已经完毕并且线程1可以尝试去修改它。</li>
 <li>最后说一点，比如说此时线程3也准备修改value了，因为比较-交换是一个原子操作不可被打断，线程3修改了value，线程1进行compareAndSet的时候必然返回false，这样线程1会继续循环去获取最新的value并进行compareAndSet，直至获取的value和内存中value一致为止。</li>
 </ul>
-<p> <strong>CAS漏洞ABA</strong><br>存在这一一个逻辑漏洞：如果一个变量初次读取的时候是A值，并且在准备赋值的时候检查到它仍然是A值，那我们就能说明它的值没有被其它线程修改过了吗？如果这段期间它的值曾经被改成了B，然后又改回A，那么CAS操作就会误认为它从来没有被修改过。这个漏洞称为CAS操作的ABA问题。java.util.concurrent包为了解决这个问题，提供了一个带有标记性的原子引用类AtomicStampedRenference，它可以通过控制变量值的版本来保证CAS的正确性</p>
+<p> <strong>CAS漏洞ABA</strong><br>存在这一一个逻辑漏洞：如果一个变量初次读取的时候是A值，并且在准备赋值的时候检查到它仍然是A值，那我们就能说明它的值没有被其它线程修改过了吗？如果这段期间它的值曾经被改成了B，然后又改回A，那么CAS操作就会误认为它从来没有被修改过。这个漏洞称为CAS操作的ABA问题。java.util.concurrent包为了解决这个问题，提供了一个带有标记性的原子引用类AtomicStampedRenference，它可以通过控制变量值的版本来保证CAS的正确性<br> <strong>CAS缺陷</strong></p>
+<ul>
+<li>循环时间开销大：自旋CAS如果长时间不成功，会给CPU带来很大的执行开销</li>
+<li>只能保证一个共享变量的原子操作，得加锁了。</li>
+</ul>
 <h5 id="Lock显示锁"><a href="#Lock显示锁" class="headerlink" title="Lock显示锁"></a>Lock显示锁</h5><ul>
 <li>Lock方式来获取锁支持中断、超时不获取、是非阻塞的</li>
 <li>提高了语义化，哪里加锁，哪里解锁都得写出来</li>
