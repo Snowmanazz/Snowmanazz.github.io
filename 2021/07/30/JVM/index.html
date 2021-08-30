@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    679
+                    1.1k
                 </div>
                 
 
@@ -405,12 +405,24 @@
 <ul>
 <li>启动一个java程序时，一个JVM实例就产生了，任何一个拥有main函数的class都可以作为JVM的起点</li>
 <li>main()作为程序初始线程的起点，启动其他线程.JVM有两种线程，一种守护线程，一种非守护线程。</li>
-<li>当程序中的所有非守护线程都终止时，JVM退出；若安全管理允许，也可以用Runtime类或者System.exit()退出<h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><h3 id="模型图"><a href="#模型图" class="headerlink" title="模型图"></a>模型图</h3><img src="/2021/07/30/JVM/jvm.jpg"><br>JVM划分为 程序计数器、虚拟机栈、本地方法栈、方法区、堆<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4>程序计数器是线程私有的。每个线程都有一个独立的计数器，记录的是虚拟机字节码指令的地址，JVM虚拟机读取程序计数器值来决定下一条执行的字节码指令 ，比如：分支、循环、跳转、异常处理和线程恢复等。</li>
+<li>当程序中的所有非守护线程都终止时，JVM退出；若安全管理允许，也可以用Runtime类或者System.exit()退出<h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><h3 id="模型图"><a href="#模型图" class="headerlink" title="模型图"></a>模型图</h3><img src="/2021/07/30/JVM/jvm.jpg"><br>JVM划分为 程序计数器、虚拟机栈、本地方法栈、方法区、堆</li>
 </ul>
+<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>程序计数器是线程私有的。每个线程都有一个独立的计数器，记录的是虚拟机字节码指令的地址，JVM虚拟机读取程序计数器值来决定下一条执行的字节码指令 ，比如：分支、循环、跳转、异常处理和线程恢复等,该区域是唯一一个不会出现OutOfMemoryError的区域。</p>
 <h4 id="java虚拟机栈"><a href="#java虚拟机栈" class="headerlink" title="java虚拟机栈"></a>java虚拟机栈</h4><p>虚拟机栈也是线程私有的，存储的是局部变量。每个方法的调用到完毕，对应一个栈帧再虚拟机栈中入栈和出栈。局部变量的内存会在编译期间分配。虚拟机栈为虚拟机执行java方法（字节码）服务</p>
-<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>和java虚拟机栈差不多，但是他是为本地（native）方法服务的</p>
+<ul>
+<li>如果线程请求栈深度大于虚拟机所允许的深度，抛出StackOverFlowError</li>
+<li>如果java虚拟机的容量可以动态扩展，当栈扩张时无法得到足够的内存会抛出OutOfMemoryError</li>
+</ul>
+<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>和java虚拟机栈差不多也可能会抛出两个异常，但是他是为本地（native）方法服务的</p>
 <h4 id="java堆"><a href="#java堆" class="headerlink" title="java堆"></a>java堆</h4><p>java堆内存最大，是被所有线程共享的一块内存区域，所有对象实例和数组都在堆上分配内存。java堆是垃圾收集器管理的内存区域，也被称为GC堆。既可以是固定大小，也可以是可扩展的</p>
-<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4>
+<ul>
+<li>如果java堆中没有内存完成实例分配，并且堆也无法继续扩展，就会抛出OutOfMemoryError异常</li>
+</ul>
+<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><p>方法区也是各个线程共享的内存区域，用于存储被虚拟机加载的类型信息、常量、静态变量，即时编译器编译后的代码缓存等数据。当方法区无法满足新的内存分配需求时，抛出OutOfMemoryError异常</p>
+<p><strong>jdk7方法区是由永久代实现，jdk8则是由元空间实现。并且jdk8后将永久代中的常量池、静态变量等移出永久代，将字符串常量池移到堆中，运行常量池在方法区，类信息等在元空间中。</strong></p>
+<h4 id="运行常量池"><a href="#运行常量池" class="headerlink" title="运行常量池"></a>运行常量池</h4><p>运行常量池是方法区中的一部分。Class文件包含类的版本、字段、方法、接口、常量池表（存放编译器生成的字面应用和符号引用），这部分内容会在类加载后加载到运行时常量池中。当常量池无法申请到内存时会抛出OutOfMemoryError</p>
+<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><p> <strong>直接内存不是虚拟机运行时数据区的一部分，也不是《java虚拟机规范》中定义的内存区域</strong>，但是直接内存也会频繁的使用导致OutOfMemoryError异常。JDK4新加入NIO类，引入勒一种基于通道与缓冲区的I/O方式，它可以使用Native函数直接分配堆外内存。</p>
+<h2 id="HotSpot虚拟机对象"><a href="#HotSpot虚拟机对象" class="headerlink" title="HotSpot虚拟机对象"></a>HotSpot虚拟机对象</h2><h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4>
                 
             </div>
             <hr/>
