@@ -376,7 +376,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    570
+                    576
                 </div>
                 
 
@@ -398,7 +398,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="volatile的应用"><a href="#volatile的应用" class="headerlink" title="volatile的应用"></a>volatile的应用</h2><p>volatile是轻量级的synchronized，保证了共享变量的可见性。</p>
+                <h2 id="volatile的应用"><a href="#volatile的应用" class="headerlink" title="volatile的应用"></a>volatile的应用</h2><p>volatile是轻量级的synchronized</p>
+<ul>
+<li><strong>保证可见性</strong></li>
+<li><strong>不保证原子性</strong></li>
+<li><strong>禁止指令重排</strong></li>
+</ul>
 <h3 id="volatile定义"><a href="#volatile定义" class="headerlink" title="volatile定义"></a>volatile定义</h3><p>java允许多线程访问共享变量，为了确保共享变量准确和一致的更新，线程应该通过排他锁获得该变量</p>
 <h3 id="volatile原理"><a href="#volatile原理" class="headerlink" title="volatile原理"></a>volatile原理</h3><p>有volatile修饰的共享变量在进行写操作的时候会多出一行汇编代码，lock前缀指令</p>
 <ul>
