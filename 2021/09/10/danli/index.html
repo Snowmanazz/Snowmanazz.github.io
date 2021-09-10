@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="http入门, Idea">
+    <meta name="keywords" content="单例模式, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>http入门 | Idea</title>
+    <title>单例模式 | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -222,12 +222,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">http入门</h1>
+                    <h1 class="description center-align post-title">单例模式</h1>
                 </div>
             </div>
         </div>
@@ -343,8 +343,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/http/">
-                                <span class="chip bg-color">http</span>
+                            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                                <span class="chip bg-color">设计模式</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+                                <span class="chip bg-color">单例模式</span>
                             </a>
                         
                     </div>
@@ -359,7 +363,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2021-08-30
+                    2021-09-10
                 </div>
                 
 
@@ -368,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2.1k
+                    1.3k
                 </div>
                 
 
@@ -390,129 +394,44 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="什么是HTTP协议"><a href="#什么是HTTP协议" class="headerlink" title="什么是HTTP协议"></a>什么是HTTP协议</h2><p>http协议就是客户端和服务端交互的一种通讯的格式，主要让文档之间相互关联，形成超文本可以相互传阅</p>
-<p> <strong>HTTP在计算机网络层的最上层——应用层</strong></p>
-<h3 id="网站通信过程"><a href="#网站通信过程" class="headerlink" title="网站通信过程"></a>网站通信过程</h3><p>我们在Web通信的过程中，除了HTTP协议，还需要其他协议：</p>
+                <h1 id="彻底玩转单例模式"><a href="#彻底玩转单例模式" class="headerlink" title="彻底玩转单例模式"></a>彻底玩转单例模式</h1><h2 id="单例模式定义"><a href="#单例模式定义" class="headerlink" title="单例模式定义"></a>单例模式定义</h2><p>单例模式确保某个类只有一个实例，而且自行实例化并向整个系统提供这个实例（构造器私有）</p>
 <ul>
-<li>DNS：负责解析域名。访问网页时，往往是通过域名访问，而计算机通信是只认主机地址的，因此需要将域名解析成主机来进行访问</li>
-<li>HTTP:产生请求报文数据。在对web页面进行操作时，会产生http报文数据，请求对应的服务端进行响应</li>
-<li>TCP：分割HTTP数据，保证数据运输。TCP采用 <strong>三次握手保证数据的准确传输</strong></li>
-<li>IP：传输数据包，找到通信目的地地址。IP协议把我们尝试的数据包发送给对方，IP地址指明了节点被分配的地址，但IP地址可能会变换， <strong>因此使用ARP协议将IP地址反射为MAC地址</strong>.MAC地址是不会更改的，是网卡的固定地址</li>
-</ul>
-<h3 id="http是不保存状态的协议"><a href="#http是不保存状态的协议" class="headerlink" title="http是不保存状态的协议"></a>http是不保存状态的协议</h3><p>http是无状态的，它不对通信状态进行保存，不知道通信的对方是谁，这样是为了使http更简化。</p>
-<p>但是为了知道访问的人是谁，就有了Cookie技术了：</p>
-<ul>
-<li>服务端想记住客户端，就会发送一个Cookie给客户端</li>
-<li>客户端会把Cookie存到本地，再次访问服务器时，浏览器会自动把客户端的Cookie带过去</li>
-</ul>
-<h3 id="常用的状态码"><a href="#常用的状态码" class="headerlink" title="常用的状态码"></a>常用的状态码</h3><h4 id="2xx"><a href="#2xx" class="headerlink" title="2xx"></a>2xx</h4><p>一般是请求成功</p>
-<ul>
-<li>200 正常处理</li>
-<li>204 成功处理，但是服务器没有新数据返回，显示页面不刷新</li>
-<li>206 对服务器进行范围请求，只返回一部分数据</li>
-</ul>
-<h4 id="3xx"><a href="#3xx" class="headerlink" title="3xx"></a>3xx</h4><p>一般表示重定向</p>
-<ul>
-<li>301 请求的资源已分配到新的URI中，URL地址改变【永久重定向】</li>
-<li>302 请求的资源临时分配到新的URI中，URL地址临时改变【临时重定向】</li>
-<li>303 与302相同，但明确客户端采用GET请求资源</li>
-<li>304 发送了附带请求，但不符合条件</li>
-<li>307 与302相同，但不会把POST请求变成GET</li>
-</ul>
-<h4 id="4xx"><a href="#4xx" class="headerlink" title="4xx"></a>4xx</h4><p>表示客户端出错</p>
-<ul>
-<li>400 请求报文语法出错</li>
-<li>401需要身份认证的</li>
-<li>403 没有权限访问</li>
-<li>404 服务器没有这个资源</li>
-</ul>
-<h4 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h4><p>表示服务器出错</p>
-<ul>
-<li>500 内部资源出错</li>
-<li>503 服务器正忙</li>
-</ul>
-<h2 id="HTTP首部描述"><a href="#HTTP首部描述" class="headerlink" title="HTTP首部描述"></a>HTTP首部描述</h2><h3 id="http请求报文"><a href="#http请求报文" class="headerlink" title="http请求报文"></a>http请求报文</h3><p>http请求报文由方法、URI、http版本、http首部字段等部分组成</p>
-<p><img src="http-head.png"></p>
-<ul>
-<li>请求行:描述客户端的请求方式、请求的资源名称、以及使用的HTTP协议版本号</li>
-<li>首部字段：描述客户端请求哪台主机、以及客户端的一些环境信息等</li>
-<li>一个空行</li>
-</ul>
-<h3 id="http响应报文"><a href="#http响应报文" class="headerlink" title="http响应报文"></a>http响应报文</h3><p>http响应报文由http版本、状态码、HTTP首部字段组成</p>
-<p><img src="http-head-respond.png"></p>
-<ul>
-<li>一个状态行：描述服务器对请求的处理结果</li>
-<li>首部字段：描述服务器的基本信息、数据的描述</li>
-<li>一个空行</li>
-<li>实体内容：服务器向客户端回送的数据</li>
-</ul>
-<h2 id="HTTP协议版本"><a href="#HTTP协议版本" class="headerlink" title="HTTP协议版本"></a>HTTP协议版本</h2><ul>
-<li>HTTP1.0</li>
-<li>HTTP1.1</li>
-<li>HTTP/2</li>
-<li>HTTP/3</li>
-</ul>
-<h3 id="HTTP1-0和HTTP1-1区别"><a href="#HTTP1-0和HTTP1-1区别" class="headerlink" title="HTTP1.0和HTTP1.1区别"></a>HTTP1.0和HTTP1.1区别</h3><p> <strong>HTTP1.1默认是持久化连接</strong> 而HTTP1.0默认是短连接，也是就说HTTP1.0每次与服务器进行交互，都需要新开一个连接。HTTP又是基于TCP的，每次连接都要经过三次握手，四次握手，慢启动….需要消耗很多的资源</p>
-<p><img src="http10.png"></p>
-<p>HTTP1.1建立一次连接，多次请求均有这一个连接完成（如果阻塞会开新的TCP连接）</p>
-<p><img src="http11.png"></p>
-<ul>
-<li>HTTP1.1增加了host字段</li>
-<li>引入了Chunked transfer-coding，范围请求，实现断点续传</li>
-<li>HTTP1.1管线化理论，客户端可以同时发出多个HTTP请求，而不用一个个等待响应之后再请求（仅理论）</li>
-</ul>
-<h3 id="HTTP2和HTTP1"><a href="#HTTP2和HTTP1" class="headerlink" title="HTTP2和HTTP1"></a>HTTP2和HTTP1</h3><ul>
-<li>在HTTP1.0中，需要等待服务器响应才能继续发送请求</li>
-<li>在HTTP1.1中，不需要等待服务器响应就可以发送，但是回送给客户端时，客户端会按照响应的顺序一一接受</li>
-<li>所有HTTP1.0和HTTP1.1都会出现阻塞的情况，线头阻塞</li>
-</ul>
-<p> <strong>而HTTP2解决了这一问题，实现了多路复用</strong></p>
-<p><img src="http2.png"></p>
-<ul>
-<li>新的二进制分帧层，定义了如何封装http消息并在客户端之间传输</li>
-<li>多路复用</li>
-<li>使用HPACK对头部压缩</li>
-<li>服务器推送</li>
-</ul>
-<h2 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h2><p><strong>对称加密</strong>：加密解密同一个密钥</p>
-<p><strong>非对称加密</strong>：加密用公开的密钥，解密用私钥</p>
-<p><strong>数字签名</strong>：验证传输的内容是对方发放的数据，且没有被篡改</p>
-<p><strong>数字证书</strong>：简称CA，证明是真实的服务器发送的数据</p>
-<p>HTTPS采用的是混合加密方式</p>
-<ul>
-<li>用户向web服务器发起一个安全连接的请求</li>
-<li>服务器返回CA认证的数字证书，证书包含了服务器的公钥</li>
-<li>用户拿到数字证书，用自己浏览器内置的CA证书加密得到服务器的公钥</li>
-<li>用服务器的公钥加密对称加密算法的密钥，传给web服务器（不用担心被拦截）</li>
-<li>服务器拿到加密的密钥，解密获取密钥，在使用对称加密算法，完成通信</li>
-</ul>
-<p><img src="https.png"></p>
-<p>因此https相对http安全，所有信息都是加密传播（防止窃听），具有校验机制（防止篡改），配备身份证书（防止冒充）</p>
-<h2 id="访问一个网页（完整的HTTP请求）经历的步骤"><a href="#访问一个网页（完整的HTTP请求）经历的步骤" class="headerlink" title="访问一个网页（完整的HTTP请求）经历的步骤"></a>访问一个网页（完整的HTTP请求）经历的步骤</h2><ul>
-<li><p>域名解析</p>
-<p>首先浏览器会解析访问的域名对应的IP地址。查找本机是否由DNS缓存，没有则向DNS服务器发送域名解析请求。</p>
+<li><p>单例类只能有一个实例。</p>
 </li>
-<li><p>发起TCP三次握手</p>
-<p><img src="/2021/08/30/http/tcpgo.png"></p>
-<ul>
-<li><strong>客服端首先发送一个连接试探</strong>，ACK=0表示确认号无效，SYN=1表示这是一个连接请求或者接受报文，同时表示这个数据报不能携带数据，seq=x表示客户端自己的初始序号（seq=0就代表这是第0号包），这时候客户端进入syn_sent状态，表示客户端等待服务器的回复</li>
-<li><strong>服务器监听到连接请求报文后，如果同意建立连接，则向Client发送确认</strong>。TCP报文首部中的SYN和ACK都置1，ack=x+1表示期望收到对方下一个报文段的第一个数据字节序号是x+1,同时表明到x为止的所有数据都已经正确收到（ack=1其实是ack=0+1，也就是期望客户端的第一个包），seq=y表示服务器自己的初始序号（seq=0就代表这是服务器这边发出的第0号包），这时服务器进入syn_rcvd，表示服务器已经接收到客户端的连接请求，等待Client的确认。</li>
-<li><strong>Client收到确认后还需要再次发送确认，同时携带要发送给Server的数据</strong>，ACK置1表示确认号ack=y+1有效（代表期望收到服务器的第1个包），客户端自己的需要seq=x+1（表示这就是我的第一个包，相对于第0个包来说的），一旦收到客户端的确认之后，这个TCP连接就进入Established装填，就可以发送http请求了。</li>
-</ul>
-<p><strong>TCP是一个端到端的可靠的面向连接的协议</strong>，<strong>所以HTTP基于传输层TCP协议不用担心数据传输中的各种问题</strong>。</p>
+<li><p>单例类必须自己创建自己的唯一实例。</p>
 </li>
-<li><p>建立TCP连接后发起http请求</p>
-<p>发送http请求报文</p>
-</li>
-<li><p>服务器响应请求，返回结果</p>
-<p>返回一个响应报文，响应的MIME类型是text/html</p>
-</li>
-<li><p>浏览器解析得到html标签代码</p>
-<p>浏览器拿到index.html文件后，开始解析其中的html代码，遇到js/css/image等静态资源时，就向服务器端去请求下载（会使用多线程下载，每个浏览器的线程数不一样），这个时候就用上keep-alive特性了，建立一次HTTP连接，可以请求多个资源</p>
-</li>
-<li><p>浏览器对页面进行渲染并呈现给用户</p>
+<li><p>单例类必须给所有其他对象提供这一实例。</p>
+<p>单例模式保证了全局对象的唯一性，比如系统启动读取配置文件就需要单例保证配置的一致性。</p>
 </li>
 </ul>
+<h2 id="饿汉式单例"><a href="#饿汉式单例" class="headerlink" title="饿汉式单例"></a>饿汉式单例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 饿汉式单例模式</span></span><br><span class="line"><span class="comment"> * 优点：这种写法比较简单，就是在类装载的时候就完成实例化。避免了线程同步问题。</span></span><br><span class="line"><span class="comment"> * 缺点：在类装载的时候就完成实例化，没有达到Lazy Loading的效果。</span></span><br><span class="line"><span class="comment"> *         如果从始至终从未使用过这个实例，则会造成内存的浪费。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HungrySingle</span> </span>&#123;</span><br><span class="line">    <span class="comment">//构造器私有，保证只有一个对象</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">HungrySingle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> HungrySingle hungrySingle =<span class="keyword">new</span> HungrySingle();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HungrySingle <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> hungrySingle;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="懒汉式单例"><a href="#懒汉式单例" class="headerlink" title="懒汉式单例"></a>懒汉式单例</h2><h3 id="懒汉式单例（不安全）"><a href="#懒汉式单例（不安全）" class="headerlink" title="懒汉式单例（不安全）"></a>懒汉式单例（不安全）</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 懒汉式单例（不安全）</span></span><br><span class="line"><span class="comment"> * 这种写法起到了Lazy Loading的效果，但是只能在单线程下使用。</span></span><br><span class="line"><span class="comment"> * 如果在多线程下，一个线程进入了if (singleton == null)判断语句块，还未来得及往下执行，</span></span><br><span class="line"><span class="comment"> * 另一个线程也通过了这个判断语句，这时便会产生多个实例。所以在多线程环境下不可使用这种方式。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazySingle</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name=<span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazySingle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//先创建，使用时再加载</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> LazySingle lazySingle =<span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingle <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">if</span>(lazySingle==<span class="keyword">null</span>)<span class="comment">//对象为空，第一次创建，new一个对象</span></span><br><span class="line">           lazySingle = <span class="keyword">new</span> LazySingle();</span><br><span class="line">        <span class="keyword">return</span> lazySingle;<span class="comment">//不为空，直接返回之前的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="懒汉式单例-安全"><a href="#懒汉式单例-安全" class="headerlink" title="懒汉式单例(安全)"></a>懒汉式单例(安全)</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 懒汉式单例(安全)</span></span><br><span class="line"><span class="comment"> * 进行了两次if (singleton == null)检查，这样就可以保证线程安全了。</span></span><br><span class="line"><span class="comment"> * 实例化代码只用执行一次，后面再次访问时，判断if (singleton == null)，直接return实例化对象。</span></span><br><span class="line"><span class="comment"> * 优点：线程安全；延迟加载；效率较高。</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazySingle</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazySingle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//先创建，使用时再加载</span></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     *lazySingle = new LazySingle(); 这并不安全，它不是一个原子性操作（可能会发生指令重排）</span></span><br><span class="line"><span class="comment">     *首先分配内存空间</span></span><br><span class="line"><span class="comment">	 *执行构造方法，初始化对象</span></span><br><span class="line"><span class="comment">	 *把对象指向这个空间</span></span><br><span class="line"><span class="comment">	 *!所以这里需要加上volatile避免指令重排</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazySingle lazySingle =<span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//双重检测锁模式的 懒汉式 单例 DCL懒汉式</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingle <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazySingle==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LazySingle.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(lazySingle==<span class="keyword">null</span>)<span class="comment">//对象为空，第一次创建，new一个对象</span></span><br><span class="line">                    lazySingle = <span class="keyword">new</span> LazySingle();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lazySingle;<span class="comment">//不为空，直接返回之前的对象</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="反射破解单例"><a href="#反射破解单例" class="headerlink" title="反射破解单例"></a>反射破解单例</h4><h5 id="我破"><a href="#我破" class="headerlink" title="我破"></a>我破</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    LazySingle instance1 = LazySingle.getInstance();</span><br><span class="line">    LazySingle instance2 = LazySingle.getInstance();</span><br><span class="line">    <span class="comment">//获取单例构造器</span></span><br><span class="line">    Constructor&lt;LazySingle&gt; constructors = LazySingle.class.getDeclaredConstructor(<span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">//无视私有构造器</span></span><br><span class="line">    constructors.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//构造一个对象</span></span><br><span class="line">    LazySingle instance3 = constructors.newInstance();</span><br><span class="line">    System.out.println(<span class="string">&quot;instance1：&quot;</span>+instance1.hashCode());</span><br><span class="line">    System.out.println(<span class="string">&quot;instance2：&quot;</span>+instance2.hashCode());</span><br><span class="line">    System.out.println(<span class="string">&quot;instance3：&quot;</span>+instance3.hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<img src="/2021/09/10/danli/single.png"></p>
+<h5 id="我解"><a href="#我解" class="headerlink" title="我解"></a>我解</h5><p>解决方法：<strong>再构造器中再加入锁</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazySingle</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazySingle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (LazySingle.class)&#123;</span><br><span class="line">        	<span class="keyword">if</span> (lazySingle!=<span class="keyword">null</span>)</span><br><span class="line">            	<span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;不要试图使用反射破坏我！！！！！&quot;</span>);</span><br><span class="line">    	&#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazySingle lazySingle =<span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingle <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazySingle==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LazySingle.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(lazySingle==<span class="keyword">null</span>)</span><br><span class="line">                    lazySingle = <span class="keyword">new</span> LazySingle();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lazySingle;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<img src="/2021/09/10/danli/re1.png"></p>
+<h5 id="我再破"><a href="#我再破" class="headerlink" title="我再破"></a>我再破</h5><p>如果两个对象都是newInstance创建又会出错</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取单例构造器</span></span><br><span class="line">    Constructor&lt;LazySingle&gt; constructors = LazySingle.class.getDeclaredConstructor(<span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">//无视私有构造器</span></span><br><span class="line">    constructors.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//构造一个对象</span></span><br><span class="line">    LazySingle instance3 = constructors.newInstance();</span><br><span class="line">    LazySingle instance4 = constructors.newInstance();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;instance3：&quot;</span>+instance3.hashCode());</span><br><span class="line">    System.out.println(<span class="string">&quot;instance4：&quot;</span>+instance4.hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<img src="/2021/09/10/danli/re2.png"></p>
+<h5 id="我再解"><a href="#我再解" class="headerlink" title="我再解"></a>我再解</h5><p>利用标志位去判断对象是否创建（知道不知道标志位的字段就无法破解）</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LazySingle</span> </span>&#123;</span><br><span class="line">    <span class="comment">//标志位,类似于密钥</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">boolean</span> xxxxxxx=<span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">LazySingle</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (LazySingle.class)&#123;</span><br><span class="line">            <span class="keyword">if</span> (xxxxxxx==<span class="keyword">false</span>)&#123;</span><br><span class="line">                xxxxxxx=<span class="keyword">true</span>;</span><br><span class="line">            &#125;<span class="keyword">else</span></span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">&quot;不要试图使用反射破坏我！！！！！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazySingle lazySingle =<span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingle <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (lazySingle==<span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (LazySingle.class)&#123;</span><br><span class="line">                <span class="keyword">if</span>(lazySingle==<span class="keyword">null</span>)</span><br><span class="line">                    lazySingle = <span class="keyword">new</span> LazySingle();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> lazySingle;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<img src="/2021/09/10/danli/re3.png"></p>
+<h5 id="我再再再破"><a href="#我再再再破" class="headerlink" title="我再再再破"></a>我再再再破</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//获取单例构造器</span></span><br><span class="line">    Constructor&lt;LazySingle&gt; constructors = LazySingle.class.getDeclaredConstructor(<span class="keyword">null</span>);</span><br><span class="line">    <span class="comment">//获取标志位字段</span></span><br><span class="line">    Field field = LazySingle.class.getDeclaredField(<span class="string">&quot;xxxxxxx&quot;</span>);</span><br><span class="line">    <span class="comment">//无视私有构造器</span></span><br><span class="line">    constructors.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//无视私有属性</span></span><br><span class="line">    field.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">    <span class="comment">//构造一个对象</span></span><br><span class="line">    LazySingle instance3 = constructors.newInstance();</span><br><span class="line">    <span class="comment">//创建对象后，将单例中的标志位改回false</span></span><br><span class="line">    field.set(instance3,<span class="keyword">false</span>);</span><br><span class="line">    LazySingle instance4 = constructors.newInstance();</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">&quot;instance3：&quot;</span>+instance3.hashCode());</span><br><span class="line">    System.out.println(<span class="string">&quot;instance4：&quot;</span>+instance4.hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<img src="/2021/09/10/danli/re4.png"></p>
+<h5 id="使出究极决战解解解"><a href="#使出究极决战解解解" class="headerlink" title="使出究极决战解解解"></a>使出究极决战解解解</h5><p>无法破解我的枚举吧</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">enum</span> <span class="title">EnumSingle</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    INSTANCE;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> EnumSingle <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> INSTANCE;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        EnumSingle single1=EnumSingle.INSTANCE;</span><br><span class="line">        Constructor&lt;EnumSingle&gt; constructor = EnumSingle.class.getDeclaredConstructor(String.class,<span class="keyword">int</span>.class);</span><br><span class="line">        constructor.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        EnumSingle single = constructor.newInstance();</span><br><span class="line">        System.out.println(single);</span><br><span class="line">        System.out.println(single1);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<img src="/2021/09/10/danli/re5.png"></p>
 
                 
             </div>
@@ -539,7 +458,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://snowmanazz.github.io/2021/08/30/http/">http://snowmanazz.github.io/2021/08/30/http/</a>
+                    <a href="http://snowmanazz.github.io/2021/09/10/danli/">http://snowmanazz.github.io/2021/09/10/danli/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -577,8 +496,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/http/">
-                                    <span class="chip bg-color">http</span>
+                                <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+                                    <span class="chip bg-color">设计模式</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F/">
+                                    <span class="chip bg-color">单例模式</span>
                                 </a>
                             
                         </div>
@@ -624,9 +547,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2021/09/10/danli/">
                     <div class="card-image">
@@ -644,9 +568,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-10
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-10
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -655,6 +579,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -677,13 +602,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/07/31/volatile/">
+                <a href="/2021/08/30/http/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="深入了解volatile">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="http入门">
                         
-                        <span class="card-title">深入了解volatile</span>
+                        <span class="card-title">http入门</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -694,7 +619,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-31
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-30
                             </span>
                         <span class="publish-author">
                             
@@ -707,16 +632,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/volatile/">
-                        <span class="chip bg-color">volatile</span>
-                    </a>
-                    
-                    <a href="/tags/%E5%B9%B6%E5%8F%91/">
-                        <span class="chip bg-color">并发</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%BA%BF%E7%A8%8B/">
-                        <span class="chip bg-color">线程</span>
+                    <a href="/tags/http/">
+                        <span class="chip bg-color">http</span>
                     </a>
                     
                 </div>
