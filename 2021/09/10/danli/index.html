@@ -368,7 +368,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.6k
+                    1.5k
                 </div>
                 
 
@@ -406,21 +406,21 @@
  * 缺点：在类装载的时候就完成实例化，没有达到Lazy Loading的效果。
  *         如果从始至终从未使用过这个实例，则会造成内存的浪费。
  */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HungrySingle</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">HungrySingle</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">//构造器私有，保证只有一个对象</span>
-    <span class="token keyword">private</span> <span class="token function">HungrySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token function">HungrySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
     <span class="token comment" spellcheck="true">//静态变量</span>
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">static</span> HungrySingle hungrySingle <span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">HungrySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">//static静态块</span>
     <span class="token comment" spellcheck="true">//private final static HungrySingle hungrySingle =null;</span>
-    <span class="token comment" spellcheck="true">//static &amp;#123;</span>
+    <span class="token comment" spellcheck="true">//static {</span>
     <span class="token comment" spellcheck="true">//    hungrySingle=new HungrySingle();</span>
-    <span class="token comment" spellcheck="true">//&amp;#125;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> HungrySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token comment" spellcheck="true">//}</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> HungrySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">return</span> hungrySingle<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <h2 id="懒汉式单例"><a href="#懒汉式单例" class="headerlink" title="懒汉式单例"></a>懒汉式单例</h2><h3 id="懒汉式单例（不安全）"><a href="#懒汉式单例（不安全）" class="headerlink" title="懒汉式单例（不安全）"></a>懒汉式单例（不安全）</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * 懒汉式单例（不安全）
@@ -428,19 +428,19 @@
  * 如果在多线程下，一个线程进入了if (singleton == null)判断语句块，还未来得及往下执行，
  * 另一个线程也通过了这个判断语句，这时便会产生多个实例。所以在多线程环境下不可使用这种方式。
  */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token punctuation">{</span>
     <span class="token keyword">private</span> String name<span class="token operator">=</span>null<span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
     <span class="token comment" spellcheck="true">//先创建，使用时再加载</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> LazySingle lazySingle <span class="token operator">=</span>null<span class="token punctuation">;</span>
 
-    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
        <span class="token keyword">if</span><span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token comment" spellcheck="true">//对象为空，第一次创建，new一个对象</span>
            lazySingle <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> lazySingle<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//不为空，直接返回之前的对象</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <h3 id="懒汉式单例-安全"><a href="#懒汉式单例-安全" class="headerlink" title="懒汉式单例(安全)"></a>懒汉式单例(安全)</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * 懒汉式单例(安全)
@@ -448,9 +448,9 @@
  * 实例化代码只用执行一次，后面再次访问时，判断if (singleton == null)，直接return实例化对象。
  * 优点：线程安全；延迟加载；效率较高。
  */</span>
-<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token punctuation">}</span>
     <span class="token comment" spellcheck="true">//先创建，使用时再加载</span>
     <span class="token comment" spellcheck="true">/**
      *lazySingle = new LazySingle(); 这并不安全，它不是一个原子性操作（可能会发生指令重排）
@@ -462,18 +462,18 @@
     <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> LazySingle lazySingle <span class="token operator">=</span>null<span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">//双重检测锁模式的 懒汉式 单例 DCL懒汉式</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
                 <span class="token keyword">if</span><span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token comment" spellcheck="true">//对象为空，第一次创建，new一个对象</span>
                     lazySingle <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> lazySingle<span class="token punctuation">;</span><span class="token comment" spellcheck="true">//不为空，直接返回之前的对象</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
-<h4 id="反射破解单例"><a href="#反射破解单例" class="headerlink" title="反射破解单例"></a>反射破解单例</h4><h5 id="我破"><a href="#我破" class="headerlink" title="我破"></a>我破</h5><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<h4 id="反射破解单例"><a href="#反射破解单例" class="headerlink" title="反射破解单例"></a>反射破解单例</h4><h5 id="我破"><a href="#我破" class="headerlink" title="我破"></a>我破</h5><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
     LazySingle instance1 <span class="token operator">=</span> LazySingle<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     LazySingle instance2 <span class="token operator">=</span> LazySingle<span class="token punctuation">.</span><span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment" spellcheck="true">//获取单例构造器</span>
@@ -485,32 +485,32 @@
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance1："</span><span class="token operator">+</span>instance1<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance2："</span><span class="token operator">+</span>instance2<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance3："</span><span class="token operator">+</span>instance3<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/single.png"></p>
 <h5 id="我解"><a href="#我解" class="headerlink" title="我解"></a>我解</h5><p>解决方法：<strong>再构造器中再加入锁</strong></p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token punctuation">{</span>
+    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
             <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">!=</span>null<span class="token punctuation">)</span>
                 <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"不要试图使用反射破坏我！！！！！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
     <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> LazySingle lazySingle <span class="token operator">=</span>null<span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
                 <span class="token keyword">if</span><span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span>
                     lazySingle <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> lazySingle<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/re1.png"></p>
 <h5 id="我再破"><a href="#我再破" class="headerlink" title="我再破"></a>我再破</h5><p>如果两个对象都是newInstance创建又会出错</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
 
     <span class="token comment" spellcheck="true">//获取单例构造器</span>
     Constructor<span class="token operator">&lt;</span>LazySingle<span class="token operator">></span> constructors <span class="token operator">=</span> LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getDeclaredConstructor</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -522,35 +522,35 @@
 
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance3："</span><span class="token operator">+</span>instance3<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance4："</span><span class="token operator">+</span>instance4<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/re2.png"></p>
 <h5 id="我再解"><a href="#我再解" class="headerlink" title="我再解"></a>我再解</h5><p>利用标志位去判断对象是否创建（知道不知道标志位的字段就无法破解）</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">LazySingle</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">//标志位,类似于密钥</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> xxxxxxx<span class="token operator">=</span><span class="token boolean">false</span><span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-            <span class="token keyword">if</span> <span class="token punctuation">(</span>xxxxxxx<span class="token operator">==</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token function">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>xxxxxxx<span class="token operator">==</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
                 xxxxxxx<span class="token operator">=</span><span class="token boolean">true</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span><span class="token keyword">else</span>
+            <span class="token punctuation">}</span><span class="token keyword">else</span>
                 <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"不要试图使用反射破坏我！！！！！"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
     <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> LazySingle lazySingle <span class="token operator">=</span>null<span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-        <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
                 <span class="token keyword">if</span><span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span>
                     lazySingle <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LazySingle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
         <span class="token keyword">return</span> lazySingle<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/re3.png"></p>
-<h5 id="我再再再破"><a href="#我再再再破" class="headerlink" title="我再再再破"></a>我再再再破</h5><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<h5 id="我再再再破"><a href="#我再再再破" class="headerlink" title="我再再再破"></a>我再再再破</h5><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
 
     <span class="token comment" spellcheck="true">//获取单例构造器</span>
     Constructor<span class="token operator">&lt;</span>LazySingle<span class="token operator">></span> constructors <span class="token operator">=</span> LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getDeclaredConstructor</span><span class="token punctuation">(</span>null<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -568,33 +568,33 @@
 
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance3："</span><span class="token operator">+</span>instance3<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"instance4："</span><span class="token operator">+</span>instance4<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/re4.png"></p>
 <h5 id="使出究极决战解解解"><a href="#使出究极决战解解解" class="headerlink" title="使出究极决战解解解"></a>使出究极决战解解解</h5><p>无法破解我的枚举吧。</p>
 <p><strong>枚举类型是线程安全的，并且只会加载一次，是唯一一种无法被破坏的单例模式。</strong></p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> EnumSingle <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">enum</span> EnumSingle <span class="token punctuation">{</span>
 
     INSTANCE<span class="token punctuation">;</span>
 
-    <span class="token keyword">public</span> EnumSingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> EnumSingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
         <span class="token keyword">return</span> INSTANCE<span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 
-<span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">Test</span><span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> Exception <span class="token punctuation">{</span>
         EnumSingle single1<span class="token operator">=</span>EnumSingle<span class="token punctuation">.</span>INSTANCE<span class="token punctuation">;</span>
         Constructor<span class="token operator">&lt;</span>EnumSingle<span class="token operator">></span> constructor <span class="token operator">=</span> EnumSingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">.</span><span class="token function">getDeclaredConstructor</span><span class="token punctuation">(</span>String<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span><span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         constructor<span class="token punctuation">.</span><span class="token function">setAccessible</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         EnumSingle single <span class="token operator">=</span> constructor<span class="token punctuation">.</span><span class="token function">newInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>single<span class="token punctuation">)</span><span class="token punctuation">;</span>
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>single1<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/re5.png"></p>
-<h2 id="单例实例（Runtime）"><a href="#单例实例（Runtime）" class="headerlink" title="单例实例（Runtime）"></a>单例实例（Runtime）</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuntimeDem</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+<h2 id="单例实例（Runtime）"><a href="#单例实例（Runtime）" class="headerlink" title="单例实例（Runtime）"></a>单例实例（Runtime）</h2><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RuntimeDem</span> <span class="token punctuation">{</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
         Runtime runtime<span class="token operator">=</span>Runtime<span class="token punctuation">.</span><span class="token function">getRuntime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment" spellcheck="true">//exec参数是一个命令</span>
         Process process<span class="token operator">=</span>runtime<span class="token punctuation">.</span><span class="token function">exec</span><span class="token punctuation">(</span><span class="token string">"ipconfig"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -606,8 +606,8 @@
         <span class="token keyword">int</span> len <span class="token operator">=</span> in<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span>arr<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
         System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>arr<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">,</span> <span class="token string">"GBK"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
-<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/runtime.png"></p>
 <h1 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h1><h2 id="普通工厂-静态工厂-工厂方法"><a href="#普通工厂-静态工厂-工厂方法" class="headerlink" title="普通工厂(静态工厂/工厂方法)"></a>普通工厂(静态工厂/工厂方法)</h2><p><strong>工厂是用来处理创建对象的细节。</strong></p>
