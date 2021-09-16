@@ -29,7 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 5.4.0"></head>
+<meta name="generator" content="Hexo 5.4.0"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"><script src="/js/prism.js"></script></head>
 
 
 
@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.1k
+                    1.8k
                 </div>
                 
 
@@ -394,35 +394,101 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="什么是JVM"><a href="#什么是JVM" class="headerlink" title="什么是JVM"></a>什么是JVM</h2><p>1.JVM是一种用于计算设备的规范，它是一个虚构出来的机器<br>2.JVM包含一套字节码指令集，一组寄存器，一个栈，一个垃圾回收堆和一个存储方法域<br>3.JVM可以使java程序只需生产在java虚拟机上运行的字节码，就能多平台运行</p>
-<h3 id="JDK、JRE、JVM"><a href="#JDK、JRE、JVM" class="headerlink" title="JDK、JRE、JVM"></a>JDK、JRE、JVM</h3><ul>
-<li>jdk（包含jre+jvm）用来编译、调试程序的开发包，jdk也是java程序，需要在jre上运行</li>
-<li>jre （包含jvm）java程序运行的必需环境</li>
-<li>jvm 是一个虚构出来的计算机，模拟各种计算机的功能。JVM有自己完善的硬件架构，如处理器、堆栈、寄存器等，还具有相应的指令系统<br>所以 java支持跨平台运行，与操作系统无关<h3 id="JVM执行程序的过程"><a href="#JVM执行程序的过程" class="headerlink" title="JVM执行程序的过程"></a>JVM执行程序的过程</h3></li>
-</ul>
-<p>1.加载.class文件<br>2.管理并分配内存<br>3.执行垃圾收集</p>
-<h3 id="JVM的生命周期"><a href="#JVM的生命周期" class="headerlink" title="JVM的生命周期"></a>JVM的生命周期</h3><p>JVM实例对应一个独立运行的JAVA程序，他是进程级别的</p>
+                <h1 id="Java虚拟机体系结构"><a href="#Java虚拟机体系结构" class="headerlink" title="Java虚拟机体系结构"></a>Java虚拟机体系结构</h1><p>java源代码被编译成class文件，而不是底层操作系统直接执行的二进制指令，因此，需要Java虚拟机（JVM）来解释Class文件并运行。</p>
+<h1 id="JVM基本结构"><a href="#JVM基本结构" class="headerlink" title="JVM基本结构"></a>JVM基本结构</h1><h2 id="类加载器子系统"><a href="#类加载器子系统" class="headerlink" title="类加载器子系统"></a>类加载器子系统</h2><h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><p>当我们执行某个java程序（Test.class），只需要输入指令：<strong>Java</strong> <strong>Test</strong></p>
 <ul>
-<li>启动一个java程序时，一个JVM实例就产生了，任何一个拥有main函数的class都可以作为JVM的起点</li>
-<li>main()作为程序初始线程的起点，启动其他线程.JVM有两种线程，一种守护线程，一种非守护线程。</li>
-<li>当程序中的所有非守护线程都终止时，JVM退出；若安全管理允许，也可以用Runtime类或者System.exit()退出<h2 id="JVM内存模型"><a href="#JVM内存模型" class="headerlink" title="JVM内存模型"></a>JVM内存模型</h2><h3 id="模型图"><a href="#模型图" class="headerlink" title="模型图"></a>模型图</h3><img src="/2021/07/30/JVM/jvm.jpg"><br>JVM划分为 程序计数器、虚拟机栈、本地方法栈、方法区、堆</li>
+<li>java.ex会找到JRE内部的jvm.dll，这个就是真正的java虚拟机器，然后加载动态库，激活java虚拟机器</li>
+<li>激活后，会产生第一个类加载器—–<strong>Bootstrap Loader（启动类加载器）</strong></li>
+<li>Bootstrap Loader的主要工作就是加载Launcher.java中的<strong>ExtClassLoader（扩展类加载器）</strong></li>
+<li>然后加载Launcher.java中的<strong>AppClassLoader（用户自定义加载器）</strong>。这两个加载器都是静态类</li>
 </ul>
-<h4 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h4><p>程序计数器是线程私有的。每个线程都有一个独立的计数器，记录的是虚拟机字节码指令的地址，JVM虚拟机读取程序计数器值来决定下一条执行的字节码指令 ，比如：分支、循环、跳转、异常处理和线程恢复等,该区域是唯一一个不会出现OutOfMemoryError的区域。</p>
-<h4 id="java虚拟机栈"><a href="#java虚拟机栈" class="headerlink" title="java虚拟机栈"></a>java虚拟机栈</h4><p>虚拟机栈也是线程私有的，存储的是局部变量。每个方法的调用到完毕，对应一个栈帧再虚拟机栈中入栈和出栈。局部变量的内存会在编译期间分配。虚拟机栈为虚拟机执行java方法（字节码）服务</p>
+<h3 id="类加载器体系结构"><a href="#类加载器体系结构" class="headerlink" title="类加载器体系结构"></a>类加载器体系结构</h3><p>JVM加载class文件必须通过类加载器，它的作用是从磁盘文件中将要运行代码的字节码流加载进内存（JVM管理的方法区中）</p>
 <ul>
-<li>如果线程请求栈深度大于虚拟机所允许的深度，抛出StackOverFlowError</li>
-<li>如果java虚拟机的容量可以动态扩展，当栈扩张时无法得到足够的内存会抛出OutOfMemoryError</li>
+<li><strong>启动类加载器</strong>：负责在系统类（核心JavaAPI的class文件）的安装路径中查找要装入的类。由JVM实现</li>
+<li><strong>扩展类加载器和用户自定义类加载器</strong>：负责JavaAPI以外的其他class文件的转载。由JVM实现</li>
+<li><strong>命名空间</strong>：Java虚拟机为每一个类装载器维护一个唯一标识的命名空间</li>
 </ul>
-<h4 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h4><p>和java虚拟机栈差不多也可能会抛出两个异常，但是他是为本地（native）方法服务的</p>
-<h4 id="java堆"><a href="#java堆" class="headerlink" title="java堆"></a>java堆</h4><p>java堆内存最大，是被所有线程共享的一块内存区域，所有对象实例和数组都在堆上分配内存。java堆是垃圾收集器管理的内存区域，也被称为GC堆。既可以是固定大小，也可以是可扩展的</p>
+<h3 id="双亲委托模型"><a href="#双亲委托模型" class="headerlink" title="双亲委托模型"></a>双亲委托模型</h3><p>这是java.lang包下面的ClassLoader类中的loadClass方法</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">loadClass</span><span class="token punctuation">(</span>string name<span class="token punctuation">)</span> <span class="token keyword">throws</span> ClassNotFoundException <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">loadClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">protected</span> Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> <span class="token function">loadClass</span><span class="token punctuation">(</span>String name<span class="token punctuation">,</span> <span class="token keyword">boolean</span> resolve<span class="token punctuation">)</span>
+                                                <span class="token keyword">throws</span> ClassNotFoundException<span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">// 首先，检查是否已经被类加载器加我过</span>
+        Class<span class="token operator">&lt;</span><span class="token operator">?</span><span class="token operator">></span> c <span class="token operator">=</span> <span class="token function">findLoadedClass</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token keyword">try</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                <span class="token comment" spellcheck="true">// 存在父加载器，递归的交由父加我器</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span>parent <span class="token operator">!=</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                    c <span class="token operator">=</span> parent<span class="token punctuation">.</span><span class="token function">loadClass</span><span class="token punctuation">(</span>name<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> <span class="token keyword">else</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+                    <span class="token comment" spellcheck="true">// 直到最上面的Bootstrap类加教器</span>
+                    c <span class="token operator">=</span> <span class="token function">findBootstrapClassOrNull</span><span class="token punctuation">(</span>name
+                <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">ClassNotFoundException</span> e<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// ClassNotFoundException thrown if class not found</span>
+            <span class="token comment" spellcheck="true">// from the non-null parent class Loader</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>c <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">// If still not found, then invoke findClass in order// to find the class.</span>
+            c <span class="token operator">=</span> <span class="token function">findClass</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> c<span class="token punctuation">;</span>
+  <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+</code></pre>
+<p><img src="/2021/07/30/JVM/class.png"></p>
+<p><strong>除启动类装载器以外的每一个类装载器，都有一个“双亲”类装载器 ，在某个特定的类装载器试图以常用方式装载类型以前，它会先默认地将这个任务“委派”给它的双亲——请求它的双亲来装载这个类型。这个双亲再依次请求它自 己的双亲来装载这个类型。这个委派的过程一直向上继续，直到达到启动类装载器，通常启动类装载器是委派链中的最后一个类装载器。如果一个类装载器的双亲类 装载器有能力来装载这个类型。则这个类装载器返回这个类型。否则，这个类装载器试图自己来装载这个类</strong></p>
+<p>实例:</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">package</span> java<span class="token punctuation">.</span>lang<span class="token punctuation">;</span>  
+  
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">String</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>  
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span><span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>  
+          
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>  
+<span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>  
+</code></pre>
+<p>这个代码中与JDK的String一模一样的类，包都一样，只是定义了一个main函数</p>
+<p>结果：<img src="/2021/07/30/JVM/string.png"></p>
+<p>所以运行这段代码：</p>
 <ul>
-<li>如果java堆中没有内存完成实例分配，并且堆也无法继续扩展，就会抛出OutOfMemoryError异常</li>
+<li><p>JVM会首先创建一个自定义类加载器（AppClassLoader），并把这个加载器链接到委托链中：AppClassLoader -&gt; ExtClassLoader -&gt; BootstrapLoader。</p>
+</li>
+<li><p> 然后AppClassLoader会将加载java.lang.String的请求委托给ExtClassLoader，而 ExtClassLoader又会委托给最后的启动类加载器BootstrapLoader。</p>
+</li>
+<li><p>启动类加载器BootstrapLoader只能加载JAVA_HOME\jre\lib中的class类(即J2SE API)，问题是标准API中确实有一个java.lang.String(注意，这个类和我们自定义的类是完全两个类)。BootstrapLoader以为找到了这个类，毫不犹豫的加载了j2se api中的java.lang.String。</p>
+<p> 最后出现上面的加载错误(注意不是异常，是错误，JVM退出)，因为API中的String类是没有main方法的。</p>
+</li>
 </ul>
-<h4 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h4><p>方法区也是各个线程共享的内存区域，用于存储被虚拟机加载的类型信息、常量、静态变量，即时编译器编译后的代码缓存等数据。当方法区无法满足新的内存分配需求时，抛出OutOfMemoryError异常</p>
-<p><strong>jdk7方法区是由永久代实现，jdk8则是由元空间实现。并且jdk8后将永久代中的常量池、静态变量等移出永久代，将字符串常量池移到堆中，运行常量池在方法区，类信息等在元空间中。</strong></p>
-<h4 id="运行常量池"><a href="#运行常量池" class="headerlink" title="运行常量池"></a>运行常量池</h4><p>运行常量池是方法区中的一部分。Class文件包含类的版本、字段、方法、接口、常量池表（存放编译器生成的字面应用和符号引用），这部分内容会在类加载后加载到运行时常量池中。当常量池无法申请到内存时会抛出OutOfMemoryError</p>
-<h4 id="直接内存"><a href="#直接内存" class="headerlink" title="直接内存"></a>直接内存</h4><p> <strong>直接内存不是虚拟机运行时数据区的一部分，也不是《java虚拟机规范》中定义的内存区域</strong>，但是直接内存也会频繁的使用导致OutOfMemoryError异常。JDK4新加入NIO类，引入勒一种基于通道与缓冲区的I/O方式，它可以使用Native函数直接分配堆外内存。</p>
-<h2 id="HotSpot虚拟机对象"><a href="#HotSpot虚拟机对象" class="headerlink" title="HotSpot虚拟机对象"></a>HotSpot虚拟机对象</h2><h4 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h4>
+<h1 id="JVM回收机制总结"><a href="#JVM回收机制总结" class="headerlink" title="JVM回收机制总结"></a>JVM回收机制总结</h1><p>java虚拟机中，数据类型分为两类：<strong>基本类型</strong>和<strong>引用类型</strong>，基本类型的值就是数值本身，引用类型表示的是是对某个对象的引用（存放的对象的地址）。</p>
+<h2 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h2><p><strong>栈是运行时的单位，而堆是存储的单位</strong>。</p>
+<p>也就是说栈是解决程序运行的问题，程序如何执行或者如何处理数据；而堆解决数据存储的问题，数据怎么存储，存储在哪里。</p>
+<h3 id="那么为什么要把栈和堆分开呢？"><a href="#那么为什么要把栈和堆分开呢？" class="headerlink" title="那么为什么要把栈和堆分开呢？"></a>那么为什么要把栈和堆分开呢？</h3><ul>
+<li><p>从软件设计的角度看，栈代表了处理逻辑 ，而堆代表了数据 。这样分开，使得处理逻辑更为清晰。分而治之的思想 。这种隔离、模块化的思想在软件设计的方方面面都有体现。</p>
+</li>
+<li><p>堆与栈的分离，使得堆中的内容可以被多个栈共享 （也可以理解为多个线程访问同一个对象）。这种共享的收益是很多的。一方面这种共享提供了一种有效的数据交互方式(如：共享内存)，另一方面，堆中的共享常量和缓存可以被所有栈访问，节省了空间。</p>
+</li>
+<li><p>栈因为运行时的需要，比如保存系统运行的上下文，需要进行地址段的划分。由于栈只能向上增长，因此就会限制住栈存储内容的能力。而堆不同，堆中的对象是可以根据需要动态增长的，因此栈和堆的拆分，使得动态增长成为可能 ，相应栈中只需记录堆中的一个地址即可。</p>
+</li>
+<li><p>面向对象就是堆和栈的完美结合 。</p>
+</li>
+</ul>
+<h3 id="堆和栈分别存什么"><a href="#堆和栈分别存什么" class="headerlink" title="堆和栈分别存什么"></a>堆和栈分别存什么</h3><p>**堆中存的是对象 。栈中存的是基本数据类型 和堆中对象的引用 **</p>
+<p>  为什么不把基本类型放堆中呢？因为其占用的空间一般是1~8个字节——需要空间比较少，而且因为是基本类型，所以不会出现动态增长的情况——长度固定，因此栈中存储就够了。</p>
+<h3 id="java传递参数时，传值还是传引用"><a href="#java传递参数时，传值还是传引用" class="headerlink" title="java传递参数时，传值还是传引用"></a>java传递参数时，传值还是传引用</h3><p>Java在方法调用传递参数时，因为没有指针，所以<strong>它都是进行传值调用</strong> 。</p>
+<p> <em>但是传引用的错觉是如何造成的呢？</em> 在运行栈中，基本类型和引用的处理是一样的，都是传值 ， 所以，如果是传引用的方法调用，也同时可以理解为“传引用值”的传值调用，即引用的处理跟基本类型是完全一样的</p>
+<h3 id="java对象的大小"><a href="#java对象的大小" class="headerlink" title="java对象的大小"></a>java对象的大小</h3><p><strong>一个空Object对象的大小是8byte</strong> ，这个大小只是保存堆中一个没有任何属性的对象的大小</p>
+<blockquote>
+<p> Object obj=new Object();  //占用了4byte+8byte</p>
+</blockquote>
+<p>4byte是Java栈中保存引用的所需要的空间。而8byte则是Java堆中对象的信息。</p>
+<pre class=" language-java"><code class="language-java">Class <span class="token class-name">NewObject</span> <span class="token operator">&amp;</span>#<span class="token number">123</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> count<span class="token punctuation">;</span>
+    <span class="token keyword">boolean</span> flag<span class="token punctuation">;</span>
+    Object ob<span class="token punctuation">;</span>
+    <span class="token operator">&amp;</span>#<span class="token number">125</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//  其大小为：空对象大小(8byte)+int大小(4byte)+Boolean大小(1byte)+空Object引用的大小 (4byte)=17byte。但是因为Java在对对象内存分配时都是以8的整数倍来分，因此大于17byte的最接近8的整数倍的是24，因此此对象 的大小为24byte。</span>
+</code></pre>
+
                 
             </div>
             <hr/>
