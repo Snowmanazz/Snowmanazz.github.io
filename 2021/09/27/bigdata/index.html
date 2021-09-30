@@ -368,7 +368,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.2k
+                    3.5k
                 </div>
                 
 
@@ -395,7 +395,8 @@
 <p><strong>Hadoop分布式文件系统（HDFS™）：一种分布式文件系统，可提供对应用程序数据的高吞吐量访问。</strong></p>
 <p><strong>Hadoop YARN：作业调度和集群资源管理的框架。</strong></p>
 <p><strong>Hadoop MapReduce：一种用于并行处理大型数据集的基于YARN的系统。</strong></p>
-<h2 id="hive"><a href="#hive" class="headerlink" title="hive"></a>hive</h2><p><strong>简单来说，Hive就是在Hadoop上架了一层SQL接口，可以将SQL翻译成MapReduce去Hadoop上执行，这样就使得数据开发和分析人员很方便的使用SQL来完成海量数据的统计和分析，而不必使用编程语言开发MapReduce那么麻烦。</strong></p>
+<p>HDFS，Hadoop Distributed File System，是一个分布式文件系统，用来存储 Hadoop 集群中所有存储节点上的文件，包含一个 NameNode 和大量 DataNode。NameNode，它在 HDFS 内部提供元数据服务，负责管理文件系统名称空间和控制外部客户机的访问，决定是否将文件映射到 DataNode 上。DataNode，它为 HDFS 提供存储块，响应来自 HDFS 客户机的读写请求。<br>MapReduce是一种编程模型，用于大规模数据集的并行运算。概念”Map（映射）“和”Reduce（归约）”，是它们的主要思想，即指定一个Map（映射）函数，用来把一组键值对映射成一组新的键值对，指定并发的Reduce（归约）函数，用来保证所有映射的键值对中的每一个共享相同的键组。</p>
+<h2 id="hive"><a href="#hive" class="headerlink" title="hive"></a>hive</h2><p><strong>简单来说，Hive就是在Hadoop上架了一层SQL接口，可以将SQL翻译成MapReduce去Hadoop上执行，这样就使得数据开发和分析人员很方便的使用SQL来完成海量数据的统计和分析，而不必使用编程语言开发MapReduce那么麻烦。</strong>Hive 没有专门的数据格式。所有Hive 的数据都存储在Hadoop兼容的文件系统（例如HDFS）中。Hive 在加载数据过程中不会对数据进行任何的修改，只是将数据移动到HDFS中Hive 设定的目录下，因此，Hive 不支持对数据的改写和添加，所有的数据都是在加载的时候确定的。</p>
 <h2 id="hbase"><a href="#hbase" class="headerlink" title="hbase"></a>hbase</h2><p>**HBase是一种构建在HDFS之上的分布式、面向列的存储系统。在需要实时读写、随机访问超大规模数据集时，可以使用HBase。是建立在 HDFS 之上，提供高可靠性、高性能、列存储、 可伸缩、实时读写 NoSQL 的数据库系统。 **</p>
 <h2 id="hbase和hive区别"><a href="#hbase和hive区别" class="headerlink" title="hbase和hive区别"></a>hbase和hive区别</h2><p><strong>Hbase和Hive在大数据架构中处在不同位置，Hbase主要解决实时数据查询问题，Hive主要解决数据处理和计算问题，一般是配合使用。</strong></p>
 <p>在大数据架构中，Hive和HBase是协作关系</p>
@@ -405,6 +406,10 @@
 <li>HIve清洗处理后的结果，如果是面向海量数据随机查询场景的可存入Hbase</li>
 <li>数据应用从HBase查询数据；</li>
 </ol>
+<h2 id="zookeeper"><a href="#zookeeper" class="headerlink" title="zookeeper"></a>zookeeper</h2><p><strong>ZooKeeper是一个分布式的应用程序协调服务，是Hadoop和Hbase的重要组件。它是一个为分布式应用提供一致性服务的软件，提供的功能包括：配置维护、域名服务、分布式同步、组服务等。其目标就是封装好复杂易出错的关键服务，将简单易用的接口和性能高效、功能稳定的系统提供给用户。</strong></p>
+<h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2><p><strong>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。Producer即生产者，向Kafka集群发送消息，在发送消息之前，会对消息进行分类，即主题（Topic），通过对消息指定主题可以将消息分类，消费者可以只关注自己需要的Topic中的消息。Consumer，即消费者，消费者通过与kafka集群建立长连接的方式，不断地从集群中拉取消息，然后可以对这些消息进行处理。</strong></p>
+<h2 id="flume"><a href="#flume" class="headerlink" title="flume"></a>flume</h2><p><strong>Flume是Cloudera提供的一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统，Flume支持在日志系统中定制各类数据发送方，用于收集数据；同时，Flume提供对数据进行简单处理，并写到各种数据接受方（可定制）的能力。Flume提供了从console（控制台）、RPC（Thrift-RPC）、text（文件）、tail（UNIX tail）、syslog（syslog日志系统），支持TCP和UDP等2种模式），exec（命令执行）等数据源上收集数据的能力。<br>使用Flume，我们可以将从多个服务器中获取的数据迅速的移交给Hadoop中，可以高效率的将多个网站服务器中收集的日志信息存入HDFS/HBase中。</strong></p>
+<h2 id="spark"><a href="#spark" class="headerlink" title="spark"></a>spark</h2><p><strong>Apache Spark 是专为大规模数据处理而设计的快速通用的计算引擎，是类似于Hadoop MapReduce的通用并行框架。Spark拥有Hadoop MapReduce所具有的优点，但不同于MapReduce的是——Job中间输出结果可以保存在内存中，从而不再需要读写HDFS，因此Spark能更好地适用于数据挖掘与机器学习等需要迭代的MapReduce的算法。Spark实际上是对Hadoop的一种补充，可以很好的在Hadoop 文件系统中并行运行.</strong></p>
 <h1 id="CentOS环境安全配置"><a href="#CentOS环境安全配置" class="headerlink" title="CentOS环境安全配置"></a>CentOS环境安全配置</h1><h2 id="NET模式，配置主机和虚拟机IP"><a href="#NET模式，配置主机和虚拟机IP" class="headerlink" title="NET模式，配置主机和虚拟机IP"></a>NET模式，配置主机和虚拟机IP</h2><p><img src="/2021/09/27/bigdata/a1.png"></p>
 <p>配置虚拟机IP地址：</p>
 <blockquote>
@@ -460,7 +465,7 @@
 </blockquote>
 <p>在bin目录下创建xsync集群分发脚本，在任何路径下都能使用</p>
 <blockquote>
-<pre class=" language-bash"><code class="language-bash"> <span class="token comment" spellcheck="true">#!/bin/bash </span>
+<pre class=" language-bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span> 
 
 <span class="token comment" spellcheck="true">#1. 判断参数个数 </span>
 
@@ -468,8 +473,8 @@
 
 <span class="token keyword">if</span> <span class="token punctuation">[</span> $<span class="token comment" spellcheck="true"># -lt 1 ]   </span>
 <span class="token keyword">then</span> 
-    <span class="token keyword">echo</span> Not Enough Arguement<span class="token operator">!</span> 
-    <span class="token keyword">exit</span><span class="token punctuation">;</span> 
+<span class="token keyword">echo</span> Not Enough Arguement<span class="token operator">!</span> 
+<span class="token keyword">exit</span><span class="token punctuation">;</span> 
 <span class="token keyword">fi</span> 
 
 <span class="token comment" spellcheck="true">#2. 遍历集群所有机器 </span>
@@ -478,25 +483,25 @@
 
 <span class="token keyword">for</span> host <span class="token keyword">in</span> hadoop100 hadoop101 hadoop102 
 <span class="token keyword">do</span> 
-   <span class="token keyword">echo</span> <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>  <span class="token variable">$host</span>  <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span> 
-   <span class="token comment" spellcheck="true">#3. 遍历所有目录，挨个发送 </span>
-   <span class="token keyword">for</span> <span class="token function">file</span> <span class="token keyword">in</span> <span class="token variable">$@</span> 
-        <span class="token keyword">do</span> 
- <span class="token comment" spellcheck="true">#4. 判断文件是否存在 </span>
-        <span class="token keyword">if</span> <span class="token punctuation">[</span> -e <span class="token variable">$file</span> <span class="token punctuation">]</span> 
-            <span class="token keyword">then</span> 
-                <span class="token comment" spellcheck="true">#5. 获取父目录 </span>
-                pdir<span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">cd</span> -P <span class="token punctuation">$(</span>dirname $file<span class="token variable">)</span></span><span class="token punctuation">;</span> pwd<span class="token punctuation">)</span> 
+<span class="token keyword">echo</span> <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>  <span class="token variable">$host</span>  <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span> 
+<span class="token comment" spellcheck="true">#3. 遍历所有目录，挨个发送 </span>
+<span class="token keyword">for</span> <span class="token function">file</span> <span class="token keyword">in</span> <span class="token variable">$@</span> 
+     <span class="token keyword">do</span> 
+<span class="token comment" spellcheck="true">#4. 判断文件是否存在 </span>
+  <span class="token keyword">if</span> <span class="token punctuation">[</span> -e <span class="token variable">$file</span> <span class="token punctuation">]</span> 
+      <span class="token keyword">then</span> 
+          <span class="token comment" spellcheck="true">#5. 获取父目录 </span>
+          pdir<span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">cd</span> -P <span class="token punctuation">$(</span>dirname $file<span class="token variable">)</span></span><span class="token punctuation">;</span> pwd<span class="token punctuation">)</span> 
 
-                <span class="token comment" spellcheck="true">#6. 获取当前文件的名称 </span>
-                fname<span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">basename</span> $file<span class="token variable">)</span></span> 
-                <span class="token function">ssh</span> <span class="token variable">$host</span> <span class="token string">"mkdir -p <span class="token variable">$pdir</span>"</span> 
-                <span class="token function">rsync</span> -av <span class="token variable">$pdir</span>/<span class="token variable">$fname</span> <span class="token variable">$host</span><span class="token keyword">:</span><span class="token variable">$pdir</span> 
-            <span class="token comment" spellcheck="true"># 如果不存在</span>
-            <span class="token keyword">else</span> 
-                <span class="token keyword">echo</span> <span class="token variable">$file</span> does not exists<span class="token operator">!</span> 
-        <span class="token keyword">fi</span> 
-    <span class="token keyword">done</span> 
+          <span class="token comment" spellcheck="true">#6. 获取当前文件的名称 </span>
+          fname<span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">basename</span> $file<span class="token variable">)</span></span> 
+          <span class="token function">ssh</span> <span class="token variable">$host</span> <span class="token string">"mkdir -p <span class="token variable">$pdir</span>"</span> 
+          <span class="token function">rsync</span> -av <span class="token variable">$pdir</span>/<span class="token variable">$fname</span> <span class="token variable">$host</span><span class="token keyword">:</span><span class="token variable">$pdir</span> 
+      <span class="token comment" spellcheck="true"># 如果不存在</span>
+      <span class="token keyword">else</span> 
+          <span class="token keyword">echo</span> <span class="token variable">$file</span> does not exists<span class="token operator">!</span> 
+  <span class="token keyword">fi</span> 
+<span class="token keyword">done</span> 
 <span class="token keyword">done</span>
 </code></pre>
 </blockquote>
@@ -513,27 +518,27 @@
 <p>ssh-copy-id hadoop102</p>
 <p>集群环境配置</p>
 </blockquote>
-<h1 id="配置hadoop重要文件"><a href="#配置hadoop重要文件" class="headerlink" title="配置hadoop重要文件"></a>配置hadoop重要文件</h1><p><strong>hadoop需要修改的配置文件：core-site.xml,hdfs-site.xml,yarn-site.xml,mapred-site.xml</strong></p>
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="配置hadoop"><a href="#配置hadoop" class="headerlink" title="配置hadoop"></a>配置hadoop</h2><p><strong>hadoop需要修改的配置文件：core-site.xml,hdfs-site.xml,yarn-site.xml,mapred-site.xml</strong></p>
 <p>为了负载均衡</p>
 <p><img src="/2021/09/27/bigdata/a14.png"></p>
 <p><strong>core-site.xml</strong></p>
 <blockquote>
 <configuration>
-    <!-- 指定 NameNode 的地址 -->
-    <property>
-        <name>fs.defaultFS</name>
-        <value>hdfs://hadoop100:8020</value>
-    </property>
-   <!-- 指定 hadoop 数据的存储目录 -->
-    <property>
-        <name>hadoop.tmp.dir</name>
-        <value>/opt/module/hadoop-3.1.3/data</value>
-    </property>
-    <!-- 配置 HDFS 网页登录使用的静态用户为 atguigu -->
-    <property>
-        <name>hadoop.http.staticuser.user</name>
-        <value>atguigu</value>
-    </property>
+<!-- 指定 NameNode 的地址 -->
+<property>
+<name>fs.defaultFS</name>
+<value>hdfs://hadoop100:8020</value>
+</property>
+<!-- 指定 hadoop 数据的存储目录 -->
+
+<property>
+
+<p><name>hadoop.tmp.dir</name><br><value>/opt/module/hadoop-3.1.3/data</value><br></p></property><p></p>
+<!-- 配置 HDFS 网页登录使用的静态用户为 atguigu -->
+<property>
+<name>hadoop.http.staticuser.user</name>
+<value>atguigu</value>
+</property>
 
 </configuration>
 </blockquote>
@@ -541,58 +546,58 @@
 <blockquote>
 <configuration>
 <!-- NameNode web 端访问地址-->
-  <property>
-        <name>dfs.namenode.http-address</name>
-        <value>hadoop100:9870</value>
-    </property>
-  <!-- SecondaryNameNode web 端访问地址-->
-    <property>
-        <name>dfs.namenode.secondary.http-address</name>
-        <value>hadoop102:9868</value>
-    </property>
+<property>
+  <name>dfs.namenode.http-address</name>
+  <value>hadoop100:9870</value>
+</property>
+<!-- SecondaryNameNode web 端访问地址-->
+<property>
+  <name>dfs.namenode.secondary.http-address</name>
+  <value>hadoop102:9868</value>
+</property>
 </configuration>
 </blockquote>
 <p>yarn-site.xml</p>
 <blockquote>
 <configuration> 
-    <!-- 指定 MR 走 shuffle --> 
-    <property> 
-        <name>yarn.nodemanager.aux-services</name> 
-        <value>mapreduce_shuffle</value> 
-    </property> 
+<!-- 指定 MR 走 shuffle --> 
+<property> 
+  <name>yarn.nodemanager.aux-services</name> 
+  <value>mapreduce_shuffle</value> 
+</property> 
 
 <!-- 指定 ResourceManager 的地址--> 
 <property> 
-    <name>yarn.resourcemanager.hostname</name> 
-    <value>hadoop101</value> 
+<name>yarn.resourcemanager.hostname</name> 
+<value>hadoop101</value> 
 </property> 
 
 <!-- 环境变量的继承 --> 
 <property> 
-    <name>yarn.nodemanager.env-whitelist</name> 
+<name>yarn.nodemanager.env-whitelist</name> 
 
-<p><value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value><br>    </p></property><br></configuration> <p></p>
+<p><value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value><br></p></property><br></configuration> <p></p>
 </blockquote>
 <p>mapred-site.xml</p>
 <blockquote>
 <configuration> 
-  <!-- 指定 MapReduce 程序运行在 Yarn 上 --> 
-    <property> 
-        <name>mapreduce.framework.name</name> 
-        <value>yarn</value> 
-    </property> 
+<!-- 指定 MapReduce 程序运行在 Yarn 上 --> 
+<property> 
+  <name>mapreduce.framework.name</name> 
+  <value>yarn</value> 
+</property> 
 </configuration> 
 </blockquote>
 <p>配置hadoop/etc/hadoop中的workers</p>
 <blockquote>
 <p>hadoop100<br>hadoop101<br>hadoop102</p>
 </blockquote>
-<h2 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h2><p>第一次启动需要初始化</p>
+<h3 id="启动集群"><a href="#启动集群" class="headerlink" title="启动集群"></a>启动集群</h3><p>第一次启动需要初始化</p>
 <blockquote>
 <p>hdfs namenode -format</p>
 </blockquote>
 <p><img src="/2021/09/27/bigdata/a15.png"></p>
-<h3 id="启动hdfs-100"><a href="#启动hdfs-100" class="headerlink" title="启动hdfs: 100"></a>启动hdfs: 100</h3><blockquote>
+<h4 id="启动hdfs-100"><a href="#启动hdfs-100" class="headerlink" title="启动hdfs: 100"></a>启动hdfs: 100</h4><blockquote>
 <p>sbin/start-dfs.sh</p>
 </blockquote>
 <p>JPS查看进程：</p>
@@ -600,18 +605,18 @@
 <p>hadoop101:<img src="/2021/09/27/bigdata/a17.png"></p>
 <p>hadoop102:<img src="/2021/09/27/bigdata/a18.png"></p>
 <p>启动成功后可访问 hadoop100:9870 <img src="/2021/09/27/bigdata/a19.png"></p>
-<h3 id="启动yarn：101"><a href="#启动yarn：101" class="headerlink" title="启动yarn：101"></a>启动yarn：101</h3><blockquote>
+<h4 id="启动yarn：101"><a href="#启动yarn：101" class="headerlink" title="启动yarn：101"></a>启动yarn：101</h4><blockquote>
 <p>sbin/start-yarn.sh</p>
 </blockquote>
 <p>hadoop100:<img src="/2021/09/27/bigdata/a20.png"></p>
 <p>hadoop101:<img src="/2021/09/27/bigdata/a21.png"></p>
 <p>hadoop102:<img src="/2021/09/27/bigdata/a22.png"></p>
 <p>启动成功后可访问 hadoop101:8088 <img src="/2021/09/27/bigdata/a23.png"></p>
-<h3 id="启动历史服务器"><a href="#启动历史服务器" class="headerlink" title="启动历史服务器"></a>启动历史服务器</h3><blockquote>
+<h4 id="启动历史服务器"><a href="#启动历史服务器" class="headerlink" title="启动历史服务器"></a>启动历史服务器</h4><blockquote>
 <p> bin/mapred –daemon start historyserver</p>
 </blockquote>
 <p><img src="/2021/09/27/bigdata/a25.png"></p>
-<h2 id="集群测试："><a href="#集群测试：" class="headerlink" title="集群测试："></a>集群测试：</h2><p>上传文件：</p>
+<h3 id="集群测试："><a href="#集群测试：" class="headerlink" title="集群测试："></a>集群测试：</h3><p>上传文件：</p>
 <blockquote>
 <p>hadoop fs -mkdir /wcinput</p>
 <p>hadoop fs -put 文件 创建的路径</p>
@@ -619,6 +624,225 @@
 <p><img src="/2021/09/27/bigdata/a24.png"></p>
 <p>页面不存储数据，只存储连接，实际数据存储在datanode中</p>
 <p><strong>如果集群启动不成功，先关闭集群，删除每个集群的data和logs，然后重新格式化。最后重新启动集群</strong></p>
+<h2 id="zookeeper配置"><a href="#zookeeper配置" class="headerlink" title="zookeeper配置"></a>zookeeper配置</h2><p>安装后在目录中创建zkData用于存储数据</p>
+<p>修改conf下zoo.cfg配置文件</p>
+<blockquote>
+<p>dataDir=/opt/module/zookeeper-3.4.10/zkData</p>
+<p>#集群</p>
+<p>##################cluster###################<br>server.1=hadoop100:2888:3888<br>server.2=hadoop101:2888:3888<br>server.3=hadoop102:2888:3888</p>
+</blockquote>
+<p>启动zookeeper服务端 </p>
+<blockquote>
+<p>bin/zkServer.sh start</p>
+</blockquote>
+<p><img src="/2021/09/27/bigdata/a28.png"></p>
+<p>启动客户端：bin/zkCli.sh</p>
+<p><img src="/2021/09/27/bigdata/a29.png"></p>
+<h2 id="hive配置"><a href="#hive配置" class="headerlink" title="hive配置"></a>hive配置</h2><p>配置hive-site.xml ,以mysql为元数据</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>javax.jdo.option.ConnectionURL<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+<span class="token operator">&lt;</span>value<span class="token operator">></span>jdbc:mysql://hadoop100:3306/metastore?createDatabaseIfNotExist<span class="token operator">=</span>true<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+ <span class="token operator">&lt;</span>description<span class="token operator">></span>JDBC connect string <span class="token keyword">for</span> a JDBC metastore<span class="token operator">&lt;</span>/description<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+<span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>javax.jdo.option.ConnectionDriverName<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+ <span class="token operator">&lt;</span>value<span class="token operator">></span>com.mysql.jdbc.Driver<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+ <span class="token operator">&lt;</span>description<span class="token operator">></span>Driver class name <span class="token keyword">for</span> a JDBC metastore<span class="token operator">&lt;</span>/description<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+<span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>javax.jdo.option.ConnectionUserName<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+ <span class="token operator">&lt;</span>value<span class="token operator">></span>root<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+ <span class="token operator">&lt;</span>description<span class="token operator">></span>username to use against metastore database<span class="token operator">&lt;</span>/description<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+<span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>javax.jdo.option.ConnectionPassword<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+ <span class="token operator">&lt;</span>value<span class="token operator">></span>12345<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+ <span class="token operator">&lt;</span>description<span class="token operator">></span>password to use against metastore database<span class="token operator">&lt;</span>/description<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+<span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>hive.metastore.schema.verification<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+ <span class="token operator">&lt;</span>value<span class="token operator">></span>false<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+<span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>hive.metastore.event.db.notification.api.auth<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+ <span class="token operator">&lt;</span>value<span class="token operator">></span>false<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+<span class="token operator">&lt;</span>property<span class="token operator">></span>
+ <span class="token operator">&lt;</span>name<span class="token operator">></span>hive.metastore.warehouse.dir<span class="token operator">&lt;</span>/name<span class="token operator">></span>
+ <span class="token operator">&lt;</span>value<span class="token operator">></span>/user/hive/warehouse<span class="token operator">&lt;</span>/value<span class="token operator">></span>
+<span class="token operator">&lt;</span>/property<span class="token operator">></span>
+</code></pre>
+<p>安装mysq：</p>
+<p>将mysql驱动拷入hive的lib目录下，安装如下几个包</p>
+<p><img src="/2021/09/27/bigdata/a30.png"></p>
+<p>测试启动mysql  : mysql -uroot -p</p>
+<p><img src="/2021/09/27/bigdata/a31.png"></p>
+<p>配置 hive-env.sh 文件</p>
+<blockquote>
+<p>#HIVE_HOME<br>export HIVE_CONF_DIR=/opt/module/apache-hive-2.3.0-bin/conf</p>
+</blockquote>
+<p>在 HDFS 上创建/tmp 和/user/hive/warehouse 两个目录并修改他们的同组权限可写 </p>
+<blockquote>
+<p>bin/hadoop fs -mkdir /tmp </p>
+<p>bin/hadoop fs -mkdir -p /user/hive/warehouse</p>
+<p>bin/hadoop fs -chmod g+w /tmp</p>
+<p>bin/hadoop fs -chmod g+w /user/hive/warehouse</p>
+</blockquote>
+<p>启动hive(启动前需要启动hadoop集群)： bin/hive</p>
+<p><img src="/2021/09/27/bigdata/a32.png"></p>
+<h2 id="flume配置"><a href="#flume配置" class="headerlink" title="flume配置"></a>flume配置</h2><p>安装netcat，测试netcat</p>
+<blockquote>
+<p>nc -lk 9999     #启动一个服务端</p>
+</blockquote>
+<blockquote>
+<p>nc localhost 9999     #启动客户端  </p>
+</blockquote>
+<p>在客户端输入会在服务端显示<img src="/2021/09/27/bigdata/a26.png"></p>
+<p>在flume目录下创建job/net-flume-logger.conf,并配置</p>
+<pre class=" language-bash"><code class="language-bash"><span class="token comment" spellcheck="true">#example.conf: A single-node Flume configuration</span>
+<span class="token comment" spellcheck="true">#Name the components on this agent</span>
+a1.sources <span class="token operator">=</span> r1
+a1.sinks <span class="token operator">=</span> k1
+a1.channels <span class="token operator">=</span> c1
+<span class="token comment" spellcheck="true">#Describe/configure the source</span>
+a1.sources.r1.type <span class="token operator">=</span> netcat
+a1.sources.r1.bind <span class="token operator">=</span> localhost
+a1.sources.r1.port <span class="token operator">=</span> 44444
+<span class="token comment" spellcheck="true">#Describe the sink</span>
+a1.sinks.k1.type <span class="token operator">=</span> logger
+<span class="token comment" spellcheck="true">#Use a channel which buffers events in memory</span>
+a1.channels.c1.type <span class="token operator">=</span> memory
+a1.channels.c1.capacity <span class="token operator">=</span> 1000
+a1.channels.c1.transactionCapacity <span class="token operator">=</span> 100
+<span class="token comment" spellcheck="true">#Bind the source and sink to the channel</span>
+a1.sources.r1.channels <span class="token operator">=</span> c1
+a1.sinks.k1.channel <span class="token operator">=</span> c1
+</code></pre>
+<p>启动服务器：</p>
+<blockquote>
+<p>bin/flume-ng agent -n a1 -c conf/ -f job/net-flume-logger.conf -Dflume.root.logger=INFO,console</p>
+</blockquote>
+<p><img src="/2021/09/27/bigdata/a27.png"></p>
+<p>启动客户端：net localhost 44444</p>
+<h3 id="实时读取本地文件传到hdfs案例"><a href="#实时读取本地文件传到hdfs案例" class="headerlink" title="实时读取本地文件传到hdfs案例"></a>实时读取本地文件传到hdfs案例</h3><h4 id="exec-source"><a href="#exec-source" class="headerlink" title="exec source"></a>exec source</h4><p>在job文件夹中添加 flume-file-hdfs.conf文件：</p>
+<pre class=" language-sh"><code class="language-sh"># example.conf: A single-node Flume configuration
+# Name the components on this agent
+a1.sources = r1
+a1.sinks = k1
+a1.channels = c1
+# Describe/configure the source
+a1.sources.r1.type = exec
+a1.sources.r1.command = tail -F /opt/module/apache-hive-3.1.2-bin/logs/hive.log
+# Use a channel which buffers events in memory
+a1.channels.c1.type = memory
+a1.channels.c1.capacity = 1000
+a1.channels.c1.transactionCapacity = 100
+# Describe the sink
+a1.sinks.k1.type = hdfs
+a1.sinks.k1.hdfs.path = hdfs://hadoop100:8020/flume/%Y%m%d/%H #上传文件的前缀 
+a1.sinks.k1.hdfs.filePrefix = logs- #是否按照时间滚动文件夹
+a1.sinks.k1.hdfs.round = true #多少时间单位创建一个新的文件夹
+a1.sinks.k1.hdfs.roundValue = 1 #重新定义时间单位
+a1.sinks.k1.hdfs.roundUnit = hour #是否使用本地时间戳
+a1.sinks.k1.hdfs.useLocalTimeStamp = true #积攒多少个 Event 才 flush 到 HDFS 一次 a1.sinks.k1.hdfs.batchSize = 1000 #设置文件类型，可支持压缩
+a1.sinks.k1.hdfs.fileType = DataStream #多久生成一个新的文件
+a1.sinks.k1.hdfs.rollInterval = 600 #设置每个文件的滚动大小
+a1.sinks.k1.hdfs.rollInterval = 600 #设置每个文件的滚动大小
+a1.sinks.k1.hdfs.rollSize = 134217700 #文件的滚动与 Event 数量无关
+a1.sinks.k1.hdfs.rollCount = 0 #最小冗余数
+a1.sinks.k1.hdfs.minBlockReplicas = 1
+# Bind the source and sink to the channel
+a1.sources.r1.channels = c1
+a1.sinks.k1.channel = c1
+</code></pre>
+<p>开启hive、flume后可在hadoop100:9870中看到/flume文件，说明监听成功</p>
+<p><img src="/2021/09/27/bigdata/a34.png"></p>
+<h4 id="spooldir-source"><a href="#spooldir-source" class="headerlink" title="spooldir source"></a>spooldir source</h4><p>在job文件夹中添加 flume-file-hdfs.conf文件：</p>
+<pre class=" language-sh"><code class="language-sh">a3.sources = r3
+a3.sinks = k3
+a3.channels = c3
+# Describe/configure the source
+a3.sources.r3.type = spooldir
+a3.sources.r3.spoolDir = /opt/module/flume/upload
+a3.sources.r3.fileSuffix = .COMPLETED
+a3.sources.r3.fileHeader = true
+#忽略所有以.tmp 结尾的文件，不上传
+a3.sources.r3.ignorePattern = ([^ ]*\.tmp)
+# Describe the sink
+a3.sinks.k3.type = hdfs
+a3.sinks.k3.hdfs.path = 
+hdfs://hadoop102:9000/flume/upload/%Y%m%d/%H
+#上传文件的前缀
+a3.sinks.k3.hdfs.filePrefix = upload-
+#是否按照时间滚动文件夹
+a3.sinks.k3.hdfs.round = true
+#多少时间单位创建一个新的文件夹
+a3.sinks.k3.hdfs.roundValue = 1
+#重新定义时间单位
+a3.sinks.k3.hdfs.roundUnit = hour
+#是否使用本地时间戳
+a3.sinks.k3.hdfs.useLocalTimeStamp = true
+#积攒多少个 Event 才 flush 到 HDFS 一次
+a3.sinks.k3.hdfs.batchSize = 100
+#设置文件类型，可支持压缩
+a3.sinks.k3.hdfs.fileType = DataStream
+#多久生成一个新的文件
+a3.sinks.k3.hdfs.rollInterval = 600
+#设置每个文件的滚动大小大概是 128M
+a3.sinks.k3.hdfs.rollSize = 134217700
+#文件的滚动与 Event 数量无关
+a3.sinks.k3.hdfs.rollCount = 0
+#最小冗余数
+a3.sinks.k3.hdfs.minBlockReplicas = 1
+# Use a channel which buffers events in memory
+a3.channels.c3.type = memory
+a3.channels.c3.capacity = 1000
+a3.channels.c3.transactionCapacity = 100
+# Bind the source and sink to the channel
+a3.sources.r3.channels = c3
+a3.sinks.k3.channel = c3
+</code></pre>
+<p><img src="/2021/09/27/bigdata/a33.png"></p>
+<h2 id="kafka-1"><a href="#kafka-1" class="headerlink" title="kafka"></a>kafka</h2><p>修改配置文件config/server.properties</p>
+<pre class=" language-sh"><code class="language-sh">zookeeper.connect=hadoop100:2181,hadoop101:2181,hadoop102:2181
+#集群
+
+log.dirs=/opt/module/kafka_2.11-0.11.0.0/logs
+#数据目录
+
+broker.id=0
+#唯一的集群id
+</code></pre>
+<p>启动需要先启动zookeeper</p>
+<p>启动命令：</p>
+<blockquote>
+<p>bin/kafka-server-start.sh config/server.properties</p>
+</blockquote>
+<p><img src="/2021/09/27/bigdata/a35.png"></p>
+<p><img src="/2021/09/27/bigdata/a36.png"></p>
+<p>显示主题：</p>
+<blockquote>
+<p>bin/kafka-topics.sh –list –zookeeper hadoop100:2181</p>
+</blockquote>
+<p>添加主题： partitions 分区   replication-factor 副本</p>
+<blockquote>
+<p>bin/kafka-topics.sh –create –zookeeper hadoop100:2181 –topic name –partitions 2 –replication-factor 2</p>
+</blockquote>
+<p><img src="/2021/09/27/bigdata/a37.png"></p>
+<p><img src="/2021/09/27/bigdata/a38.png"></p>
+<p>删除主题：</p>
+<blockquote>
+<p>bin/kafka-topics.sh –delete–zookeeper hadoop100:2181 –topic name</p>
+</blockquote>
+<pre class=" language-sh"><code class="language-sh">zookeeper.connect=hadoop100:2181,hadoop101:2181,hadoop102:2181
+#集群
+
+log.dirs=/opt/module/kafka_2.11-0.11.0.0/logs
+#数据目录
+
+broker.id=0
+#唯一的集群id
+</code></pre>
 
                 
             </div>
