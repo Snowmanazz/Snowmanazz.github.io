@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.8k
+                    2.1k
                 </div>
                 
 
@@ -395,7 +395,8 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="Java虚拟机体系结构"><a href="#Java虚拟机体系结构" class="headerlink" title="Java虚拟机体系结构"></a>Java虚拟机体系结构</h1><p>java源代码被编译成class文件，而不是底层操作系统直接执行的二进制指令，因此，需要Java虚拟机（JVM）来解释Class文件并运行。</p>
-<h1 id="JVM基本结构"><a href="#JVM基本结构" class="headerlink" title="JVM基本结构"></a>JVM基本结构</h1><h2 id="类加载器子系统"><a href="#类加载器子系统" class="headerlink" title="类加载器子系统"></a>类加载器子系统</h2><h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><p>当我们执行某个java程序（Test.class），只需要输入指令：<strong>Java</strong> <strong>Test</strong></p>
+<h1 id="JVM基本结构"><a href="#JVM基本结构" class="headerlink" title="JVM基本结构"></a>JVM基本结构</h1><h2 id="类加载器子系统"><a href="#类加载器子系统" class="headerlink" title="类加载器子系统"></a>类加载器子系统</h2><h3 id="类加载过程"><a href="#类加载过程" class="headerlink" title="类加载过程"></a>类加载过程</h3><p>加载——–》链接——–》初始化</p>
+<p>当我们执行某个java程序（Test.class），只需要输入指令：<strong>Java</strong> <strong>Test</strong></p>
 <ul>
 <li>java.ex会找到JRE内部的jvm.dll，这个就是真正的java虚拟机器，然后加载动态库，激活java虚拟机器</li>
 <li>激活后，会产生第一个类加载器—–<strong>Bootstrap Loader（启动类加载器）</strong></li>
@@ -488,6 +489,36 @@
     <span class="token punctuation">}</span>
 <span class="token comment" spellcheck="true">//  其大小为：空对象大小(8byte)+int大小(4byte)+Boolean大小(1byte)+空Object引用的大小 (4byte)=17byte。但是因为Java在对对象内存分配时都是以8的整数倍来分，因此大于17byte的最接近8的整数倍的是24，因此此对象 的大小为24byte。</span>
 </code></pre>
+<h1 id="运行时区数据结构"><a href="#运行时区数据结构" class="headerlink" title="运行时区数据结构"></a>运行时区数据结构</h1><p><img src="/2021/07/30/JVM/jvma.png"></p>
+<h2 id="程序计数器："><a href="#程序计数器：" class="headerlink" title="程序计数器："></a>程序计数器：</h2><p><strong>程序计数寄存器</strong>：存储指令相关的信息， 指向下一条指令的地址。由执行引擎读取</p>
+<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p><strong>虚拟机栈</strong>：跨平台，指令集小，编译器易实现，内部保存栈帧</p>
+<h3 id="设置栈的大小："><a href="#设置栈的大小：" class="headerlink" title="设置栈的大小："></a>设置栈的大小：</h3><p><strong>-Xss</strong>设置线程的最大栈空间。栈的大小决定了函数调用的最大可达深度</p>
+<p><img src="/2021/07/30/JVM/stackSize.png"></p>
+<h3 id="栈中的结构"><a href="#栈中的结构" class="headerlink" title="栈中的结构"></a>栈中的结构</h3><p>每个方法都对应一个栈帧，方法执行–入栈，方法结束–出栈</p>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><pre class=" language-bash"><code class="language-bash">LocalVariableTable:
+    Start  Length  Slot  Name   Signature
+      140      18    10     s   Ljava/lang/String<span class="token punctuation">;</span>
+        0     162     0  args   <span class="token punctuation">[</span>Ljava/lang/String<span class="token punctuation">;</span>
+        3     159     1 start_line   Ljava/lang/String<span class="token punctuation">;</span>
+</code></pre>
+<p>变量槽（slot）：32位以为的类型只占一个slot，64位的类型占两个slot（long，double）</p>
+<p>变量的分类：</p>
+<ul>
+<li>按照数据类型：<ul>
+<li>基本数据类型</li>
+<li>引用数据类型</li>
+</ul>
+</li>
+<li>类中声明的位置<ul>
+<li>成员变量：<ul>
+<li>类变量：linking的prepare阶段：赋默认值—》initial阶段，赋真实值</li>
+<li>实例变量：随着对象的创建，在堆空间中分配实例变量空间，进行默认赋值</li>
+</ul>
+</li>
+<li>局部变量：使用前，必须进行赋值，否则编译器报错</li>
+</ul>
+</li>
+</ul>
 
                 
             </div>
