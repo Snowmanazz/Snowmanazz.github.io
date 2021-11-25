@@ -376,7 +376,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    598
+                    532
                 </div>
                 
 
@@ -453,17 +453,6 @@
 
     connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
-</code></pre>
-<p><strong>feign和ribbon同时设置connectTimeout readTimeout，谁会先起作用？</strong></p>
-<p>feign:feign的配置会覆盖ribbon的（<a target="_blank" rel="noopener" href="https://github.com/spring-cloud/spring-cloud-netflix/issues/696%EF%BC%89">https://github.com/spring-cloud/spring-cloud-netflix/issues/696）</a></p>
-<p>解决办法：</p>
-<pre class=" language-java"><code class="language-java">    <span class="token annotation punctuation">@Bean</span>
-    Request<span class="token punctuation">.</span>Options <span class="token function">requestOptions</span><span class="token punctuation">(</span>ConfigurableEnvironment env<span class="token punctuation">)</span><span class="token punctuation">{</span>
-        <span class="token keyword">int</span> ribbonReadTimeout <span class="token operator">=</span> env<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"ribbon.ReadTimeout"</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token number">6000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">int</span> ribbonConnectionTimeout <span class="token operator">=</span> env<span class="token punctuation">.</span><span class="token function">getProperty</span><span class="token punctuation">(</span><span class="token string">"ribbon.ConnectTimeout"</span><span class="token punctuation">,</span> <span class="token keyword">int</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span> <span class="token number">3000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Request<span class="token punctuation">.</span>Options</span><span class="token punctuation">(</span>ribbonConnectionTimeout<span class="token punctuation">,</span> ribbonReadTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
 </code></pre>
 <p><strong>Feign调用接口分两层即：ribbon的调用和hystrix的调用，</strong><br><strong>所以ribbon的超时时间和Hystrix的超时时间的结合就是Feign的超时时间</strong></p>
 <pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">ribbon</span><span class="token punctuation">:</span>
