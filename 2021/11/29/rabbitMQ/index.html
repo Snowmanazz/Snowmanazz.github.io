@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="springCloud, Idea">
+    <meta name="keywords" content="rabbitMQ, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>springCloud | Idea</title>
+    <title>rabbitMQ | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -222,12 +222,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">springCloud</h1>
+                    <h1 class="description center-align post-title">rabbitMQ</h1>
                 </div>
             </div>
         </div>
@@ -343,16 +343,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/RestTemplate/">
-                                <span class="chip bg-color">RestTemplate</span>
+                            <a href="/tags/rabbitMQ/">
+                                <span class="chip bg-color">rabbitMQ</span>
                             </a>
                         
-                            <a href="/tags/Ribbon/">
-                                <span class="chip bg-color">Ribbon</span>
-                            </a>
-                        
-                            <a href="/tags/Feign/">
-                                <span class="chip bg-color">Feign</span>
+                            <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
+                                <span class="chip bg-color">消息队列</span>
                             </a>
                         
                     </div>
@@ -367,7 +363,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2021-11-25
+                    2021-11-29
                 </div>
                 
 
@@ -376,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    532
+                    671
                 </div>
                 
 
@@ -398,80 +394,103 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RestTemplate和Ribbon"><a href="#RestTemplate和Ribbon" class="headerlink" title="RestTemplate和Ribbon"></a>RestTemplate和Ribbon</h1><p>在SpringCloud项目中，RestTemplate一般通过负责均匀来使用，其超时时间不能通过ribbon直接来设置，这样设置是无效的。</p>
-<pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true">#ribbon的超时时间</span>
-<span class="token key atrule">ribbon</span><span class="token punctuation">:</span>
-  <span class="token key atrule">ReadTimeout</span><span class="token punctuation">:</span> <span class="token number">3000 </span><span class="token comment" spellcheck="true">#读取超时时间</span>
-  <span class="token key atrule">ConnectTimeout</span><span class="token punctuation">:</span> <span class="token number">3000  </span><span class="token comment" spellcheck="true">#连接超时时间</span>
-    
+                <h1 id="认识RabbitMQ"><a href="#认识RabbitMQ" class="headerlink" title="认识RabbitMQ"></a>认识RabbitMQ</h1><h2 id="RabbitMQ功能："><a href="#RabbitMQ功能：" class="headerlink" title="RabbitMQ功能："></a>RabbitMQ功能：</h2><ul>
+<li><p><strong>流量消峰</strong><img src="/2021/11/29/rabbitMQ/p1.png"></p>
+</li>
+<li><p><strong>应用解耦</strong></p>
+</li>
+<li><p><strong>异步处理</strong><img src="/2021/11/29/rabbitMQ/p2.png"></p>
+</li>
+</ul>
+<h2 id="MQ的分类"><a href="#MQ的分类" class="headerlink" title="MQ的分类"></a>MQ的分类</h2><ul>
+<li><p><strong>ActiveMQ</strong>: 单机吞吐量万级，时效性ms级，可用性高，基于主从架构。维护变少， 使用场景变少</p>
+</li>
+<li><p><strong>Kafka</strong>：大数据常用，百万级吞吐量，时效性ms级，可用性非常高。队列多-&gt;load高-&gt;时间长</p>
+</li>
+<li><p><strong>RocketMQ</strong>：吞吐量十万级，可用性非常高，消息0丢失，扩展性好。</p>
+</li>
+<li><p><strong>RabbitMQ</strong>：基于erlang语言的高并发特性，性能较好，吞吐量万级。 </p>
+</li>
+</ul>
+<h2 id="RabbitMQ核心"><a href="#RabbitMQ核心" class="headerlink" title="RabbitMQ核心"></a>RabbitMQ核心</h2><p>rabbitMQ工作原理：<img src="/2021/11/29/rabbitMQ/p3.png"></p>
+<ul>
+<li>server：Broker,接受客户端的连接，实现AMQP实体服务</li>
+<li>Connection：应用程序与Broker的网络连接TCP/IP</li>
+<li>Channel：网络信道，几乎所有的操作都在Channel中进行。信息读写</li>
+<li>Message：服务与应用程序之间传递的消息</li>
+<li>Exchange：交换机，接收消息，根据路由键发送消息到绑定的队列</li>
+<li>Routing key：路由键</li>
+<li>Queue：消息队列</li>
+</ul>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>导入依赖：pom.xml：</p>
+<pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-amqp<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.amqp<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-rabbit-test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>scope</span><span class="token punctuation">></span></span>test<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>scope</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span>
 </code></pre>
-<p>restTemplate的超时时间可以在具体的客户端指定（java原生、apache客户端）。</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
-  <span class="token keyword">public</span> RestTemplate <span class="token function">getRestTemplate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
-    SimpleClientHttpRequestFactory requestFactory <span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">SimpleClientHttpRequestFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    requestFactory<span class="token punctuation">.</span><span class="token function">setReadTimeout</span><span class="token punctuation">(</span><span class="token number">15000</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//读取超时,单位ms</span>
-    requestFactory<span class="token punctuation">.</span><span class="token function">setConnectTimeout</span><span class="token punctuation">(</span><span class="token number">5000</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//连接超时，单位ms</span>
-    RestTemplate restTemplate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RestTemplate</span><span class="token punctuation">(</span>requestFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> restTemplate<span class="token punctuation">;</span>
-  <span class="token punctuation">}</span>
+<p><strong>application.yml</strong>：</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 </code></pre>
-<p><strong>Ribbon配置的超时时间对RestTemplate不生效原因</strong>：</p>
-<p><strong>RibbonClientConfiguration</strong>初始化<strong>IClientConfig</strong>源码：</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Bean</span>
-<span class="token annotation punctuation">@ConditionalOnMissingBean</span>
-<span class="token keyword">public</span> IClientConfig <span class="token function">ribbonClientConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-    DefaultClientConfigImpl config <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultClientConfigImpl</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    config<span class="token punctuation">.</span><span class="token function">loadProperties</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//加载配置</span>
-    config<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>CommonClientConfigKey<span class="token punctuation">.</span>ConnectTimeout<span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//替换连接超时时间</span>
-    config<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>CommonClientConfigKey<span class="token punctuation">.</span>ReadTimeout<span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//替换请求超时时间</span>
-    config<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>CommonClientConfigKey<span class="token punctuation">.</span>GZipPayload<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> config<span class="token punctuation">;</span>
+<p>新建config类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RabbitConfig</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String QUEUE <span class="token operator">=</span> <span class="token string">"queue"</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String EXCHANGE <span class="token operator">=</span> <span class="token string">"directExchange"</span><span class="token punctuation">;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> String ROUTING_KEY <span class="token operator">=</span> <span class="token string">"directRouting"</span><span class="token punctuation">;</span>
+
+    <span class="token comment" spellcheck="true">/**
+     * Direct模式 交换机Exchange
+     * 发送者先发送到交换机上，然后交换机作为路由再将信息发到队列，
+     * */</span>
+    <span class="token comment" spellcheck="true">//创建队列</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> Queue <span class="token function">queue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">Queue</span><span class="token punctuation">(</span>QUEUE<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//创建交换机</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> DirectExchange <span class="token function">exchange</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">DirectExchange</span><span class="token punctuation">(</span>EXCHANGE<span class="token punctuation">,</span><span class="token boolean">true</span><span class="token punctuation">,</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//路由键绑定交换机和队列</span>
+    <span class="token annotation punctuation">@Bean</span>
+    Binding <span class="token function">bindingDirect</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> BindingBuilder
+                <span class="token punctuation">.</span><span class="token function">bind</span><span class="token punctuation">(</span><span class="token function">queue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">to</span><span class="token punctuation">(</span><span class="token function">exchange</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">with</span><span class="token punctuation">(</span>ROUTING_KEY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
 <span class="token punctuation">}</span>
 </code></pre>
-<p>所以，配置中的参数都呗覆盖掉了（但这不是最终原因），而是<strong>SimpleClientHttpRequestFactory</strong>，因为<strong>SimpleClientHttpRequestFactory</strong>会在request数据完全准备好了之后进行Connection的初始化，可以查看<strong>SimpleClientHttpRequestFactory</strong>方法<strong>prepareConnection</strong>源码：</p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">prepareConnection</span><span class="token punctuation">(</span>HttpURLConnection connection<span class="token punctuation">,</span> String httpMethod<span class="token punctuation">)</span> <span class="token keyword">throws</span> IOException <span class="token punctuation">{</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>connectTimeout <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        connection<span class="token punctuation">.</span><span class="token function">setConnectTimeout</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>connectTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//默认是-1</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>readTimeout <span class="token operator">>=</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        connection<span class="token punctuation">.</span><span class="token function">setReadTimeout</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>readTimeout<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//默认是-1</span>
-    <span class="token punctuation">}</span>
-
-    connection<span class="token punctuation">.</span><span class="token function">setDoInput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token string">"GET"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        connection<span class="token punctuation">.</span><span class="token function">setInstanceFollowRedirects</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-        connection<span class="token punctuation">.</span><span class="token function">setInstanceFollowRedirects</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token string">"POST"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token string">"PUT"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token string">"PATCH"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span><span class="token string">"DELETE"</span><span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
-        connection<span class="token punctuation">.</span><span class="token function">setDoOutput</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-
-    connection<span class="token punctuation">.</span><span class="token function">setRequestMethod</span><span class="token punctuation">(</span>httpMethod<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<p><strong>Feign调用接口分两层即：ribbon的调用和hystrix的调用，</strong><br><strong>所以ribbon的超时时间和Hystrix的超时时间的结合就是Feign的超时时间</strong></p>
-<pre class=" language-yaml"><code class="language-yaml"><span class="token key atrule">ribbon</span><span class="token punctuation">:</span>
-    <span class="token key atrule">MaxAutoRetries</span><span class="token punctuation">:</span> <span class="token number">1 </span><span class="token comment" spellcheck="true">#最大重试次数，当Eureka中可以找到服务，但是服务连不上时将会重试</span>
-    <span class="token key atrule">MaxAutoRetriesNextServer</span><span class="token punctuation">:</span> <span class="token number">1 </span><span class="token comment" spellcheck="true">#切换实例的重试次数</span>
-    <span class="token key atrule">OkToRetryOnAllOperations</span><span class="token punctuation">:</span> <span class="token boolean important">false </span><span class="token comment" spellcheck="true"># 对所有的操作请求都进行重试，如果是get则可以，如果是post,put等操作没有实现幂等的情况下是很危险的，所以设置为false</span>
-    <span class="token key atrule">ConnectTimeout</span><span class="token punctuation">:</span> <span class="token number">1000 </span><span class="token comment" spellcheck="true">#请求连接的超时时间</span>
-    <span class="token key atrule">ReadTimeout</span><span class="token punctuation">:</span> <span class="token number">1800 </span><span class="token comment" spellcheck="true">#请求处理的超时时间</span>
-    
-<span class="token key atrule">hystrix</span><span class="token punctuation">:</span>
-    <span class="token key atrule">command</span><span class="token punctuation">:</span>
-        <span class="token key atrule">default</span><span class="token punctuation">:</span>
-            <span class="token key atrule">execution</span><span class="token punctuation">:</span>
-                <span class="token key atrule">isolation</span><span class="token punctuation">:</span>
-                    <span class="token key atrule">thread</span><span class="token punctuation">:</span>
-                        <span class="token key atrule">timeoutInMilliseconds</span><span class="token punctuation">:</span> <span class="token number">3000</span>
-        <span class="token comment" spellcheck="true">#如果配置ribbon的重试，hystrix的超时时间要大于ribbon的超时时间，ribbon才会重试</span>
-        <span class="token comment" spellcheck="true">#hystrix的超时时间>(1 + MaxAutoRetries + MaxAutoRetriesNextServer) * ReadTimeout 比较好，具体看需求</span>
-</code></pre>
+<h2 id="RabbitMQ多种模式："><a href="#RabbitMQ多种模式：" class="headerlink" title="RabbitMQ多种模式："></a>RabbitMQ多种模式：</h2><p><a target="_blank" rel="noopener" href="https://www.rabbitmq.com/getstarted.html">https://www.rabbitmq.com/getstarted.html</a></p>
+<h3 id="简单模式HelloWOrd："><a href="#简单模式HelloWOrd：" class="headerlink" title="简单模式HelloWOrd："></a>简单模式HelloWOrd：</h3><p><img src="/2021/11/29/rabbitMQ/f1.png"></p>
+<p>一个生产者P发送消息到队列Q,一个消费者C接收</p>
+<h3 id="工作队列模式Work-Queue"><a href="#工作队列模式Work-Queue" class="headerlink" title="工作队列模式Work Queue"></a>工作队列模式Work Queue</h3><p><img src="/2021/11/29/rabbitMQ/f2.png"></p>
+<p>一个生产者，多个消费者，每个消费者获取到的消息唯一，多个消费者只有一个队列</p>
+<h3 id="发布-订阅模式Publish-Subscribe"><a href="#发布-订阅模式Publish-Subscribe" class="headerlink" title="发布/订阅模式Publish/Subscribe"></a>发布/订阅模式Publish/Subscribe</h3><p><img src="/2021/11/29/rabbitMQ/f3.png"></p>
+<p>一个生产者发送的消息会被多个消费者获取。一个生产者、一个交换机、多个队列、多个消费者</p>
+<h3 id="路由模式Routing"><a href="#路由模式Routing" class="headerlink" title="路由模式Routing"></a>路由模式Routing</h3><p><img src="/2021/11/29/rabbitMQ/f4.png"></p>
+<p>生产者发送消息到交换机并且要指定路由key，消费者将队列绑定到交换机时需要指定路由key</p>
+<h3 id="通配符模式Topics"><a href="#通配符模式Topics" class="headerlink" title="通配符模式Topics"></a>通配符模式Topics</h3><p><img src="/2021/11/29/rabbitMQ/f5.png"></p>
+<p>生产者P发送消息到交换机X，type=topic，交换机根据绑定队列的routing key的值进行通配符匹配；符号#：匹配一个或者多个词lazy.# 可以匹配lazy.irs或者lazy.irs.cor</p>
 
                 
             </div>
@@ -498,7 +517,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://snowmanazz.github.io/2021/11/25/springCloud/">http://snowmanazz.github.io/2021/11/25/springCloud/</a>
+                    <a href="http://snowmanazz.github.io/2021/11/29/rabbitMQ/">http://snowmanazz.github.io/2021/11/29/rabbitMQ/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -536,16 +555,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/RestTemplate/">
-                                    <span class="chip bg-color">RestTemplate</span>
+                                <a href="/tags/rabbitMQ/">
+                                    <span class="chip bg-color">rabbitMQ</span>
                                 </a>
                             
-                                <a href="/tags/Ribbon/">
-                                    <span class="chip bg-color">Ribbon</span>
-                                </a>
-                            
-                                <a href="/tags/Feign/">
-                                    <span class="chip bg-color">Feign</span>
+                                <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
+                                    <span class="chip bg-color">消息队列</span>
                                 </a>
                             
                         </div>
@@ -591,9 +606,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2021/11/29/rabbitMQ/">
                     <div class="card-image">
@@ -611,9 +627,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-11-29
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-29
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -622,6 +638,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -644,13 +661,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/09/27/bigdata/">
+                <a href="/2021/11/25/springCloud/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="bigdata">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="springCloud">
                         
-                        <span class="card-title">bigdata</span>
+                        <span class="card-title">springCloud</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -661,7 +678,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-27
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-25
                             </span>
                         <span class="publish-author">
                             
@@ -674,8 +691,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE%EF%BC%8Chadoop/">
-                        <span class="chip bg-color">大数据，hadoop</span>
+                    <a href="/tags/RestTemplate/">
+                        <span class="chip bg-color">RestTemplate</span>
+                    </a>
+                    
+                    <a href="/tags/Ribbon/">
+                        <span class="chip bg-color">Ribbon</span>
+                    </a>
+                    
+                    <a href="/tags/Feign/">
+                        <span class="chip bg-color">Feign</span>
                     </a>
                     
                 </div>
