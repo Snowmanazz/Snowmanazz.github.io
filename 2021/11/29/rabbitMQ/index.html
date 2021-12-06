@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    671
+                    886
                 </div>
                 
 
@@ -394,7 +394,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="认识RabbitMQ"><a href="#认识RabbitMQ" class="headerlink" title="认识RabbitMQ"></a>认识RabbitMQ</h1><h2 id="RabbitMQ功能："><a href="#RabbitMQ功能：" class="headerlink" title="RabbitMQ功能："></a>RabbitMQ功能：</h2><ul>
+                <h1 id="认识RabbitMQ"><a href="#认识RabbitMQ" class="headerlink" title="认识RabbitMQ"></a>认识RabbitMQ</h1><h2 id="RabbitMQ功能："><a href="#RabbitMQ功能：" class="headerlink" title="RabbitMQ功能："></a>RabbitMQ功能：</h2><p>MQ全称为Message Queue, 是一种分布式应用程序的的通信方法，它是消费-生产者模型的一个典型的代表，producer往消息队列中不断写入消息，而另一端consumer则可以读取或者订阅队列中的消息</p>
+<ul>
 <li><p><strong>流量消峰</strong><img src="/2021/11/29/rabbitMQ/p1.png"></p>
 </li>
 <li><p><strong>应用解耦</strong></p>
@@ -418,11 +419,19 @@
 <li>Connection：应用程序与Broker的网络连接TCP/IP</li>
 <li>Channel：网络信道，几乎所有的操作都在Channel中进行。信息读写</li>
 <li>Message：服务与应用程序之间传递的消息</li>
-<li>Exchange：交换机，接收消息，根据路由键发送消息到绑定的队列</li>
-<li>Routing key：路由键</li>
-<li>Queue：消息队列</li>
+<li>Exchange：交换机负责从生产者那里接收消息，并根据交换类型分发到对应的消息列队里。要实现消息的接收，一个队列必须到绑定一个交换机</li>
+<li>Routing key：：路由键是供交换机查看并根据键来决定如何分发消息到列队的一个键。路由键可以说是消息的目的地址。</li>
+<li>Queue：存储消息的缓存</li>
 </ul>
-<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>导入依赖：pom.xml：</p>
+<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2><p>安装RabbitMQ客户端</p>
+<pre class=" language-tex"><code class="language-tex"># 启动rabbitmq_managemen是管理后台的插件、我们要开启这个插件才能通过浏览器访问登录页面
+rabbitmq-plugins enable rabbitmq_management
+# 启动rabbitmq
+rabbitmq-server start
+#访问登录页面 用户名和密码都是guest
+http://localhost:15672
+</code></pre>
+<p>导入依赖：pom.xml：</p>
 <pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.springframework.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>spring-boot-starter-amqp<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
@@ -691,16 +700,16 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/RestTemplate/">
-                        <span class="chip bg-color">RestTemplate</span>
+                    <a href="/tags/springCloud/">
+                        <span class="chip bg-color">springCloud</span>
                     </a>
                     
-                    <a href="/tags/Ribbon/">
-                        <span class="chip bg-color">Ribbon</span>
+                    <a href="/tags/nacos/">
+                        <span class="chip bg-color">nacos</span>
                     </a>
                     
-                    <a href="/tags/Feign/">
-                        <span class="chip bg-color">Feign</span>
+                    <a href="/tags/Netfix/">
+                        <span class="chip bg-color">Netfix</span>
                     </a>
                     
                 </div>

@@ -343,16 +343,16 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/RestTemplate/">
-                                <span class="chip bg-color">RestTemplate</span>
+                            <a href="/tags/springCloud/">
+                                <span class="chip bg-color">springCloud</span>
                             </a>
                         
-                            <a href="/tags/Ribbon/">
-                                <span class="chip bg-color">Ribbon</span>
+                            <a href="/tags/nacos/">
+                                <span class="chip bg-color">nacos</span>
                             </a>
                         
-                            <a href="/tags/Feign/">
-                                <span class="chip bg-color">Feign</span>
+                            <a href="/tags/Netfix/">
+                                <span class="chip bg-color">Netfix</span>
                             </a>
                         
                     </div>
@@ -376,7 +376,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    532
+                    4.7k
                 </div>
                 
 
@@ -398,11 +398,179 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RestTemplate和Ribbon"><a href="#RestTemplate和Ribbon" class="headerlink" title="RestTemplate和Ribbon"></a>RestTemplate和Ribbon</h1><p>在SpringCloud项目中，RestTemplate一般通过负责均匀来使用，其超时时间不能通过ribbon直接来设置，这样设置是无效的。</p>
+                <h1 id="springCloud"><a href="#springCloud" class="headerlink" title="springCloud"></a>springCloud</h1><p>SpringCloud就是分布式微服务架构的一站式解决方案，多种微服务架构落地技术的集合体</p>
+<p><img src="/2021/11/25/springCloud/p1.png"></p>
+<p>比较重点的如下：</p>
+<p><img src="/2021/11/25/springCloud/p2.png"></p>
+<p>而现在由于各种组件的停更/升级/替换：</p>
+<p><img src="/2021/11/25/springCloud/p3.png"></p>
+<h1 id="Eureka服务注册与发现"><a href="#Eureka服务注册与发现" class="headerlink" title="Eureka服务注册与发现"></a>Eureka服务注册与发现</h1><p>SpringCloud封装了Netfix公司的Eureka实现服务治理</p>
+<p>Eureka采用CS的设计架构，Eureka Server作为服务注册功能的服务器，它是服务注册中心。其他微服务使用Eureka的客户端连接到Eureka Server并维持心跳。</p>
+<p><img src="/2021/11/25/springCloud/p4.png"></p>
+<h2 id="Eureka两组件"><a href="#Eureka两组件" class="headerlink" title="Eureka两组件"></a>Eureka两组件</h2><ul>
+<li><p>EurekaServer提供服务注册服务 <strong>@EnableEurekaServer</strong>：将服务信息注册进注册中心服务发现，从注册中心上获取服务信息</p>
+</li>
+<li><p>EurekaClient通过注册中心进行访问 <strong>@EnableEurekaClient</strong>：</p>
+<ul>
+<li>启动Eureka注册中心</li>
+<li>启动服务提供者，然后把自身注册进Eureka</li>
+<li>消费者调用时，使用服务器别名去注册中心获取实际的RPC远程调用地址</li>
+<li>消费者获取服务地址后会缓存到本地jvm内存中，默认30s更新一次地址</li>
+</ul>
+</li>
+</ul>
+<p>操作：导入依赖，编写配置application.yml，启动类添加注解</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+#    name: cloud-eureka-server7001
+    name: cloud-eureka-servers  #集群需要一致
+eureka:
+  instance:
+    hostname: www.eureka7001.com
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://www.eureka7002.com:7002/eureka/  #集群
+      
+#      fetch-registry: false  #不注册自己
+#      register-with-eureka: false # 不检索自己
+#      service-url:
+#       defaultZone: http://www.eureka7001.com:7001/eureka/ #单机
+  server:
+    #关闭自我保护机制，保证不可用服务立即被踢出
+    enable-self-preservation: false
+    eviction-interval-timer-in-ms: 2000
+</code></pre>
+<p><a target="_blank" rel="noopener" href="http://localhost:7001/%E5%8F%AF%E4%BB%A5%E6%A3%80%E6%9F%A5">http://localhost:7001/可以检查</a></p>
+<h2 id="负载均衡"><a href="#负载均衡" class="headerlink" title="负载均衡"></a>负载均衡</h2><p>在消费者的ApplicationContextConfig里的restTemplate方法上加上<code>@LoadBalanced</code>，开启负载均衡功能。</p>
+<p>可自定义实现负载均衡机制</p>
+<h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><p>在主配置类上加上<code>@EnableDiscoveryClient</code>注解，启用发现客户端。</p>
+<pre><code>@Resource
+private DiscoveryClient discoveryClient;    //springframework的DiscoveryClient
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@GetMapping</span><span class="token punctuation">(</span><span class="token string">"/payment/discovery"</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> Object <span class="token function">discovery</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//获取服务列表的信息</span>
+    List<span class="token operator">&lt;</span>String<span class="token operator">></span> services <span class="token operator">=</span> discoveryClient<span class="token punctuation">.</span><span class="token function">getServices</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>String element <span class="token operator">:</span> services<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"*******element："</span> <span class="token operator">+</span> element<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token comment" spellcheck="true">//获取CLOUD-PAYMENT-SERVICE服务的所有具体实例</span>
+    List<span class="token operator">&lt;</span>ServiceInstance<span class="token operator">></span> instances <span class="token operator">=</span> discoveryClient<span class="token punctuation">.</span><span class="token function">getInstances</span><span class="token punctuation">(</span><span class="token string">"CLOUD-PAYMENT-SERVICE"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span>ServiceInstance instance <span class="token operator">:</span> instances<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment" spellcheck="true">//getServiceId服务器id getHost主机名称 getPort端口号  getUri地址</span>
+        log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>instance<span class="token punctuation">.</span><span class="token function">getServiceId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\t"</span> <span class="token operator">+</span> instance<span class="token punctuation">.</span><span class="token function">getHost</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\t"</span> <span class="token operator">+</span> instance<span class="token punctuation">.</span><span class="token function">getPort</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"\t"</span> <span class="token operator">+</span> instance<span class="token punctuation">.</span><span class="token function">getUri</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>discoveryClient<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>    
+</code></pre>
+<h2 id="Eureka自我保护"><a href="#Eureka自我保护" class="headerlink" title="Eureka自我保护"></a>Eureka自我保护</h2><p>EurekaServer会尝试保护其服务注册表中的信息，不会删除数据也不会注销微服务。server的application.yml</p>
+<p>#关闭自我保护，默认为true <code>enable-self-preservation: false</code><br>#心跳的间隔时间，单位毫秒  <code>eviction-interval-timer-in-ms: 2000</code></p>
+<h1 id="Consul服务注册与发现"><a href="#Consul服务注册与发现" class="headerlink" title="Consul服务注册与发现"></a>Consul服务注册与发现</h1><p>Consul是一套开源的分布式服务发现与配置管理系统，由GO语言编写。</p>
+<p>提供了微服务系统的服务治理，配置中心，控制总线等</p>
+<h2 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h2><p>官网下载后有.exe的文件，<code>consul --version</code>查看版本 ，<code>consul agent -dev</code>使用开发者模式启动</p>
+<p>启动之后访问 <a target="_blank" rel="noopener" href="http://localhost:8500/">http://localhost:8500</a></p>
+<p>配置application.yml</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: consul-payment-service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        service-name: ${spring.application.name}
+</code></pre>
+<p><img src="/2021/11/25/springCloud/p.png"></p>
+<p><strong>集群中需要再RestTemplate的Bean上加@LoadBalanced注解</strong></p>
+<h2 id="架构原理"><a href="#架构原理" class="headerlink" title="架构原理"></a>架构原理</h2><p><img src="/2021/11/25/springCloud/p5.png"></p>
+<ul>
+<li><p>consul节点在启动时可以定义自身角色，client、server两种。</p>
+</li>
+<li><p> client节点只负责转发外部请求，是无状态的；</p>
+</li>
+<li><p> server节点的职责是使用raft协议保证数据一致性，响应客户端的请求，维护集群状态，与其他数据中心交互。</p>
+</li>
+</ul>
+<p>  节点之间通过gossip广播协议（谣言协议），进行节点之间的数据交互，最终大家达到一致</p>
+<h1 id="Eureka、zookeeper、Consul"><a href="#Eureka、zookeeper、Consul" class="headerlink" title="Eureka、zookeeper、Consul"></a>Eureka、zookeeper、Consul</h1><table>
+<thead>
+<tr>
+<th align="center">组件名</th>
+<th align="center">语言</th>
+<th align="center">CAP</th>
+<th align="center">服务健康检查</th>
+<th align="center">对外暴露接口</th>
+<th align="center">spring cloud集成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Eureka</td>
+<td align="center">java</td>
+<td align="center">AP</td>
+<td align="center">可配支持</td>
+<td align="center">HTTP</td>
+<td align="center">已集成</td>
+</tr>
+<tr>
+<td align="center">Consul</td>
+<td align="center">Go</td>
+<td align="center">CP</td>
+<td align="center">支持</td>
+<td align="center">HTTP/DNS</td>
+<td align="center">已集成</td>
+</tr>
+<tr>
+<td align="center">Zookeeper</td>
+<td align="center">java</td>
+<td align="center">CP</td>
+<td align="center">支持</td>
+<td align="center">客户端</td>
+<td align="center">已集成</td>
+</tr>
+</tbody></table>
+<p>CAP：一个分布式系统只能满足其二，P是必须满足的</p>
+<p><img src="/2021/11/25/springCloud/CAP.png"></p>
+<p>C:一致性（Consistency）A:可用性（Availability）P:分区容错性（Partition tolerance）</p>
+<ul>
+<li>CA：单点集群，可扩展性不大</li>
+<li>CP：性能不是很高</li>
+<li>AP：对一致性要求较低</li>
+</ul>
+<h1 id="Ribbon"><a href="#Ribbon" class="headerlink" title="Ribbon"></a>Ribbon</h1><p>负载均衡LoadBalance</p>
+<p>Ngix是服务器负载均衡，Ribbon是本地负载均衡</p>
+<h2 id="Ribbon负载均衡"><a href="#Ribbon负载均衡" class="headerlink" title="Ribbon负载均衡"></a>Ribbon负载均衡</h2><ul>
+<li><strong>RoundRobinRule</strong>  轮询 （默认规则）</li>
+<li><strong>RandomRule</strong>随机</li>
+<li><strong>AvailabilityFilteringRule</strong> 会先过滤掉由多次访问故障而处于断路器跳闸状态的服务， 还有并发的连接数量超过阈值的服务，然后对剩余的服务列表按照轮询策略进行访问</li>
+<li><strong>WeightedResponseTimeRule</strong> 根据平均响应时间计算所有服务的权重，响应时间越快服务权重越大被选中的概率越高。 刚启动时如果统计信息不足，则使用RoundRobinRule策略，等统计信息足够， 会切换到WeightedResponseTimeRule</li>
+<li><strong>RetryRule</strong>先按照RoundRobinRule 的策略获取服务，如果获取服务失败则在指定时间内会进行重试，获取可用的服务</li>
+<li><strong>BestAvailableRule</strong>  会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务，然后选择一个并发量最小的服务</li>
+<li><strong>ZoneAvoidanceRule</strong>  默认规则,复合判断server所在区域的性能和server的可用性选择服务器</li>
+</ul>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MySelfRule</span>
+<span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@Bean</span>
+  <span class="token keyword">public</span> IRule <span class="token function">myRule</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+  <span class="token punctuation">{</span>
+   <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">RandomRule</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//Ribbon默认是轮询，自定义为随机</span>
+  <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>在主启动类上添加：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RibbonClient</span><span class="token punctuation">(</span>name<span class="token operator">=</span><span class="token string">"CLOUD-PAYMENT-SERVICE"</span><span class="token punctuation">,</span>configuration<span class="token operator">=</span>MySelfRule<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//name表示对哪些服务进行负载均衡</span>
+</code></pre>
+<h2 id="RestTemplate和Ribbon"><a href="#RestTemplate和Ribbon" class="headerlink" title="RestTemplate和Ribbon"></a>RestTemplate和Ribbon</h2><p>在SpringCloud项目中，RestTemplate一般通过负责均匀来使用，其超时时间不能通过ribbon直接来设置，这样设置是无效的。</p>
 <pre class=" language-yaml"><code class="language-yaml"><span class="token comment" spellcheck="true">#ribbon的超时时间</span>
 <span class="token key atrule">ribbon</span><span class="token punctuation">:</span>
   <span class="token key atrule">ReadTimeout</span><span class="token punctuation">:</span> <span class="token number">3000 </span><span class="token comment" spellcheck="true">#读取超时时间</span>
   <span class="token key atrule">ConnectTimeout</span><span class="token punctuation">:</span> <span class="token number">3000  </span><span class="token comment" spellcheck="true">#连接超时时间</span>
+  package com.atguigu.myrule;
     
 </code></pre>
 <p>restTemplate的超时时间可以在具体的客户端指定（java原生、apache客户端）。</p>
@@ -472,7 +640,429 @@
         <span class="token comment" spellcheck="true">#如果配置ribbon的重试，hystrix的超时时间要大于ribbon的超时时间，ribbon才会重试</span>
         <span class="token comment" spellcheck="true">#hystrix的超时时间>(1 + MaxAutoRetries + MaxAutoRetriesNextServer) * ReadTimeout 比较好，具体看需求</span>
 </code></pre>
+<h1 id="OpenFeign服务接口调用"><a href="#OpenFeign服务接口调用" class="headerlink" title="OpenFeign服务接口调用"></a>OpenFeign服务接口调用</h1><p>调用一个微服务有两种方法：</p>
+<ul>
+<li>Feign ：接口+注解。可读性高</li>
+<li>RestTemplate+Ribbon。效率高</li>
+</ul>
+<p>Feign是一个声明式的WebService客户端。使用方法就是定义一个服务接口然后加上注解</p>
+<p>Feign集成了Ribbon，实现了负载均衡。<strong>接口+注解</strong></p>
+<ul>
+<li>主启动类加注解 <code>@EnableFeignClients</code></li>
+<li>编写一个接口加注解 <code>@FeignClient(value = &quot;SPRINGCLOUD-PROVIDER-DEPT&quot;)//value值为服务器名称</code></li>
+</ul>
+<p><img src="/2021/11/25/springCloud/p6.png"></p>
+<p>默认Feign客户端只等待一秒钟，超过则直接报错</p>
+<pre class=" language-YML"><code class="language-YML">#设置feign客户端超时时间
+ribbon:
+    #指的是建立连接所用的时间
+  ReadTimeout: 5000  #单位ms
+  #建立连接后从服务器读取到可用资源的时间
+  ConnectTimeout: 5000  #单位ms
+logging:
+  level:
+    com.atguigu.springcloud.service.PaymentFeignService: debug
+</code></pre>
+<h1 id="Hystrix断路器"><a href="#Hystrix断路器" class="headerlink" title="Hystrix断路器"></a>Hystrix断路器</h1><p>多个微服务相互调用容易发生服务雪崩</p>
+<p>Hystrix用于处理分布式系统的延迟和容错的开源库，保证出现问题时，不会导致服务器整体崩溃，避免级联故障，提供分布式系统的弹性。</p>
+<p>Hystrix设计目标：</p>
+<ul>
+<li>对来自依赖的延迟和故障进行防护和控制——这些依赖通常都是通过网络访问的</li>
+<li>阻止故障的连锁反应</li>
+<li>快速失败并迅速恢复</li>
+<li>回退并优雅降级</li>
+<li>提供近实时的监控与告警</li>
+</ul>
+<p>Hystrix遵循的设计原则：</p>
+<ul>
+<li>防止任何单独的依赖耗尽资源（线程）</li>
+<li>过载立即切断并快速失败，防止排队</li>
+<li>尽可能提供回退以保护用户免受故障</li>
+<li>使用隔离技术（例如隔板，泳道和断路器模式）来限制任何一个依赖的影响</li>
+<li>通过近实时的指标，监控和告警，确保故障被及时发现</li>
+<li>通过动态修改配置属性，确保故障及时恢复</li>
+<li>防止整个依赖客户端执行失败，而不仅仅是网络通信</li>
+</ul>
+<p><img src="/2021/11/25/springCloud/p12.png"></p>
+<h2 id="压力测试："><a href="#压力测试：" class="headerlink" title="压力测试："></a>压力测试：</h2><p>工具 ：Jrebel</p>
+<p>测试地址：<a target="_blank" rel="noopener" href="http://localhost:8001/payment/info/error/4%EF%BC%8C20000%E9%AB%98%E5%B9%B6%E5%8F%91%E8%AE%BF%E9%97%AE">http://localhost:8001/payment/info/error/4，20000高并发访问</a></p>
+<p><img src="/2021/11/25/springCloud/p7.png"></p>
+<p>新建一个HTTP请求测试：</p>
+<p><img src="/2021/11/25/springCloud/p8.png"></p>
+<p>测试可以发现：<a target="_blank" rel="noopener" href="http://localhost:8001/payment/info/ok/4%E8%AF%A5%E5%9C%B0%E5%9D%80%E8%AE%BF%E9%97%AE%E4%B9%9F%E4%BC%9A%E5%8F%98%E6%85%A2">http://localhost:8001/payment/info/ok/4该地址访问也会变慢</a></p>
+<h2 id="服务降级："><a href="#服务降级：" class="headerlink" title="服务降级："></a>服务降级：</h2><ul>
+<li>提供者fallback：一旦调用方法失败后并抛出错误信息后，会自动调用HystrixCommand中的fallbackMethod的指定的方法</li>
+</ul>
+<pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">//@HystrixCommand:启用hystrix</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token annotation punctuation">@HystrixCommand</span><span class="token punctuation">(</span>fallbackMethod <span class="token operator">=</span> <span class="token string">"getPaymentInfo_ErrorHandler"</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//失败后调用的方法</span>
+                    commandProperties <span class="token operator">=</span> <span class="token punctuation">{</span><span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>
+              name <span class="token operator">=</span> <span class="token string">"execution.isolation.thread.timeoutInMilliseconds"</span><span class="token punctuation">,</span>value <span class="token operator">=</span> <span class="token string">"3000"</span><span class="token punctuation">)</span>
+              <span class="token comment" spellcheck="true">//设置超时时间的峰值3s</span>
+    <span class="token punctuation">}</span><span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">getPaymentInfo_Error</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">//        return Thread.currentThread().getName()+"----ERROR----"+id;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"-----------error----------"</span><span class="token operator">+</span>id<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        Integer timeout <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+        <span class="token keyword">try</span> <span class="token punctuation">{</span>
+            TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span>timeout<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token keyword">return</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"-----getPaymentInfo_Error----ERROR----"</span><span class="token operator">+</span>id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<p>fallback方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> String <span class="token function">getPaymentInfo_ErrorHandler</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"-----------getPaymentInfo_ErrorHandler----ERROR----"</span><span class="token operator">+</span>id<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>application.yml开启hysrix</p>
+<pre class=" language-yml"><code class="language-yml">feign:
+  hystrix:
+    enabled: true  #在feign中开启hystrix
+</code></pre>
+<ul>
+<li>消费者fallback</li>
+</ul>
+<p>接口的FeignClient注解添加fallback类</p>
+<pre class=" language-java"><code class="language-java">fallback <span class="token operator">=</span> PaymentFallbackHystrixService<span class="token punctuation">.</span><span class="token keyword">class</span> <span class="token comment" spellcheck="true">//FeignClient属性</span>
+</code></pre>
+<p>实现接口方法：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>   <span class="token comment" spellcheck="true">//将fallback接口添加到容器中</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PaymentFallbackHystrixService</span> <span class="token keyword">implements</span> <span class="token class-name">PaymentHystrixService</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//对用方法的fallback方法</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">paymentInfo_OK</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"-------PaymentFallbackService fall back-paymentInfo_OK,o(╥﹏╥)o"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">paymentInfo_ERROR</span><span class="token punctuation">(</span>Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"-------PaymentFallbackService fall back-paymentInfo_TimeOut,o(╥﹏╥)o"</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>这样可以实现解耦，避免代码臃肿</p>
+<h2 id="服务熔断："><a href="#服务熔断：" class="headerlink" title="服务熔断："></a>服务熔断：</h2><p>熔断机制是应对雪崩效应的一种微服务链路保护机制。当检测到该节点正常响应时，恢复调用链路</p>
+<p>当下游的服务因为某种原因突然变得不可用或响应过慢，上游服务为了保证自己整体服务的可用性，不再继续调用目标服务，直接返回，快速释放资源。如果目标服务情况好转则恢复调用    </p>
+<p><img src="/2021/11/25/springCloud/p9.png"></p>
+<p><a target="_blank" rel="noopener" href="https://martinfowler.com/bliki/CircuitBreaker.html">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//---服务的熔断</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token annotation punctuation">@HystrixCommand</span><span class="token punctuation">(</span>
+            fallbackMethod <span class="token operator">=</span> <span class="token string">"paymentCircuitBreaker_fallback"</span><span class="token punctuation">,</span>commandProperties <span class="token operator">=</span>
+        <span class="token punctuation">{</span>
+  <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.enabled"</span><span class="token punctuation">,</span>value <span class="token operator">=</span> <span class="token string">"true"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//是否开启断路</span>
+  <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.requestVolumeThreshold"</span><span class="token punctuation">,</span>value <span class="token operator">=</span> <span class="token string">"10"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//请求次数</span>
+  <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.sleepWindowInMilliseconds"</span><span class="token punctuation">,</span>value <span class="token operator">=</span> <span class="token string">"10000"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true">//时间窗口期</span>
+  <span class="token annotation punctuation">@HystrixProperty</span><span class="token punctuation">(</span>name <span class="token operator">=</span> <span class="token string">"circuitBreaker.errorThresholdPercentage"</span><span class="token punctuation">,</span>value <span class="token operator">=</span> <span class="token string">"60"</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token comment" spellcheck="true">//失败率达到多少后跳闸</span>
+    <span class="token comment" spellcheck="true">// 10s中的时间每访问10次失败率达到60%则断路</span>
+    <span class="token punctuation">}</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">public</span> String <span class="token function">paymentCircuitBreaker</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span> Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>id<span class="token operator">&lt;</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"******id不能为负数"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        String simpleUUID <span class="token operator">=</span> IdUtil<span class="token punctuation">.</span><span class="token function">simpleUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"\t"</span> <span class="token operator">+</span> <span class="token string">"成功调用，流水号是："</span> <span class="token operator">+</span> simpleUUID<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> String <span class="token function">paymentCircuitBreaker_fallback</span><span class="token punctuation">(</span><span class="token annotation punctuation">@PathVariable</span><span class="token punctuation">(</span><span class="token string">"id"</span><span class="token punctuation">)</span> Integer id<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token string">"id不能为负数，请稍后再试............"</span><span class="token operator">+</span>id<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+<h2 id="服务限流："><a href="#服务限流：" class="headerlink" title="服务限流："></a>服务限流：</h2><p>alibaba中sentient</p>
+<h2 id="服务监控："><a href="#服务监控：" class="headerlink" title="服务监控："></a>服务监控：</h2><p>准实时的调用监控</p>
+<p>在启动类中：加上<code>@EnableHystrixDashboard</code>注解即可</p>
+<p>需要监控的启动类中加入：</p>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+ * 此配置是为了服务监控而配置，与服务容错本身无关，springcloud升级后的坑
+ * ServletRegistrationBean因为springboot的默认路径不是/hystrix.stream
+ * 只要在自己的项目里配置下面的Servlet就可以了
+ * @return
+ */</span>
+<span class="token annotation punctuation">@Bean</span>
+<span class="token keyword">public</span> ServletRegistrationBean <span class="token function">getServlet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    HystrixMetricsStreamServlet streamServlet <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HystrixMetricsStreamServlet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    ServletRegistrationBean registrationBean <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServletRegistrationBean</span><span class="token punctuation">(</span>streamServlet<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    registrationBean<span class="token punctuation">.</span><span class="token function">setLoadOnStartup</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    registrationBean<span class="token punctuation">.</span><span class="token function">addUrlMappings</span><span class="token punctuation">(</span><span class="token string">"/hystrix.stream"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    registrationBean<span class="token punctuation">.</span><span class="token function">setName</span><span class="token punctuation">(</span><span class="token string">"HystrixMetricsStreamServlet"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> registrationBean<span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>正常情况<img src="/2021/11/25/springCloud/p10.png"></p>
+<p>错误情况<img src="/2021/11/25/springCloud/p11.png"></p>
+<h1 id="路由网关Gateway-zuul"><a href="#路由网关Gateway-zuul" class="headerlink" title="路由网关Gateway/zuul"></a>路由网关Gateway/zuul</h1><p>已一种简单有效的方式对API进行路由，提供一些强大的功能，例如：熔断，限流，重试，代理</p>
+<ul>
+<li>路由：构建网关的基本模块，由ID、URI，断言和过滤器组成，断言为true则匹配该路由</li>
+<li>断言：匹配HTTP请求 的所有内容，请求与断言匹配则进行路由</li>
+<li>过滤：请求被路由前或路由后对请求进行修改</li>
+</ul>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: payment_routh
+          uri: http://localhost:8001  #匹配后提供服务的路由地址
+#          uri: lb://cloud-payment-service
+          predicates:
+            - Path=/payment/selectOne/**         #断言，路径相匹配的进行路由
+        - id: payment_routh2
+          uri: http://localhost:8001
+#          uri: lb://cloud-payment-service
+          predicates:
+            - Path=/payment/lb/**
+      discovery:
+        locator:
+          enabled: true  #开启从注册中心动态生成路由的功能，用微服务名进行路由
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span>    <span class="token class-name">GateWayConfig</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//访问localhost://9527/guonei跳转到baidu的guonei</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> RouteLocator <span class="token function">customRouteLocator</span><span class="token punctuation">(</span>RouteLocatorBuilder builder<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        RouteLocatorBuilder<span class="token punctuation">.</span>Builder routes <span class="token operator">=</span> builder<span class="token punctuation">.</span><span class="token function">routes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        routes<span class="token punctuation">.</span><span class="token function">route</span><span class="token punctuation">(</span><span class="token string">"path_route"</span><span class="token punctuation">,</span>r<span class="token operator">-</span><span class="token operator">></span>r<span class="token punctuation">.</span><span class="token function">path</span><span class="token punctuation">(</span><span class="token string">"/guonei"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">uri</span><span class="token punctuation">(</span><span class="token string">"https://www.baidu.com"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> routes<span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<pre class=" language-yml"><code class="language-yml">predicates:
+  - Path=/payment/lb/**
+  - After=2021-12-03T11:07:22.717+08:00[Asia/Shanghai] #在这个时间之后访问生效
+  - Before=2021-12-03T11:07:22.717+08:00[Asia/Shanghai] #在这个时间之前访问生效
+  - Btween=2021-12-03T11:07:22.717+08:00[Asia/Shanghai],2021-12-03T11:07:22.717+08:00[Asia/Shanghai] #在这个时间之间访问生效
+  - Cookie=username,zzyy  #判断cookie
+  - Header=X-Request-Id,\d+ #判断请求头
+</code></pre>
+<h2 id="GatewayFilter"><a href="#GatewayFilter" class="headerlink" title="GatewayFilter"></a>GatewayFilter</h2><p>生命周期：pre（业务逻辑前）/post（业务逻辑后）</p>
+<p>种类：GatewayFilter（单一）/GlobalFileter（全局）</p>
+<h3 id="自定义GlobalFilter："><a href="#自定义GlobalFilter：" class="headerlink" title="自定义GlobalFilter："></a>自定义GlobalFilter：</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//自定义过滤器</span>
+<span class="token annotation punctuation">@Component</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MyGateWayFilter</span> <span class="token keyword">implements</span> <span class="token class-name">GlobalFilter</span><span class="token punctuation">,</span> Ordered <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">//过滤没有登陆的请求</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Mono<span class="token operator">&lt;</span>Void<span class="token operator">></span> <span class="token function">filter</span><span class="token punctuation">(</span>ServerWebExchange exchange<span class="token punctuation">,</span> GatewayFilterChain chain<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"**************come in MylogGateWayGilter:  "</span> <span class="token operator">+</span> <span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        String uname <span class="token operator">=</span> exchange<span class="token punctuation">.</span><span class="token function">getRequest</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getQueryParams</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getFirst</span><span class="token punctuation">(</span><span class="token string">"uname"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>uname <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"********用户名为空，非法用户。"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment" spellcheck="true">//设置响应状态码</span>
+            exchange<span class="token punctuation">.</span><span class="token function">getResponse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setStatusCode</span><span class="token punctuation">(</span>HttpStatus<span class="token punctuation">.</span>NOT_ACCEPTABLE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> exchange<span class="token punctuation">.</span><span class="token function">getResponse</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setComplete</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+        <span class="token comment" spellcheck="true">//进入下个过滤链</span>
+        <span class="token keyword">return</span> chain<span class="token punctuation">.</span><span class="token function">filter</span><span class="token punctuation">(</span>exchange<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//加载顺序，0最先 </span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token keyword">int</span> <span class="token function">getOrder</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h1 id="Config配置中心"><a href="#Config配置中心" class="headerlink" title="Config配置中心"></a>Config配置中心</h1><p>springCloud Config为微服务框架提供了集中化的外部配置支持。配置服务为不同的微服务提供一个中心化的外部配置</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-config-center
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://gitee.com/mingsama/springcloud-config.git #git仓库地址
+          #私有仓库需要用户名密码
+          search-paths:
+            - springcloud-config
+      label: master
+</code></pre>
+<p>application.yml是用户级的资源配置项</p>
+<p>bootstrap.yml是系统级，优先级更高</p>
+<p>客户端bootstrap.yml</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: config-client
+  cloud:
+    config:
+      label: master  #分支名称
+      name: config  #配置文件名称
+      profile: dev  #读取后缀名称   上述三个综合http://localhost:3344/master/config-dev.yml
+      uri: http://localhost:3344  #配置中心的地址
+</code></pre>
+<p>配置更改时Config服务端可直接刷新</p>
+<h2 id="Config客户端动态刷新"><a href="#Config客户端动态刷新" class="headerlink" title="Config客户端动态刷新"></a>Config客户端动态刷新</h2><p>避免重启。</p>
+<pre class=" language-yml"><code class="language-yml">#暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+</code></pre>
+<p>Controller层中添加 <code>@RefreshScope</code></p>
+<p><strong>改完之后需要发送post请求刷新3355</strong></p>
+<pre class=" language-bash"><code class="language-bash">curl -X POST <span class="token string">"http://localhost:3355/actuator/refresh"</span>        
+</code></pre>
+<h1 id="BUS消息总线"><a href="#BUS消息总线" class="headerlink" title="BUS消息总线"></a>BUS消息总线</h1><p><strong>Bus支持两种消息代理：RabbitMQ和Kafka</strong></p>
+<p>Bus配合Config可以实现配置全自动动态刷新</p>
+<p>Bus能够管理和传播分布式系统之间的消息，可用于广播状态更改、事件推送等。通信通道</p>
+<p>广播模式：</p>
+<ul>
+<li>利用消息总线触发一个客户端/bus/refresh，而刷新所有客户端</li>
+<li>利用消息总线触发一个服务端的/bus/refresh，而刷新所有客户端（更合适）</li>
+</ul>
+<h2 id="给服务端添加消息总线支持：RabbitMQ"><a href="#给服务端添加消息总线支持：RabbitMQ" class="headerlink" title="给服务端添加消息总线支持：RabbitMQ"></a>给服务端添加消息总线支持：RabbitMQ</h2><p>服务端：</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-config-center
+    #rabbitmq配置
+  rabbitmq:
+    host: localhost
+    port: 15672
+    username: guest
+    password: guest
+</code></pre>
+<pre class=" language-yml"><code class="language-yml">#rabbitmq相关配置，暴露bus刷新配置的端点  必须添加actuator依赖！！！！！
+management:
+  endpoints:  #暴露bus刷新配置的端点
+    web:
+      exposure:
+        include: 'bus-refresh'
+</code></pre>
+<p>客户端：</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-config-center
+    #rabbitmq配置
+  rabbitmq:
+    host: localhost
+    port: 15672
+    username: guest
+    password: guest
+</code></pre>
+<p>控制台输入：<code>curl -X POST &quot;http://localhost:3344/actuator/bus-refresh&quot;</code>即可全局生效</p>
+<h2 id="定点通知"><a href="#定点通知" class="headerlink" title="定点通知"></a>定点通知</h2><p>指定name和port：</p>
+<p><code>curl -X POST &quot;http://localhost:3344/actuator/bus-refresh/config-client:3366&quot;</code></p>
+<h1 id="消息驱动Stream"><a href="#消息驱动Stream" class="headerlink" title="消息驱动Stream"></a>消息驱动Stream</h1><p>屏蔽底层中间件的差异，降低切换成本，统一消息 的编程模型</p>
+<h2 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h2><p>通过绑定器Binder作为中简介，实现应用程序与消息中间件之间的隔离</p>
+<p>Stream中的消息通信方式遵行发布-订阅模式  Topic</p>
+<ul>
+<li>inputing：消息输入通道</li>
+<li>output：消息输出通道 </li>
+<li>StreamListener：监听队列</li>
+<li>EnableBinding：绑定队列和交换机</li>
+</ul>
+<h2 id="生产者："><a href="#生产者：" class="headerlink" title="生产者："></a>生产者：</h2><pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-stream-privider
+  cloud:
+    stream:
+      binders:   #自此处配置要绑定的rabbitmq的服务信息
+        defaultRabbit: #表示定义的名称，用于binding整合
+          type: rabbit #消息组件类型
+          environment:  # 设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings:   #服务的整合处理
+        output: #这个名字是一个通道的名称
+          destination: studyExchange #表示要使用的exchange名称定义
+          content-type: application/json #设置消息类型，本次为json
+          binder: defaultRabbit  #设置要绑定的消息服务的具体设置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+  instance:
+    lease-expiration-duration-in-seconds: 5 #如果现在超过了5秒的间隔
+    lease-renewal-interval-in-seconds: 2 #设置心跳的时间间隔
+    instance-id: send-8801.com
+    prefer-ip-address: true #访问的路径变为IP地址
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@EnableBinding</span><span class="token punctuation">(</span>Source<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true">//定义消息推送通道</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">MessageServiceImpl</span> <span class="token keyword">implements</span> <span class="token class-name">IMessageService</span> <span class="token punctuation">{</span>
+
+    <span class="token comment" spellcheck="true">//消息发送通道</span>
+    <span class="token annotation punctuation">@Resource</span>
+    <span class="token keyword">private</span> MessageChannel output<span class="token punctuation">;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> String <span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        String serial <span class="token operator">=</span> UUID<span class="token punctuation">.</span><span class="token function">randomUUID</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        output<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>MessageBuilder<span class="token punctuation">.</span><span class="token function">withPayload</span><span class="token punctuation">(</span>serial<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"***********serial:"</span><span class="token operator">+</span>serial<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> serial<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="消费者："><a href="#消费者：" class="headerlink" title="消费者："></a>消费者：</h2><pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-stream-privider
+  cloud:
+    stream:
+      binders:   #自此处配置要绑定的rabbitmq的服务信息
+        defaultRabbit: #表示定义的名称，用于binding整合
+          type: rabbit #消息组件类型
+          environment:  # 设置rabbitmq的相关的环境配置
+            spring:
+              rabbitmq:
+                host: localhost
+                port: 5672
+                username: guest
+                password: guest
+      bindings:   #服务的整合处理
+        input: #这个名字是一个通道的名称
+          destination: studyExchange #表示要使用的exchange名称定义
+          content-type: application/json #设置消息类型，本次为json
+          binder: defaultRabbit  #设置要绑定的消息服务的具体设置
+          group: atguiguA
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka/
+  instance:
+    lease-expiration-duration-in-seconds: 5 #如果现在超过了5秒的间隔
+    lease-renewal-interval-in-seconds: 2 #设置心跳的时间间隔
+    instance-id: send-8802.com
+    prefer-ip-address: true #访问的路径变为IP地址
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Component</span>
+<span class="token annotation punctuation">@EnableBinding</span><span class="token punctuation">(</span>Sink<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ReceiveMessageListenerController</span> <span class="token punctuation">{</span>
+
+    <span class="token annotation punctuation">@Value</span><span class="token punctuation">(</span><span class="token string">"${server.port}"</span><span class="token punctuation">)</span>
+    <span class="token keyword">private</span> String serverPort<span class="token punctuation">;</span>
+
+
+    <span class="token annotation punctuation">@StreamListener</span><span class="token punctuation">(</span>Sink<span class="token punctuation">.</span>INPUT<span class="token punctuation">)</span>
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">input</span><span class="token punctuation">(</span>Message<span class="token operator">&lt;</span>String<span class="token operator">></span> message<span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"我是消费者1号，-----》接受到的消息是："</span><span class="token operator">+</span>message<span class="token punctuation">.</span><span class="token function">getPayload</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"\t"</span><span class="token operator">+</span>serverPort<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="重复消费问题："><a href="#重复消费问题：" class="headerlink" title="重复消费问题："></a>重复消费问题：</h2><p>解决方式：消息分组 。同一个组只会消费一次</p>
+<p>yml中添加           group：name #要想消费一次必须相同</p>
+<p><strong>group属性可以防止服务重启后没有接收到的消息丢失</strong></p>
+<h1 id="Sleuth分布式请求链路跟踪"><a href="#Sleuth分布式请求链路跟踪" class="headerlink" title="Sleuth分布式请求链路跟踪"></a>Sleuth分布式请求链路跟踪</h1><p>提供服务跟踪方案，兼容支持zipkin</p>
+<p>启动zipkin ：<code>java -jar zipkin-server-2.23.9-exec.jar</code></p>
+<p>访问：localhost:9411</p>
+<p><strong>一条链路通过traceId唯一标识，Span标识发起的请求信息，各Span通过parentId 关联起来</strong></p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-comsumer-order
+    zipkin:
+      base-url: http://localhost:9411
+    sleuth:
+      sampler:
+        #采样值0-1，1标识全部采集
+        probability: 1
+</code></pre>
+<h1 id="SpringCloudAlibaba"><a href="#SpringCloudAlibaba" class="headerlink" title="SpringCloudAlibaba"></a>SpringCloudAlibaba</h1>
                 
             </div>
             <hr/>
@@ -536,16 +1126,16 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/RestTemplate/">
-                                    <span class="chip bg-color">RestTemplate</span>
+                                <a href="/tags/springCloud/">
+                                    <span class="chip bg-color">springCloud</span>
                                 </a>
                             
-                                <a href="/tags/Ribbon/">
-                                    <span class="chip bg-color">Ribbon</span>
+                                <a href="/tags/nacos/">
+                                    <span class="chip bg-color">nacos</span>
                                 </a>
                             
-                                <a href="/tags/Feign/">
-                                    <span class="chip bg-color">Feign</span>
+                                <a href="/tags/Netfix/">
+                                    <span class="chip bg-color">Netfix</span>
                                 </a>
                             
                         </div>
