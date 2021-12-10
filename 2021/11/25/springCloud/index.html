@@ -376,7 +376,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    4.7k
+                    5.7k
                 </div>
                 
 
@@ -663,6 +663,10 @@ logging:
   level:
     com.atguigu.springcloud.service.PaymentFeignService: debug
 </code></pre>
+<p><strong>远程接口的本地JDK Proxy代理实例</strong>，有以下特点：</p>
+<p>（1）Proxy代理实例，实现了一个加 @FeignClient 注解的远程调用接口；</p>
+<p>（2）Proxy代理实例，能在内部进行HTTP请求的封装，以及发送HTTP 请求；</p>
+<p>（3）Proxy代理实例，能处理远程HTTP请求的响应，并且完成结果的解码，然后返回给调用者。</p>
 <h1 id="Hystrix断路器"><a href="#Hystrix断路器" class="headerlink" title="Hystrix断路器"></a>Hystrix断路器</h1><p>多个微服务相互调用容易发生服务雪崩</p>
 <p>Hystrix用于处理分布式系统的延迟和容错的开源库，保证出现问题时，不会导致服务器整体崩溃，避免级联故障，提供分布式系统的弹性。</p>
 <p>Hystrix设计目标：</p>
@@ -690,7 +694,8 @@ logging:
 <p>新建一个HTTP请求测试：</p>
 <p><img src="/2021/11/25/springCloud/p8.png"></p>
 <p>测试可以发现：<a target="_blank" rel="noopener" href="http://localhost:8001/payment/info/ok/4%E8%AF%A5%E5%9C%B0%E5%9D%80%E8%AE%BF%E9%97%AE%E4%B9%9F%E4%BC%9A%E5%8F%98%E6%85%A2">http://localhost:8001/payment/info/ok/4该地址访问也会变慢</a></p>
-<h2 id="服务降级："><a href="#服务降级：" class="headerlink" title="服务降级："></a>服务降级：</h2><ul>
+<h2 id="服务降级："><a href="#服务降级：" class="headerlink" title="服务降级："></a>服务降级：</h2><p>当服务不可用的时候，不会被等待，直接返回一个友好的提示</p>
+<ul>
 <li>提供者fallback：一旦调用方法失败后并抛出错误信息后，会自动调用HystrixCommand中的fallbackMethod的指定的方法</li>
 </ul>
 <pre class=" language-java"><code class="language-java">    <span class="token comment" spellcheck="true">//@HystrixCommand:启用hystrix</span>
@@ -744,8 +749,7 @@ logging:
 <span class="token punctuation">}</span>
 </code></pre>
 <p>这样可以实现解耦，避免代码臃肿</p>
-<h2 id="服务熔断："><a href="#服务熔断：" class="headerlink" title="服务熔断："></a>服务熔断：</h2><p>熔断机制是应对雪崩效应的一种微服务链路保护机制。当检测到该节点正常响应时，恢复调用链路</p>
-<p>当下游的服务因为某种原因突然变得不可用或响应过慢，上游服务为了保证自己整体服务的可用性，不再继续调用目标服务，直接返回，快速释放资源。如果目标服务情况好转则恢复调用    </p>
+<h2 id="服务熔断："><a href="#服务熔断：" class="headerlink" title="服务熔断："></a>服务熔断：</h2><p>当服务器达到最大的承受能的之后，直接拒绝访问服务，最会调用服务降级方法，返回友好提示。目的是保证服务不被宕机掉    </p>
 <p><img src="/2021/11/25/springCloud/p9.png"></p>
 <p><a target="_blank" rel="noopener" href="https://martinfowler.com/bliki/CircuitBreaker.html">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//---服务的熔断</span>
@@ -1062,7 +1066,174 @@ eureka:
         #采样值0-1，1标识全部采集
         probability: 1
 </code></pre>
-<h1 id="SpringCloudAlibaba"><a href="#SpringCloudAlibaba" class="headerlink" title="SpringCloudAlibaba"></a>SpringCloudAlibaba</h1>
+<h1 id="Nacos服务注册和配置中心"><a href="#Nacos服务注册和配置中心" class="headerlink" title="Nacos服务注册和配置中心"></a>Nacos服务注册和配置中心</h1><p>易于构建云原生应用的动态服务发现、配置管理和服务管理平台</p>
+<p>nacos启动：<code>startup.cmd -m standalone</code></p>
+<p>访问：<code>localhost:8848/nacos  账户密码都是nacos</code></p>
+<h2 id="服务注册："><a href="#服务注册：" class="headerlink" title="服务注册："></a>服务注册：</h2><h3 id="生产者：-1"><a href="#生产者：-1" class="headerlink" title="生产者："></a>生产者：</h3><pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: nacos-payment-provider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848 #nacos地址
+#暴露
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+</code></pre>
+<p>nacos自带负载均衡</p>
+<h3 id="消费者：-1"><a href="#消费者：-1" class="headerlink" title="消费者："></a>消费者：</h3><pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloud-nacos-order
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+#消费者将要去访问的微服务名称
+server-url:
+  nacos-user-service: http://nacos-payment-provider
+</code></pre>
+<p>Nacos支持CP和AP的切换</p>
+<h2 id="配置中心："><a href="#配置中心：" class="headerlink" title="配置中心："></a>配置中心：</h2><p>nacos中添加配置：</p>
+<p><code>nacos-config-client-dev.yaml</code></p>
+<p>bootstrap.yml:</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: nacos-config-client
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848  #Nacos服务注册中心地址
+      config:
+        server-addr: localhost:8848  #Nacos作为配置中心地址
+        file-extension: yaml #指定yaml格式的配置
+#        group: DEFAULT_GROUP   #对应的分组，默认default_group
+#        namespace: 7a901d46-e75e-4e6a-b186-5980cca4249b  #新建的命名空间的ID
+
+# ${spring.application.name}-${spring.profile.active}.${spring.cloud.nacos.config.file-extension}
+#nacos-config-client-dev.yaml
+</code></pre>
+<p>application.yml:</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  profiles:
+    active: dev
+</code></pre>
+<h2 id="持久化配置："><a href="#持久化配置：" class="headerlink" title="持久化配置："></a>持久化配置：</h2><p>默认Nacos使用的是嵌入式数据库实现数据的存储。Nacos采用了集中式存储的方法来支持集群化部署</p>
+<p>需要将derby换成mysql数据库</p>
+<h1 id="Sentinel熔断限流"><a href="#Sentinel熔断限流" class="headerlink" title="Sentinel熔断限流"></a>Sentinel熔断限流</h1><p>Hystrix：需要手工搭建监控平台，没有一套web化界面供我们配置</p>
+<p>Sentinel：支持界面化的统一配置，可以独立出来</p>
+<p><img src="/2021/11/25/springCloud/zz2.png"> </p>
+<p>启动sentinel控制台：<code>java -jar sentinel-dashboard-1.8.2.jar</code> 访问：localhost:8080</p>
+<pre class=" language-yml"><code class="language-yml">spring:
+  application:
+    name: cloudalibaba-sentinel-service
+  cloud:
+    nacos:
+      discovery:
+          #nacos服务注册中心地址
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+          #配置sentinel dashboard地址
+        dashboard: localhost:8080
+        #默认8719地址，如果被占用则+1，直到可用
+        port: 8719
+      datasource:
+        ds1:
+          nacos:
+            server-addr: localhost:8848
+            dataId: ${spring.application.name}
+            groupId: DEFAULT_GROUP
+            data_type: json
+            rule_type: flow
+</code></pre>
+<h2 id="流控规则："><a href="#流控规则：" class="headerlink" title="流控规则："></a>流控规则：</h2><ul>
+<li><p>阈值类型/单机阈值：</p>
+<ul>
+<li><p>QPS（每秒钟的请求数量）:当调用该api的QPS达到阈值时，进行限流</p>
+</li>
+<li><p>线程数：当调用该api的线程数达到阈值时，进行限流</p>
+</li>
+</ul>
+</li>
+<li><p>流控模式：</p>
+<ul>
+<li>直接：api达到限流条件时，直接限流</li>
+<li>关联：当关联的资源达到阈值，限流自己</li>
+<li>链路: 只记录指定链路上的流量</li>
+</ul>
+</li>
+<li><p>流控效果：</p>
+<ul>
+<li>快速失败：直接失败，抛出异常</li>
+<li>Warm up：根据codeFactor（冷加载因子，默认3）的值，从 阈值/codeFactor，经过预热时长，才达到设置的QPS阈值</li>
+</ul>
+</li>
+</ul>
+<p><img src="/2021/11/25/springCloud/zz1.png"></p>
+<p>每秒查询超过一次则立刻报错</p>
+<h2 id="降级规则："><a href="#降级规则：" class="headerlink" title="降级规则："></a>降级规则：</h2><p><img src="/2021/11/25/springCloud/zz3.png"></p>
+<ul>
+<li>RT(平均响应时间)：平均响应时间超出阈值且在时间窗口内通过的请求&gt;=5，则触发降级。窗口期过后关闭断路器，RT最大4900，可设置</li>
+<li>异常比例：QPS&gt;=5且异常比例超过阈值时，触发降级，时间窗口结束后，关闭降级</li>
+<li>异常数：当资源近一分钟的异常数且超过阈值之后进行降级</li>
+</ul>
+<h2 id="热点规则："><a href="#热点规则：" class="headerlink" title="热点规则："></a>热点规则：</h2><p><img src="/2021/11/25/springCloud/zz4.png"></p>
+<p>自定义兜底降级方法</p>
+<p>从<strong>HystrixCommand</strong>到<strong>SentinelResource</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@RequestMapping</span><span class="token punctuation">(</span><span class="token string">"testHotKey"</span><span class="token punctuation">)</span>
+<span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"testHotKey"</span><span class="token punctuation">,</span>blockHandler <span class="token operator">=</span> <span class="token string">"deal_testHotKet"</span><span class="token punctuation">)</span>
+<span class="token comment" spellcheck="true">//blockHandler指定异常方法</span>
+<span class="token comment" spellcheck="true">//sentinel系统默认提示：Blocked by Sentinel(flow limiting)</span>
+<span class="token keyword">public</span> String <span class="token function">testHotKey</span><span class="token punctuation">(</span>
+        <span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"p1"</span><span class="token punctuation">,</span>required <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> String p1<span class="token punctuation">,</span>
+        <span class="token annotation punctuation">@RequestParam</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"p2"</span><span class="token punctuation">,</span>required <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">)</span> String p2
+<span class="token punctuation">)</span><span class="token punctuation">{</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"testHotKey 热点Key--测试"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> age <span class="token operator">=</span> <span class="token number">10</span><span class="token operator">/</span><span class="token number">0</span><span class="token punctuation">;</span> <span class="token comment" spellcheck="true">//这个是RuntimeException，不归SentinelRescource管</span>
+    <span class="token keyword">return</span> <span class="token string">"testHotKey-------"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+
+<span class="token keyword">public</span> String <span class="token function">deal_testHotKet</span><span class="token punctuation">(</span>String p1<span class="token punctuation">,</span> String p2<span class="token punctuation">,</span> BlockException e<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token keyword">return</span> <span class="token string">"----deal_testHotKet,------"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="系统规则："><a href="#系统规则：" class="headerlink" title="系统规则："></a>系统规则：</h2><p><img src="/2021/11/25/springCloud/zz5.png"></p>
+<h2 id="SentinelResource"><a href="#SentinelResource" class="headerlink" title="SentinelResource:"></a>SentinelResource:</h2><p>自定义限流处理类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Customerhandler</span> <span class="token punctuation">{</span>
+
+    <span class="token keyword">public</span> CommonResult <span class="token function">handlerException</span><span class="token punctuation">(</span>BlockException exception<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">CommonResult</span><span class="token punctuation">(</span><span class="token number">444</span><span class="token punctuation">,</span><span class="token string">"按客户自定义，global handlerException"</span><span class="token punctuation">,</span><span class="token keyword">new</span> <span class="token class-name">Payment</span><span class="token punctuation">(</span>2020L<span class="token punctuation">,</span><span class="token string">"serial003"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> CommonResult <span class="token function">handlerException2</span><span class="token punctuation">(</span>BlockException exception<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">CommonResult</span><span class="token punctuation">(</span><span class="token number">444</span><span class="token punctuation">,</span><span class="token string">"按客户自定义，global handlerException2"</span><span class="token punctuation">,</span><span class="token keyword">new</span> <span class="token class-name">Payment</span><span class="token punctuation">(</span>2020L<span class="token punctuation">,</span><span class="token string">"serial003"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="服务熔断功能："><a href="#服务熔断功能：" class="headerlink" title="服务熔断功能："></a>服务熔断功能：</h2><p>搭配ribbon+openfeign</p>
+<ul>
+<li><p>fallback：java异常</p>
+</li>
+<li><p>blockHandler：配置异常</p>
+</li>
+</ul>
+<p>如果两个都配置，只会    进入blockHandler处理</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"fallback"</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true">//没有配置</span>
+<span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"fallback"</span><span class="token punctuation">,</span>fallback <span class="token operator">=</span> <span class="token string">"handlerFallback"</span><span class="token punctuation">)</span>  <span class="token comment" spellcheck="true">//fallback只负责业务异常</span>
+<span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"fallback"</span><span class="token punctuation">,</span>blockHandler <span class="token operator">=</span> <span class="token string">"blockHandler"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//blockHandler只负责sentine控制台配置违规</span>
+<span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"fallback"</span><span class="token punctuation">,</span>fallback <span class="token operator">=</span> <span class="token string">"handlerFallback"</span><span class="token punctuation">,</span>blockHandler <span class="token operator">=</span> <span class="token string">"blockHandler"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//handlerFallback和blockHandler都配置</span>
+</code></pre>
+<h2 id="SpringCloudAlibaba"><a href="#SpringCloudAlibaba" class="headerlink" title="SpringCloudAlibaba"></a>SpringCloudAlibaba</h2><ul>
+<li>Nacos = Eureka/Consule + Config + Admin</li>
+<li>Sentinel = Hystrix + Dashboard + Turbine</li>
+<li>Dubbo = Ribbon + Feign</li>
+<li>RocketMQ = RabbitMQ</li>
+</ul>
+
                 
             </div>
             <hr/>
