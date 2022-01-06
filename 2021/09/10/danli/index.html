@@ -368,7 +368,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2.2k
+                    2.6k
                 </div>
                 
 
@@ -390,7 +390,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="设计模式七大原则"><a href="#设计模式七大原则" class="headerlink" title="设计模式七大原则"></a>设计模式七大原则</h1><p>代码重用性、可读性、可扩展性、可靠性、高内聚、低耦合</p>
+                <h1 id="设计模式七大原则"><a href="#设计模式七大原则" class="headerlink" title="设计模式七大原则"></a>设计模式七大原则</h1><p><a target="_blank" rel="noopener" href="http://c.biancheng.net/view/1317.html">更详细介绍</a></p>
+<p>代码重用性、可读性、可扩展性、可靠性、高内聚、低耦合</p>
 <h2 id="单一职责原则"><a href="#单一职责原则" class="headerlink" title="单一职责原则"></a>单一职责原则</h2><ul>
 <li>降低类的复杂度，一个类只负责一项职责</li>
 <li>提高类的可读性，可维护性</li>
@@ -511,6 +512,7 @@
     <span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">static</span> LazySingle lazySingle <span class="token operator">=</span>null<span class="token punctuation">;</span>
 
     <span class="token comment" spellcheck="true">//双重检测锁模式的 懒汉式 单例 DCL懒汉式</span>
+    <span class="token comment" spellcheck="true">//在类上 加synchronized效率太低  所以在加在同步块中</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> LazySingle <span class="token function">getInstance</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>lazySingle<span class="token operator">==</span>null<span class="token punctuation">)</span><span class="token punctuation">{</span>
             <span class="token keyword">synchronized</span> <span class="token punctuation">(</span>LazySingle<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
@@ -659,16 +661,45 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>结果：<img src="/2021/09/10/danli/runtime.png"></p>
-<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><h3 id="普通工厂-静态工厂-工厂方法"><a href="#普通工厂-静态工厂-工厂方法" class="headerlink" title="普通工厂(静态工厂/工厂方法)"></a>普通工厂(静态工厂/工厂方法)</h3><p><strong>工厂是用来处理创建对象的细节。</strong></p>
-<p><img src="/2021/09/10/danli/factory.png"></p>
+<h2 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h2><h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>该模式对对象创建管理方式最为简单，因为其仅仅简单的对不同类对象的创建进行了一层薄薄的封装。该模式通过向工厂传递类型来指定要创建的对象，其UML类图如下：</p>
+<p><img src="/2021/09/10/danli/fa1.png"> </p>
+<h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><p>工厂方法模式将生成具体产品的任务分发给具体的产品工厂，也就是定义一个抽象工厂，其定义了产品的生产接口，但不负责具体的产品，将生产任务交给不同的派生类工厂。这样不用通过指定类型来创建对象了。</p>
+<p><img src="/2021/09/10/danli/fa2.png"></p>
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>抽象工厂模式通过在AbstarctFactory中增加创建产品的接口，并在具体子工厂中实现新加产品的创建</p>
+<p><img src="/2021/09/10/danli/fa3.png"></p>
+<h2 id="原型模型"><a href="#原型模型" class="headerlink" title="原型模型"></a>原型模型</h2><p>用一个已经创建的实例作为原型，通过复制该原型对象来创建一个和原型相同或相似的新对象</p>
+<p><strong>原型模式的优点</strong>：</p>
 <ul>
-<li>工厂方法模式只需要知道具体工厂的名称就可以得到所要的产品，无需知道产品创建的过程</li>
-<li>添加新的产品时，只用添加具体产品类和对应的具体工厂类，无需对原工厂进行修改，满足开闭原则</li>
-<li>缺点：增加产品时需要增加产品类和产品工厂</li>
+<li>Java 自带的原型模式基于内存二进制流的复制，在性能上比直接 new 一个对象更加优良。</li>
+<li>可以使用深克隆方式保存对象的状态，使用原型模式将对象复制一份，并将其状态保存起来，简化了创建对象的过程，以便在需要的时候使用（例如恢复到历史某一状态），可辅助实现撤销操作。</li>
 </ul>
-<h3 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h3><p>由于工厂方法模式只能生产同一类产品，扩展性很差，抽象工厂可生产多级别的商品生产。</p>
-<p><img src="/2021/09/10/danli/abFactory.png"></p>
-<h3 id="模式扩展"><a href="#模式扩展" class="headerlink" title="模式扩展"></a>模式扩展</h3><p>可以通过工厂模式+配置文件的方式解除耦合</p>
+<p>Object 类提供了浅克隆的 clone() 方法，具体原型类只要实现 Cloneable 接口就可实现对象的浅克隆</p>
+<p>原型模式的克隆分为浅克隆和深克隆。</p>
+<ul>
+<li>浅克隆：创建一个新对象，新对象的属性和原来对象完全相同，对于非基本类型属性，仍指向原有属性所指向的对象的内存地址。</li>
+<li>深克隆：创建一个新对象，属性中引用的其他对象也会被克隆，不再指向原有对象地址。</li>
+</ul>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PrototypePattern</span> <span class="token keyword">implements</span> <span class="token class-name">Cloneable</span><span class="token punctuation">{</span>
+    <span class="token function">PrototypePattern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"具体原型创建成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> Object <span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> CloneNotSupportedException <span class="token punctuation">{</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"具体原型复制成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> CloneNotSupportedException <span class="token punctuation">{</span>
+        PrototypePattern p<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">PrototypePattern</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        PrototypePattern clone <span class="token operator">=</span> <span class="token punctuation">(</span>PrototypePattern<span class="token punctuation">)</span> p<span class="token punctuation">.</span><span class="token function">clone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>p<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>clone<span class="token punctuation">.</span><span class="token function">hashCode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<h2 id="建造模式"><a href="#建造模式" class="headerlink" title="建造模式"></a>建造模式</h2><p>指将一个复杂对象的构造与它的表示分离，使同样的构建过程可以创建不同的表示</p>
 
                 
             </div>
@@ -1039,7 +1070,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021</span>
+                <span id="year">2021-2022</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">Snowman</a>

@@ -490,8 +490,8 @@
 <span class="token comment" spellcheck="true">//  其大小为：空对象大小(8byte)+int大小(4byte)+Boolean大小(1byte)+空Object引用的大小 (4byte)=17byte。但是因为Java在对对象内存分配时都是以8的整数倍来分，因此大于17byte的最接近8的整数倍的是24，因此此对象 的大小为24byte。</span>
 </code></pre>
 <h1 id="运行时区数据结构"><a href="#运行时区数据结构" class="headerlink" title="运行时区数据结构"></a>运行时区数据结构</h1><p><img src="/2021/07/30/JVM/jvma.png"></p>
-<h2 id="程序计数器："><a href="#程序计数器：" class="headerlink" title="程序计数器："></a>程序计数器：</h2><p><strong>程序计数寄存器</strong>：存储指令相关的信息， 指向下一条指令的地址。由执行引擎读取</p>
-<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p><strong>虚拟机栈</strong>：跨平台，指令集小，编译器易实现，内部保存栈帧</p>
+<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p><strong>程序计数寄存器</strong>：存储指令相关的信息， 指向下一条指令的地址。由执行引擎读取</p>
+<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p><strong>虚拟机栈</strong>：跨平台，指令集小，编译器易实现，内部保存栈帧.不存在GC、OOM,只会出现stackOverFlowError</p>
 <h3 id="设置栈的大小："><a href="#设置栈的大小：" class="headerlink" title="设置栈的大小："></a>设置栈的大小：</h3><p><strong>-Xss</strong>设置线程的最大栈空间。栈的大小决定了函数调用的最大可达深度</p>
 <p><img src="/2021/07/30/JVM/stackSize.png"></p>
 <h3 id="栈中的结构"><a href="#栈中的结构" class="headerlink" title="栈中的结构"></a>栈中的结构</h3><p>每个方法都对应一个栈帧，方法执行–入栈，方法结束–出栈</p>
@@ -519,6 +519,7 @@
 </ul>
 </li>
 </ul>
+<p>​    </p>
 
                 
             </div>
@@ -901,7 +902,7 @@
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021</span>
+                <span id="year">2021-2022</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">Snowman</a>

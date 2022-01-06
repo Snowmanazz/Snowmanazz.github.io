@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    10k
+                    10.4k
                 </div>
                 
 
@@ -490,8 +490,8 @@
 <li>对象所有的域都是final修饰的</li>
 <li>对象是正确创建的(没有this引用逸出)</li>
 </ul>
-<h3 id="加锁机制"><a href="#加锁机制" class="headerlink" title="加锁机制"></a>加锁机制</h3><p>锁-是为了解决并发操作引起的脏读、数据不一致的问题。</p>
-<h3 id="synchronized同步锁"><a href="#synchronized同步锁" class="headerlink" title="synchronized同步锁"></a>synchronized同步锁</h3><p>synchronized是Java的一个关键字，它能够将代码块(方法)锁起来。（牺牲时间）</p>
+<h1 id="加锁机制"><a href="#加锁机制" class="headerlink" title="加锁机制"></a>加锁机制</h1><p>锁-是为了解决并发操作引起的脏读、数据不一致的问题。</p>
+<h2 id="synchronized同步锁"><a href="#synchronized同步锁" class="headerlink" title="synchronized同步锁"></a>synchronized同步锁</h2><p>synchronized是Java的一个关键字，它能够将代码块(方法)锁起来。（牺牲时间）</p>
 <ul>
 <li>synchronized是一种互斥锁，一次只能允许一个线程进入被锁住的代码块。</li>
 <li>synchronized是一种内置锁/监视器锁，Java中每个对象都有一个内置锁(监视器,也可以理解成锁标记)，而synchronized就是使用对象的内置锁(监视器)来将代码块(方法)锁定。</li>
@@ -508,7 +508,7 @@
 <li>当方法(代码块)执行完毕后会自动释放锁，不需要做任何的操作。</li>
 <li>当一个线程执行的代码出现异常时，其所持有的锁会自动释放。</li>
 </ul>
-<h3 id="JUC-java-util-concurrent-并发编程"><a href="#JUC-java-util-concurrent-并发编程" class="headerlink" title="JUC(java.util.concurrent)并发编程"></a>JUC(java.util.concurrent)并发编程</h3><h4 id="LOCK锁"><a href="#LOCK锁" class="headerlink" title="LOCK锁"></a>LOCK锁</h4><p>lock锁与synchronized锁区别：</p>
+<h2 id="JUC-java-util-concurrent-并发编程"><a href="#JUC-java-util-concurrent-并发编程" class="headerlink" title="JUC(java.util.concurrent)并发编程"></a>JUC(java.util.concurrent)并发编程</h2><h3 id="LOCK锁"><a href="#LOCK锁" class="headerlink" title="LOCK锁"></a>LOCK锁</h3><p>lock锁与synchronized锁区别：</p>
 <ul>
 <li>synchronized是内置关键字，lock是java类</li>
 <li>synchronized无法判断锁状态</li>
@@ -520,7 +520,7 @@
 <li>lock支持公平锁(是相对公平的)</li>
 <li>lock使用时最标准用法是在try之前调用lock方法，在finally代码块释放锁<br><img src="/2021/07/21/Thread/reentrantlock.png"></li>
 </ul>
-<h4 id="生产者和消费者问题"><a href="#生产者和消费者问题" class="headerlink" title="生产者和消费者问题"></a>生产者和消费者问题</h4><p><strong>synchronized版</strong></p>
+<h3 id="生产者和消费者问题"><a href="#生产者和消费者问题" class="headerlink" title="生产者和消费者问题"></a>生产者和消费者问题</h3><p><strong>synchronized版</strong></p>
 <blockquote>
 <pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * 线程之间的通信问题：生产者和消费者问题！ 等待唤醒，通知唤醒
@@ -753,7 +753,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h4 id="8锁现象"><a href="#8锁现象" class="headerlink" title="8锁现象"></a>8锁现象</h4><p>深刻理解我们的锁</p>
+<h3 id="8锁现象"><a href="#8锁现象" class="headerlink" title="8锁现象"></a>8锁现象</h3><p>深刻理解我们的锁</p>
 <ul>
 <li>标准情况下，两个线程谁先执行？</li>
 </ul>
@@ -1025,7 +1025,7 @@
 </blockquote>
 <p>同上一样</p>
 <p><em><strong>总结：new this 指具体的对象，static Class是指类加载后的模板</strong></em></p>
-<h4 id="集合类不安全"><a href="#集合类不安全" class="headerlink" title="集合类不安全"></a>集合类不安全</h4><p><strong>ArrayList示例：</strong></p>
+<h3 id="集合类不安全"><a href="#集合类不安全" class="headerlink" title="集合类不安全"></a>集合类不安全</h3><p><strong>ArrayList示例：</strong></p>
 <p><img src="/2021/07/21/Thread/jihe.png"></p>
 <p>java.util.ConcurrentModificationException :并发修改异常</p>
 <p>并发下ArrayList是不安全的</p>
@@ -1084,7 +1084,7 @@
 </blockquote>
 </li>
 </ul>
-<h4 id="常用辅助类"><a href="#常用辅助类" class="headerlink" title="常用辅助类"></a>常用辅助类</h4><ul>
+<h3 id="常用辅助类"><a href="#常用辅助类" class="headerlink" title="常用辅助类"></a>常用辅助类</h3><ul>
 <li><strong>CountDownLatch减法计数器</strong></li>
 </ul>
 <blockquote>
@@ -1194,7 +1194,7 @@
 <p>semaphore.release();释放，将当前的信号量释放+1，唤醒等待的线程</p>
 </blockquote>
 <p>作用：<strong>多个资源互斥的使用！并发限流，控制最大的线程数</strong></p>
-<h4 id="读写锁-ReadWriteLock"><a href="#读写锁-ReadWriteLock" class="headerlink" title="读写锁 ReadWriteLock"></a>读写锁 ReadWriteLock</h4><blockquote>
+<h3 id="读写锁-ReadWriteLock"><a href="#读写锁-ReadWriteLock" class="headerlink" title="读写锁 ReadWriteLock"></a>读写锁 ReadWriteLock</h3><blockquote>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">G</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         Cache cache <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Cache</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1256,7 +1256,7 @@
 <p> lock.readLock().lock(); //加上读锁 lock.readLock().unlock(); //释放读锁  <strong>共享锁就是读锁</strong></p>
 <p>为了使 独占锁（写锁）只有一个线程占有，共享锁（读锁）可以多个线程同时占有</p>
 </blockquote>
-<h4 id="阻塞队列-BlockingQueue"><a href="#阻塞队列-BlockingQueue" class="headerlink" title="阻塞队列 BlockingQueue"></a>阻塞队列 BlockingQueue</h4><ul>
+<h3 id="阻塞队列-BlockingQueue"><a href="#阻塞队列-BlockingQueue" class="headerlink" title="阻塞队列 BlockingQueue"></a>阻塞队列 BlockingQueue</h3><ul>
 <li>写入：如果队列满了，就必须阻塞等待</li>
 <li>取出：如果队列使空的，就必须阻塞等待生产</li>
 </ul>
@@ -1469,7 +1469,7 @@
 </code></pre>
 <p>队空时取出，等待两秒还是不行就退出</p>
 <p><img src="/2021/07/21/Thread/e6.png"></p>
-<h4 id="四大函数式接口"><a href="#四大函数式接口" class="headerlink" title="四大函数式接口"></a>四大函数式接口</h4><blockquote>
+<h3 id="四大函数式接口"><a href="#四大函数式接口" class="headerlink" title="四大函数式接口"></a>四大函数式接口</h3><blockquote>
 <p>函数式接口：只有一个方法的接口</p>
 </blockquote>
 <p>例：Runnable</p>
@@ -1565,7 +1565,7 @@
     <span class="token punctuation">}</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h4 id="Stream流式计算"><a href="#Stream流式计算" class="headerlink" title="Stream流式计算"></a>Stream流式计算</h4><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
+<h3 id="Stream流式计算"><a href="#Stream流式计算" class="headerlink" title="Stream流式计算"></a>Stream流式计算</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">/**
  * Stream流计算
  * 筛选5个用户
  *  1、ID必须是偶数
@@ -1644,7 +1644,7 @@
 <span class="token punctuation">}</span>
 </code></pre>
 <p>结果输出： E</p>
-<h4 id="volatile和atomic示例"><a href="#volatile和atomic示例" class="headerlink" title="volatile和atomic示例"></a>volatile和atomic示例</h4><p><strong>volatile保证可见性，atomic保证原子性</strong></p>
+<h3 id="volatile和atomic示例"><a href="#volatile和atomic示例" class="headerlink" title="volatile和atomic示例"></a>volatile和atomic示例</h3><p><strong>volatile保证可见性，atomic保证原子性</strong></p>
 <p>不使用lock和synchronized加锁</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Demo</span> <span class="token punctuation">{</span>
     <span class="token comment" spellcheck="true">//volatile只保证可见性</span>
@@ -1770,7 +1770,7 @@
 <li>在LOCK包中的相关锁(常用的有ReentrantLock、 ReadWriteLock)都是基于AQS来构建</li>
 </ul>
 <p> <strong>使用volatile修饰实现线程可见性</strong><br>    <strong>修改state状态值时使用CAS算法来实现</strong></p>
-<h3 id="各种锁"><a href="#各种锁" class="headerlink" title="各种锁"></a>各种锁</h3><h4 id="公平锁和非公平锁"><a href="#公平锁和非公平锁" class="headerlink" title="公平锁和非公平锁"></a>公平锁和非公平锁</h4><ul>
+<h2 id="各种锁"><a href="#各种锁" class="headerlink" title="各种锁"></a>各种锁</h2><h3 id="公平锁和非公平锁"><a href="#公平锁和非公平锁" class="headerlink" title="公平锁和非公平锁"></a>公平锁和非公平锁</h3><ul>
 <li>公平锁：不能插队，讲究先来后到</li>
 <li>非公平锁：可以插队（默认都是非公平锁）</li>
 </ul>
@@ -1784,7 +1784,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
     sync <span class="token operator">=</span> fair <span class="token operator">?</span> <span class="token keyword">new</span> <span class="token class-name">FairSync</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token keyword">new</span> <span class="token class-name">NonfairSync</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">}</span>
 </code></pre>
-<h4 id="可重入锁（递归锁）"><a href="#可重入锁（递归锁）" class="headerlink" title="可重入锁（递归锁）"></a>可重入锁（递归锁）</h4><p>外面有锁，里面也有锁，拿到外面的锁就相当于与也拿到里面的锁</p>
+<h3 id="可重入锁（递归锁）"><a href="#可重入锁（递归锁）" class="headerlink" title="可重入锁（递归锁）"></a>可重入锁（递归锁）</h3><p>外面有锁，里面也有锁，拿到外面的锁就相当于与也拿到里面的锁</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">X</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">></span><span class="token punctuation">{</span>
@@ -1806,7 +1806,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 <span class="token punctuation">}</span>
 </code></pre>
 <p><strong>注意：使用lock锁时必须配对，否则会发生死锁</strong></p>
-<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><p>两个线程互相争抢对方的锁</p>
+<h3 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h3><p>两个线程互相争抢对方的锁</p>
 <pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">DeadLock</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         String lockA<span class="token operator">=</span><span class="token string">"AAAAAA"</span><span class="token punctuation">;</span>
@@ -1848,7 +1848,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 <li>使用<em><strong>jstack</strong></em> 11668查看进程信息</li>
 </ul>
 <p><img src="/2021/07/21/Thread/dead2.png"></p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p>线程池可以看做是线程的集合。在没有任务时线程处于空闲状态，当请求到来：线程池给这个请求分配一个空闲的线程，任务完成后回到线程池中等待下次任务(而不是销毁)。这样就实现了线程的重用。</p>
+<h2 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h2><p>线程池可以看做是线程的集合。在没有任务时线程处于空闲状态，当请求到来：线程池给这个请求分配一个空闲的线程，任务完成后回到线程池中等待下次任务(而不是销毁)。这样就实现了线程的重用。</p>
 <ul>
 <li>提高了响应速度（减少创建线程的时间）</li>
 <li>降低资源消耗（重复利用线程中线程，不需要每次都创建）</li>
@@ -1861,7 +1861,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 </ul>
 </li>
 </ul>
-<h4 id="JDK提供的线程池API"><a href="#JDK提供的线程池API" class="headerlink" title="JDK提供的线程池API"></a>JDK提供的线程池API</h4><p>JDK5.0起提供了线程池相关的API：ExecutorService和Executors</p>
+<h3 id="JDK提供的线程池API"><a href="#JDK提供的线程池API" class="headerlink" title="JDK提供的线程池API"></a>JDK提供的线程池API</h3><p>JDK5.0起提供了线程池相关的API：ExecutorService和Executors</p>
 <ul>
 <li>ExecutorService：真正的线程池接口。常见子类ThreadPoolExecutor<ul>
 <li>void execute(Runnable command):执行任务，没有返回值，一般执行runnable</li>
@@ -1871,7 +1871,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 </li>
 <li>Executors：工具类、线程池的工厂类，用于创建并返回不同类型的线程池</li>
 </ul>
-<h4 id="Executors-3大方法"><a href="#Executors-3大方法" class="headerlink" title="Executors 3大方法"></a>Executors 3大方法</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
+<h3 id="Executors-3大方法"><a href="#Executors-3大方法" class="headerlink" title="Executors 3大方法"></a>Executors 3大方法</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         <span class="token comment" spellcheck="true">//单个线程</span>
         ExecutorService threadPool <span class="token operator">=</span> Executors<span class="token punctuation">.</span><span class="token function">newSingleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1934,7 +1934,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 <span class="token punctuation">}</span>
 </code></pre>
 <p><img src="/2021/07/21/Thread/p3.png"></p>
-<h4 id="Executors7大参数"><a href="#Executors7大参数" class="headerlink" title="Executors7大参数"></a>Executors7大参数</h4><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> ExecutorService <span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<h3 id="Executors7大参数"><a href="#Executors7大参数" class="headerlink" title="Executors7大参数"></a>Executors7大参数</h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> ExecutorService <span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> Integer<span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">,</span>
                                   60L<span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">,</span>
                                   <span class="token keyword">new</span> <span class="token class-name">SynchronousQueue</span><span class="token operator">&lt;</span>Runnable<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1962,8 +1962,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
     <span class="token punctuation">}</span>
 </code></pre>
 <p>尽量避免使用Executor去创建，而是使用ThreadPoolExecutor去创建，因为Executor允许创建的最大线程数为Integer.MAX_VALUE，有可能导致OOM</p>
-<p><strong>自定义ThreadPoolExecutor</strong></p>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">H</span> <span class="token punctuation">{</span>
+<h3 id="自定义ThreadPoolExecutor"><a href="#自定义ThreadPoolExecutor" class="headerlink" title="自定义ThreadPoolExecutor"></a><strong>自定义ThreadPoolExecutor</strong></h3><pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">H</span> <span class="token punctuation">{</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">{</span>
         ExecutorService threadPool<span class="token operator">=</span><span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>
                 <span class="token number">2</span><span class="token punctuation">,</span>
@@ -1997,7 +1996,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 <p><img src="/2021/07/21/Thread/z1.png"></p>
 <p>超过最大承载时（i&lt;10）</p>
 <p><img src="/2021/07/21/Thread/z2.png"></p>
-<h4 id="最大线程数如何定义"><a href="#最大线程数如何定义" class="headerlink" title="最大线程数如何定义"></a>最大线程数如何定义</h4><ul>
+<h3 id="最大线程数如何定义"><a href="#最大线程数如何定义" class="headerlink" title="最大线程数如何定义"></a>最大线程数如何定义</h3><ul>
 <li>CPU密集型 ：电脑CPU为几核就是几，可以保持CPU效率最高</li>
 </ul>
 <blockquote>
@@ -2006,6 +2005,25 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
 <ul>
 <li>IO密集型：判断程序中十分耗IO的线程，大于IO线程数</li>
 </ul>
+<h1 id="ThreadLocal"><a href="#ThreadLocal" class="headerlink" title="ThreadLocal"></a>ThreadLocal</h1><p>​    <strong>ThreadLocal并不是一个Thread，而是Thread的局部变量</strong>.</p>
+<p>当使用ThreadLocal维护变量时，ThreadLocal为每个使用该变量的线程提供独立的变量副本，所以每一个线程都可以独立地改变自己的副本，而不会影响其它线程所对应的副本。从线程的角度看，目标变量就像是线程的本地变量，这也是类名中“Local”所要表达的意思</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">set</span><span class="token punctuation">(</span>T value<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//设置当前线程局部变量值</span>
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> T <span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//获取当前线程局部变量值</span>
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//删除当前线程局部变量值，减少内存的占用</span>
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">protected</span> T <span class="token function">initialValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment" spellcheck="true">//返回当前线程初始化的局部变量值</span>
+</code></pre>
+<h2 id="ThreadLocal实现原理"><a href="#ThreadLocal实现原理" class="headerlink" title="ThreadLocal实现原理"></a>ThreadLocal实现原理</h2><p>在ThreadLocal类中有一个Map，用于存储每一个线程的变量副本，Map中元素的键为线程对象，而值对应线程的变量副本</p>
+<h2 id="ThreadLocal内存泄漏"><a href="#ThreadLocal内存泄漏" class="headerlink" title="ThreadLocal内存泄漏"></a>ThreadLocal内存泄漏</h2><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//声明一个threadlocal变量</span>
+ThreadLocal<span class="token operator">&lt;</span>Integer<span class="token operator">></span> b <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadLocal</span><span class="token operator">&lt;</span>Integer<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//赋值</span>
+b<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+</code></pre>
+<p><strong>10不是放在了b里面。10和b是两个独立存放的东西，不是包含关系。</strong></p>
+<p>Java程序跑起来的时候，它是运行在一个容器里面，这个容器就是jvm，10存放在这个容器里面，b也是存放在容器里面，b只是帮忙把10存放到了容器里面，而不是把10放到它的里面。</p>
+<p>10和b是两个独立存放的变量，如果其中的一个被清理，那么另外一个不受影响的</p>
 
                 
             </div>
@@ -2384,7 +2402,7 @@ Lock lock<span class="token operator">=</span><span class="token keyword">new</s
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021</span>
+                <span id="year">2021-2022</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">Snowman</a>

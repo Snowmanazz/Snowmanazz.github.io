@@ -376,7 +376,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    5.7k
+                    5.9k
                 </div>
                 
 
@@ -1227,7 +1227,15 @@ server-url:
 <span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"fallback"</span><span class="token punctuation">,</span>blockHandler <span class="token operator">=</span> <span class="token string">"blockHandler"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//blockHandler只负责sentine控制台配置违规</span>
 <span class="token annotation punctuation">@SentinelResource</span><span class="token punctuation">(</span>value <span class="token operator">=</span> <span class="token string">"fallback"</span><span class="token punctuation">,</span>fallback <span class="token operator">=</span> <span class="token string">"handlerFallback"</span><span class="token punctuation">,</span>blockHandler <span class="token operator">=</span> <span class="token string">"blockHandler"</span><span class="token punctuation">)</span> <span class="token comment" spellcheck="true">//handlerFallback和blockHandler都配置</span>
 </code></pre>
-<h2 id="SpringCloudAlibaba"><a href="#SpringCloudAlibaba" class="headerlink" title="SpringCloudAlibaba"></a>SpringCloudAlibaba</h2><ul>
+<h1 id="seata分布式事务处理"><a href="#seata分布式事务处理" class="headerlink" title="seata分布式事务处理"></a>seata分布式事务处理</h1><p>提供高性能和简单易用的分布式事务服务</p>
+<p><strong>处理过程</strong></p>
+<ul>
+<li>Transaction ID，全局唯一的事务ID</li>
+<li>Transaction Coordinator 事务协调器，维护全局和分支事务的状态，驱动全局事务提交或回滚</li>
+<li>Transaction Manager 事务管理器，定义全局事务的范围，开始、提交或回滚全局事务</li>
+<li>Resource Manager 资源管理器，管理分支事务处理的资源，驱动分支事务的提交或回滚</li>
+</ul>
+<h1 id="SpringCloudAlibaba"><a href="#SpringCloudAlibaba" class="headerlink" title="SpringCloudAlibaba"></a>SpringCloudAlibaba</h1><ul>
 <li>Nacos = Eureka/Consule + Config + Admin</li>
 <li>Sentinel = Hystrix + Dashboard + Turbine</li>
 <li>Dubbo = Ribbon + Feign</li>
@@ -1615,7 +1623,7 @@ server-url:
         <div class="col s12 m8 l8 copy-right">
             Copyright&nbsp;&copy;
             
-                <span id="year">2021</span>
+                <span id="year">2021-2022</span>
             
             <span id="year">2021</span>
             <a href="/about" target="_blank">Snowman</a>
