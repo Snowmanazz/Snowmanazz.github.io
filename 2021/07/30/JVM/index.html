@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2.1k
+                    6.7k
                 </div>
                 
 
@@ -460,6 +460,430 @@
 <p> 最后出现上面的加载错误(注意不是异常，是错误，JVM退出)，因为API中的String类是没有main方法的。</p>
 </li>
 </ul>
+<h1 id="运行时区数据结构"><a href="#运行时区数据结构" class="headerlink" title="运行时区数据结构"></a>运行时区数据结构</h1><p><img src="/2021/07/30/JVM/jvma.png"></p>
+<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p><strong>程序计数寄存器</strong>：存储指令相关的信息， 指向下一条指令的地址。由执行引擎读取</p>
+<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p><strong>虚拟机栈</strong>：跨平台，指令集小，编译器易实现，内部保存栈帧.</p>
+<h3 id="设置栈的大小："><a href="#设置栈的大小：" class="headerlink" title="设置栈的大小："></a>设置栈的大小：</h3><p>Java 虚拟机规范允许<strong>Java栈的大小是动态的或者是固定不变的。</strong></p>
+<ul>
+<li><p> 如果采用固定大小的Java虚拟机栈，Java虚拟机可能会抛出一个StackOverflowError 异常。 </p>
+</li>
+<li><p> 如果Java虚拟机栈可以动态扩展，并且在尝试扩展的时候无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的虚拟机栈，那Java虚拟机将会抛出一个 OutOfMemoryError 异常。 </p>
+</li>
+</ul>
+<p><strong>-Xss</strong>设置线程的最大栈空间。栈的大小决定了函数调用的最大可达深度</p>
+<p><img src="/2021/07/30/JVM/stackSize.png"></p>
+<h3 id="栈中的结构"><a href="#栈中的结构" class="headerlink" title="栈中的结构"></a>栈中的结构</h3><p>栈中有一个个栈帧，每个方法都对应一个栈帧，方法执行–入栈，方法结束–出栈</p>
+<p>栈帧存储着 <strong>局部变量表、操作数栈、动态链接、方法返回地址以及一些附加信息</strong></p>
+<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><pre class=" language-bash"><code class="language-bash">LocalVariableTable:
+    Start  Length  Slot  Name   Signature
+      140      18    10     s   Ljava/lang/String<span class="token punctuation">;</span>
+        0     162     0  args   <span class="token punctuation">[</span>Ljava/lang/String<span class="token punctuation">;</span>
+        3     159     1 start_line   Ljava/lang/String<span class="token punctuation">;</span>
+</code></pre>
+<p>变量槽（slot）：32位以为的类型只占一个slot，64位的类型占两个slot（long，double）</p>
+<p>变量的分类：</p>
+<ul>
+<li>按照数据类型：<ul>
+<li>基本数据类型</li>
+<li>引用数据类型</li>
+</ul>
+</li>
+<li>类中声明的位置<ul>
+<li>成员变量：<ul>
+<li>类变量：linking的prepare阶段：赋默认值—》initial阶段，赋真实值</li>
+<li>实例变量：随着对象的创建，在堆空间中分配实例变量空间，进行默认赋值</li>
+</ul>
+</li>
+<li>局部变量：使用前，必须进行赋值，否则编译器报错</li>
+</ul>
+</li>
+</ul>
+<h2 id="堆"><a href="#堆" class="headerlink" title="堆"></a>堆</h2><p>一个JVM实例只存在一个堆内存，堆也是内存管理的核心区域。堆在jvm启动时就会确定大小</p>
+<p>java7之前堆内存逻辑上分为：新生代+老年代+永久代</p>
+<p><img src="/2021/07/30/JVM/jdk7.png"></p>
+<p>java8之后堆内存逻辑上分为：新生代+老年代+元空间</p>
+<p><img src="/2021/07/30/JVM/jdk8.png"></p>
+<h3 id="堆内存的设置"><a href="#堆内存的设置" class="headerlink" title="堆内存的设置"></a>堆内存的设置</h3><ul>
+<li><p>“**-Xms**”用于表示堆区的起始内存，等价于<code>-XX:InitialHeapSize</code></p>
+</li>
+<li><p>“**-Xmx**”则用于表示堆区的最大内存，等价于<code>-XX:MaxHeapSize</code>。超过则会报OutOfMemoryError</p>
+</li>
+</ul>
+<p>通常会将-Xms和-Xmx两个参数配置相同的值，其目的是<strong>为了能够在ava垃圾回收机制清理完堆区后不需要重新分隔计算堆区的大小，从而提高性能。</strong></p>
+<h3 id="年轻代与老年代"><a href="#年轻代与老年代" class="headerlink" title="年轻代与老年代"></a>年轻代与老年代</h3><p>堆空间细分</p>
+<p><img src="/2021/07/30/JVM/heap1.png"></p>
+<p>配置新生代与老年代在堆结构的占比。</p>
+<ul>
+<li><p>默认<code>-XX:NewRatio=2</code>，表示新生代占1，老年代占2，新生代占整个堆的1/3</p>
+</li>
+<li><p>可以修改<code>-XX:NewRatio=4</code>，表示新生代占1，老年代占4，新生代占整个堆的1/5</p>
+</li>
+</ul>
+<p>在HotSpot中，Eden空间和另外两个survivor空间缺省所占的比例是8：1：1</p>
+<p>几乎所有的Java对象都是在Eden区被new出来的。绝大部分的Java对象的销毁都在新生代进行了。</p>
+<h3 id="对象分配内存过程"><a href="#对象分配内存过程" class="headerlink" title="对象分配内存过程"></a>对象分配内存过程</h3><ol>
+<li> new的对象先放伊甸园区。此区有大小限制。</li>
+<li> 当伊甸园的空间填满时，程序又需要创建对象，JVM的垃圾回收器将对伊甸园区进行垃圾回（MinorGC），将伊甸园区中的不再被其他对象所引用的对象进行销毁。再加载新的对象放到伊甸园区 </li>
+<li> 然后将伊甸园中的剩余对象移动到幸存者0区。 </li>
+<li> 如果再次触发垃圾回收，此时上次幸存下来的放到幸存者0区的，如果没有回收，就会放到幸存者1区。 </li>
+<li> 如果再次经历垃圾回收，此时会重新放回幸存者0区，接着再去幸存者1区。 </li>
+<li> 啥时候能去养老区。可以设置次数，默认是15次。设置<code>-Xx:MaxTenuringThreshold= N</code></li>
+<li> 在养老区，相对悠闲。当养老区内存不足时，再次触发GC：Major GC，进行养老区的内存清理 </li>
+<li> 若养老区执行了Major GC之后，发现依然无法进行对象的保存，就会产生OOM异常。  </li>
+</ol>
+<p><img src="/2021/07/30/JVM/heap2.png"></p>
+<h3 id="GC分类"><a href="#GC分类" class="headerlink" title="GC分类"></a>GC分类</h3><ul>
+<li><p>部分收集：不是完整收集整个Java堆的垃圾收集。其中又分为： </p>
+</li>
+<li><ul>
+<li>新生代收集（Minor GC / Young GC）：只是新生代的垃圾收集</li>
+</ul>
+</li>
+<li><ul>
+<li>老年代收集（Major GC / Old GC）：只是老年代的圾收集。 </li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>目前，只有CMSGC会有单独收集老年代的行为。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>注意，很多时候Major GC会和Full GC混淆使用，需要具体分辨是老年代回收还是整堆回收。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>混合收集（MixedGC）：收集整个新生代以及部分老年代的垃圾收集。 </li>
+</ul>
+</li>
+<li><ul>
+<li><ul>
+<li>目前，只有G1 GC会有这种行为</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>整堆收集（Full GC）：收集整个java堆和方法区的垃圾收集。</p>
+</li>
+</ul>
+<h3 id="堆空间参数设置"><a href="#堆空间参数设置" class="headerlink" title="堆空间参数设置"></a>堆空间参数设置</h3><pre class=" language-apl"><code class="language-apl"><span class="token function">-</span>XX<span class="token dfn builtin">:</span><span class="token function">+</span>PrintFlagsInitial  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>查看所有的参数的默认初始值
+<span class="token function">-</span>XX<span class="token dfn builtin">:</span><span class="token function">+</span>PrintFlagsFinal  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>查看所有的参数的最终值（可能会存在修改，不再是初始值）
+<span class="token function">-</span>Xms  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>初始堆空间内存（默认为物理内存的<span class="token number">1</span><span class="token monadic-operator operator">/</span><span class="token number">64</span>）
+<span class="token function">-</span>Xmx  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>最大堆空间内存（默认为物理内存的<span class="token number">1</span><span class="token monadic-operator operator">/</span><span class="token number">4</span>）
+<span class="token function">-</span>Xmn  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>设置新生代的大小。（初始值及最大值）
+<span class="token function">-</span>XX<span class="token statement">:NewRatio</span>  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>配置新生代与老年代在堆结构的占比
+<span class="token function">-</span>XX<span class="token statement">:SurvivorRatio</span>  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>设置新生代中Eden和S<span class="token number">0</span><span class="token monadic-operator operator">/</span>S<span class="token number">1</span>空间的比例
+<span class="token function">-</span>XX<span class="token statement">:MaxTenuringThreshold</span>  <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>设置新生代垃圾的最大年龄
+<span class="token function">-</span>XX<span class="token dfn builtin">:</span><span class="token function">+</span>PrintGCDetails <span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>输出详细的GC处理日志
+<span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>打印gc简要信息：①<span class="token function">-</span>Xx：<span class="token function">+</span>PrintGC ② <span class="token function">-</span> verbose<span class="token dfn builtin">:</span>gc
+<span class="token function">-</span>XX<span class="token statement">:HandlePromotionFalilure</span>：<span class="token monadic-operator operator">/</span><span class="token monadic-operator operator">/</span>是否设置空间分配担保
+</code></pre>
+<h3 id="堆上分配对象是绝对的么"><a href="#堆上分配对象是绝对的么" class="headerlink" title="堆上分配对象是绝对的么"></a>堆上分配对象是绝对的么</h3><p>随着JIT编译期的发展与<strong>逃逸分析技术</strong>逐渐成熟，栈上分配、标量替换优化技术将会导致一些微妙的变化，所有的对象都分配到堆上也渐渐变得不那么“绝对”了。</p>
+<p>在Java虚拟机中，对象是在Java堆中分配内存的，这是一个普遍的常识。但是，有一种特殊情况，那就是如果经过逃逸分析（Escape Analysis）后发现，一个对象并没有逃逸出方法的话，那么就可能被优化成栈上分配.。这样就无需在堆上分配内存，也无须进行垃圾回收了。这也是最常见的堆外存储技术。</p>
+<h4 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h4><p>逃逸分析的基本行为就是分析对象动态作用域：</p>
+<ul>
+<li><p>当一个对象在方法中被定义后，对象只在方法内部使用，则认为没有发生逃逸。</p>
+</li>
+<li><p>当一个对象在方法中被定义后，它被外部方法所引用，则认为发生逃逸。例如作为调用参数传递到其他地方中。</p>
+</li>
+</ul>
+<p>没有发生逃逸的对象，则可以分配到栈上，随着方法执行的结束，栈空间就被移除，每个栈里面包含了很多栈帧</p>
+<h2 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h2><p>它用于存储已被虚拟机加载的类型信息、常量、静态变量、即时编译器编译后的代码缓存等。</p>
+<p>栈、堆、方法区之间的关系</p>
+<p><img src="/2021/07/30/JVM/m1.png"></p>
+<p>方法区可以看作是一块独立于堆的内存空间</p>
+<p><img src="/2021/07/30/JVM/j6.png"></p>
+<p><img src="/2021/07/30/JVM/j7.png"></p>
+<p><img src="/2021/07/30/JVM/j8.png"></p>
+<p>不过元空间与永久代最大的区别在于<strong>：元空间不在虚拟机设置的内存中，而是使用本地内存</strong></p>
+<p><img src="/2021/07/30/JVM/m.png"></p>
+<h1 id="对象实例化"><a href="#对象实例化" class="headerlink" title="对象实例化"></a>对象实例化</h1><p><img src="/2021/07/30/JVM/d1.png"></p>
+<h2 id="创建对象的步骤"><a href="#创建对象的步骤" class="headerlink" title="创建对象的步骤"></a>创建对象的步骤</h2><ul>
+<li><strong>判断对象对应的类是否加载</strong>、<strong>链接</strong>、<strong>初始化</strong><ul>
+<li>虚拟机遇到new指令，首先去检查这个指令的参数能否在Metaspace的常量池中定位到一个类的符号引用，并且检查这个符号引用代表的类是否已经被加载，解析和初始化。</li>
+<li>如果没有被加载，会去找到该类对应的.class文件。</li>
+<li>找到则进行加载，生成Class对象，否则抛出ClassNotFoundException异常。</li>
+</ul>
+</li>
+<li><strong>为对象分配内存</strong><ul>
+<li>计算对象占用空间的大小，在堆中划分一块内存给对象。如果实例成用变量是引用对象，仅分配引用变量空间即可，4个字节。</li>
+<li>如果<strong>内存规整</strong>：虚拟机采用指针碰撞的方法分配内存</li>
+<li>如果<strong>内存不规整</strong>：虚拟机会维护一个空闲列表来为对象分配内存</li>
+</ul>
+</li>
+<li><strong>处理并发问题</strong><ul>
+<li>采用CAS失败重、区域加锁保证更新的原子性</li>
+<li>每个线程都会分配一块TLAB:  通过<code>-XX:+UseTLAB</code>参数设定</li>
+</ul>
+</li>
+<li><strong>初始化分配到的内存</strong><ul>
+<li>所有属性设置默认值，保证对象实例字段在不赋值时可直接使用</li>
+</ul>
+</li>
+<li><strong>设置对象的对象头</strong><ul>
+<li>将对象的所属类（即类的元数据信息）、对象的HashCode和对象的GC信息、锁信息等数据存储在对象的对象头中</li>
+</ul>
+</li>
+<li><strong>执行init方法进行初始化</strong><ul>
+<li>初始化成员变量，执行实例化代码块，调用类的构造方法，并把堆内对象的首地址赋值给引用变量。</li>
+</ul>
+</li>
+</ul>
+<h2 id="对象内存分布"><a href="#对象内存分布" class="headerlink" title="对象内存分布"></a>对象内存分布</h2><ul>
+<li><strong>对象头</strong><ul>
+<li>运行时元数据：哈希值、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、时间戳</li>
+<li>类型指针：指向元数据InstanceKlass，确定该对象所属的类型</li>
+</ul>
+</li>
+<li><strong>实例数据</strong>：对象真正存储的有效信息</li>
+<li><strong>对齐填充</strong>：起占位符的作用</li>
+</ul>
+<h2 id="StringTable"><a href="#StringTable" class="headerlink" title="StringTable"></a>StringTable</h2><p>String在jdk9中结构发生改变：<strong>String再也不用char[] 来存储了，改成了byte [] 加上编码标记</strong></p>
+<p>使得内存占用的预期减少，GC活动的大幅减少，以及在某些角落情况下的轻微性能倒退。</p>
+<h3 id="String的内存分配"><a href="#String的内存分配" class="headerlink" title="String的内存分配"></a>String的内存分配</h3><p>String声明的主要方法有两种：</p>
+<ul>
+<li>直接双引号声明的String会直接存储在常量池中</li>
+<li>也可以用intern()指向</li>
+</ul>
+<p><strong>字符串传常量池存在堆中</strong></p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">test3</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+    String s1 <span class="token operator">=</span> <span class="token string">"a"</span><span class="token punctuation">;</span>
+    String s2 <span class="token operator">=</span> <span class="token string">"b"</span><span class="token punctuation">;</span>
+    String s3 <span class="token operator">=</span> <span class="token string">"ab"</span><span class="token punctuation">;</span>
+    String s4 <span class="token operator">=</span> s1 <span class="token operator">+</span> s2<span class="token punctuation">;</span>
+    System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>s3<span class="token operator">==</span>s4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p>我们拿例4的字节码进行查看，可以发现<code>s1 + s2</code>实际上是new了一个StringBuilder对象，并使用了append方法将s1和s2添加进来，最后调用了toString方法赋给s4</p>
+<pre class=" language-shell"><code class="language-shell">0 ldc #2 <a>
+2 astore_1
+3 ldc #3 <b>
+5 astore_2
+6 ldc #4 <ab>
+8 astore_3
+9 new #5 <java/lang/StringBuilder>
+12 dup
+13 invokespecial #6 <java/lang/StringBuilder.<init>>
+16 aload_1
+17 invokevirtual #7 <java/lang/StringBuilder.append>
+20 aload_2
+21 invokevirtual #7 <java/lang/StringBuilder.append>
+24 invokevirtual #8 <java/lang/StringBuilder.toString>
+27 astore 4
+29 getstatic #9 <java/lang/System.out>
+32 aload_3
+33 aload 4
+35 if_acmpne 42 (+7)
+38 iconst_1
+39 goto 43 (+4)
+42 iconst_0
+43 invokevirtual #10 <java/io/PrintStream.println>
+46 return
+</code></pre>
+<h3 id="intern-的使用"><a href="#intern-的使用" class="headerlink" title="intern()的使用"></a>intern()的使用</h3><p>当调用intern方法时，如果池子里已经包含了一个与这个String对象相等的字符串，正如equals(Object)方法所确定的，那么池子里的字符串会被返回。否则，这个String对象被添加到池中，并返回这个String对象的引用。</p>
+<p>返回一个与此字符串内容相同的字符串，但保证是来自一个唯一的字符串池。</p>
+<p>intern()是一个native方法，调用的是底层c的方法</p>
+<p><strong>总结String的intern()的使用：</strong></p>
+<p>JDK1.6中，将这个字符串对象尝试放入串池。</p>
+<ul>
+<li><p>如果串池中有，则并不会放入。返回已有的串池中的对象的地址</p>
+</li>
+<li><p>如果没有，会把此对象复制一份，放入串池，并返回串池中的对象地址</p>
+</li>
+</ul>
+<p>JDK1.7起，将这个字符串对象尝试放入串池。</p>
+<ul>
+<li><p>如果串池中有，则并不会放入。返回已有的串池中的对象的地址</p>
+</li>
+<li><p>如果没有，则会把对象的引用地址复制一份，放入串池，并返回串池中的引用地址</p>
+</li>
+</ul>
+<h1 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>指在运行过程中没有任何指针指向对象，那么这个对象就需要被回收</p>
+<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><p>Java堆是垃圾收集器的工作重点</p>
+<ul>
+<li><p>频繁收集Young区</p>
+</li>
+<li><p>较少收集Old区</p>
+</li>
+<li><p>基本不收集Perm区（元空间）</p>
+</li>
+</ul>
+<h2 id="垃圾回收相关算法"><a href="#垃圾回收相关算法" class="headerlink" title="垃圾回收相关算法"></a>垃圾回收相关算法</h2><p>判断对象存活的两种方式：<strong>引用计数法</strong>和<strong>可达性分析算法</strong></p>
+<h3 id="引用计数法（jvm没有采用）"><a href="#引用计数法（jvm没有采用）" class="headerlink" title="引用计数法（jvm没有采用）"></a>引用计数法（jvm没有采用）</h3><p>对每个对象保存一个整型的引用计数器属性，用于记录被引用的情况（被引用 +1，引用失效-1.为0时可进行回收）</p>
+<p>优点：实现简单，垃圾对象便于辨识；判定效率高，回收没有延迟性。</p>
+<p>缺点：</p>
+<ul>
+<li><p>它需要单独的字段存储计数器，这样的做法增加了存储空间的开销。</p>
+</li>
+<li><p>每次赋值都需要更新计数器，伴随着加法和减法操作，这增加了时间开销。</p>
+</li>
+<li><p>引用计数器有一个严重的问题，即<strong>无法处理循环引用</strong>的情况。这是一条致命缺陷，导致在Java的垃圾回收器中没有使用这类算法。</p>
+</li>
+</ul>
+<h3 id="可达性分析算法（java、c-所选择的）"><a href="#可达性分析算法（java、c-所选择的）" class="headerlink" title="可达性分析算法（java、c#所选择的）"></a>可达性分析算法（java、c#所选择的）</h3><p>可以有效地解决循环引用的问题，防止内存泄露发生</p>
+<ul>
+<li>可达性分析算法是以根对象集合（GCRoots）为起始点，按从上到下的方式搜索被根对象集合所链接的目标对象是否可达</li>
+<li>使用可达性算法分析后，内存中存活的对象会被根对象集合直接或间接的连接着， 搜索所走过的引用路径成为引用链</li>
+<li>如果目标对象没有任何引用链相连，则是不可达的，就意味着对象已经死亡，可以标记为垃圾对象</li>
+<li>只有被根对象集合直接或间接连接的才是存活的对象</li>
+</ul>
+<p><img src="/2021/07/30/JVM/m2.png"></p>
+<h5 id="GCRoots中的元素分类"><a href="#GCRoots中的元素分类" class="headerlink" title="GCRoots中的元素分类"></a>GCRoots中的元素分类</h5><ul>
+<li>虚拟机栈中引用的对象：各个线程被调用的方法中使用到的参数、局部变量等</li>
+<li>本地方法栈内JNI引用的对象</li>
+<li>方法区中静态属性、常量引用的对象</li>
+<li>所有被synchronized持有的对象</li>
+<li>java虚拟机内部的引用</li>
+<li>反应java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等</li>
+</ul>
+<h2 id="对象的finalization机制"><a href="#对象的finalization机制" class="headerlink" title="对象的finalization机制"></a>对象的finalization机制</h2><p>Java语言提供了对象终止（finalization）机制来允许开发人员提供对象被销毁之前的自定义处理逻辑。</p>
+<p><strong>垃圾回收此对象之前，总会先调用这个对象的finalize()方法。</strong></p>
+<p>永远不要主动调用某个对象的finalize()方法I应该交给垃圾回收机制调用：</p>
+<ul>
+<li><p>在finalize()时可能会导致对象复活。</p>
+</li>
+<li><p>finalize()方法的执行时间是没有保障的，它完全由GC线程决定，极端情况下，若不发生GC，则finalize()方法将没有执行机会。</p>
+</li>
+<li><p>一个糟糕的finalize()会严重影响Gc的性能。</p>
+</li>
+</ul>
+<h3 id="对象的状态"><a href="#对象的状态" class="headerlink" title="对象的状态"></a>对象的状态</h3><ul>
+<li><p>可触及的：从根节点开始，可以到达这个对象。</p>
+</li>
+<li><p>可复活的：对象的所有引用都被释放，但是对象有可能在finalize()中复活。</p>
+</li>
+<li><p>不可触及的：对象的finalize()被调用，并且没有复活，那么就会进入不可触及状态。不可触及的对象不可能被复活，因为<strong>finalize()只会被调用一次。</strong></p>
+</li>
+</ul>
+<h3 id="对象是否可回收"><a href="#对象是否可回收" class="headerlink" title="对象是否可回收"></a>对象是否可回收</h3><p>判定一个对象objA是否可回收，至少要经历两次标记过程：</p>
+<ol>
+<li><p>如果对象objA到GC Roots没有引用链，则进行第一次标记。</p>
+</li>
+<li><p>进行筛选，判断此对象是否有必要执行finalize()方法</p>
+</li>
+<li><p>如果对象objA没有重写finalize()方法，或者finalize()方法已经被虚拟机调用过，则虚拟机视为“没有必要执行”，objA被判定为不可触及的。</p>
+</li>
+<li><p>如果对象objA重写了finalize()方法，且还未执行过，那么objA会被插入到F-Queue队列中，由一个虚拟机自动创建的、低优先级的Finalizer线程触发其finalize()方法执行。</p>
+</li>
+<li><p>finalize()方法是对象逃脱死亡的最后机会，稍后GC会对F-Queue队列中的对象进行第二次标记。如果objA在finalize()方法中与引用链上的任何一个对象建立了联系，那么在第二次标记时，objA会被移出“即将回收”集合。之后，对象会再次出现没有引用存在的情况。在这个情况下，finalize方法不会被再次调用，对象会直接变成不可触及的状态，也就是说，一个对象的finalize方法只会被调用一次。</p>
+</li>
+</ol>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">CanReliveObj</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">// 类变量，属于GC Roots的一部分</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> CanReliveObj canReliveObj<span class="token punctuation">;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> Throwable <span class="token punctuation">{</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">finalize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"调用当前类重写的finalize()方法"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        canReliveObj <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span>String<span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> InterruptedException <span class="token punctuation">{</span>
+        canReliveObj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CanReliveObj</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        canReliveObj <span class="token operator">=</span> null<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span><span class="token function">gc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"-----------------第一次gc操作------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 因为Finalizer线程的优先级比较低，暂停2秒，以等待它</span>
+        Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>canReliveObj <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"obj is dead"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"obj is still alive"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+        System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"-----------------第二次gc操作------------"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        canReliveObj <span class="token operator">=</span> null<span class="token punctuation">;</span>
+        System<span class="token punctuation">.</span><span class="token function">gc</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">// 下面代码和上面代码是一样的，但是 canReliveObj却自救失败了</span>
+        Thread<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>canReliveObj <span class="token operator">==</span> null<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"obj is dead"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span> <span class="token keyword">else</span> <span class="token punctuation">{</span>
+            System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"obj is still alive"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
+<p><img src="/2021/07/30/JVM/m3.png"></p>
+<p>在第一次GC时，执行了finalize方法，但finalize()方法只会被调用一次，所以第二次该对象被GC标记并清除了</p>
+<h2 id="清除阶段"><a href="#清除阶段" class="headerlink" title="清除阶段"></a>清除阶段</h2><h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记-清除算法"></a>标记-清除算法</h3><p>当堆中的有效内存空间耗尽时，就会停住整个程序，然后进行标记+清除：</p>
+<ul>
+<li>标记：Collecter从引用根节点开始遍历，标记所有被引用的对象</li>
+<li>清除：Collecter对堆内存从头到尾进行线性的遍历，发现没有被标记，则会被回收</li>
+</ul>
+<p><img src="/2021/07/30/JVM/m4.png"></p>
+<p>缺点：</p>
+<ul>
+<li><p>标记清除算法的效率不算高</p>
+</li>
+<li><p>在进行GC的时候，需要停止整个应用程序，用户体验较差</p>
+</li>
+<li><p>这种方式清理出来的空闲内存是不连续的，产生内碎片，需要维护一个空闲列表</p>
+</li>
+</ul>
+<h3 id="复制算法"><a href="#复制算法" class="headerlink" title="复制算法"></a>复制算法</h3><p>将活着的内存空间分为两块，每次只使用其中一块，在垃圾回收时将正在使用的内存中的存活对象复制到未被使用的内存块中，之后清除正在使用的内存块中的所有对象，交换两个内存的角色，最后完成垃圾回收</p>
+<p><img src="/2021/07/30/JVM/m5.png"></p>
+<p><strong>优点</strong></p>
+<ul>
+<li><p>没有标记和清除过程，实现简单，运行高效</p>
+</li>
+<li><p>复制过去以后保证空间的连续性，不会出现“碎片”问题。</p>
+</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li><p>此算法的缺点也是很明显的，就是需要两倍的内存空间。</p>
+</li>
+<li><p>对于G1这种分拆成为大量region的GC，复制而不是移动，意味着GC需要维护region之间对象引用关系，不管是内存占用或者时间开销也不小</p>
+</li>
+</ul>
+<h3 id="标记-压缩（整理）算法"><a href="#标记-压缩（整理）算法" class="headerlink" title="标记-压缩（整理）算法"></a>标记-压缩（整理）算法</h3><ol>
+<li> 第一阶段和标记清除算法一样，从根节点开始标记所有被引用对象</li>
+<li>  第二阶段将所有的存活对象压缩到内存的一端，按顺序排放。 </li>
+<li> 之后，清理边界外所有的空间。</li>
+</ol>
+<p><img src="/2021/07/30/JVM/m7.png"></p>
+<p>标记-压缩算法的最终效果等同于标记-清除算法执行完成后，再进行一次内存碎片整理，因此，也可以把它称为标记-清除-压缩（Mark-Sweep-Compact）算法。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Mark-Sweep</th>
+<th>Mark-Compact</th>
+<th>Copying</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>速率</td>
+<td>中等</td>
+<td>最慢</td>
+<td>最快</td>
+</tr>
+<tr>
+<td>空间开销</td>
+<td>少（堆积碎片）</td>
+<td>少（无碎片）</td>
+<td>通常需要活对象的两倍（无碎片）</td>
+</tr>
+<tr>
+<td>移动对象</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+</tr>
+</tbody></table>
+<h2 id="分代收集算法"><a href="#分代收集算法" class="headerlink" title="分代收集算法"></a>分代收集算法</h2><p>一般是把Java堆分为新生代和老年代，这样就可以根据各个年代的特点使用不同的回收算法，以提高垃圾回收的效率。</p>
+<ul>
+<li>年轻代特点：区域相对老年代较小，对象生命周期短、存活率低，回收频繁。复制算法</li>
+<li>老年代特点：区域较大，对象生命周期长、存活率高，回收不及年轻代频繁。由标记-清除或者是标记-清除与标记-整理的混合实现。</li>
+</ul>
 <h1 id="JVM回收机制总结"><a href="#JVM回收机制总结" class="headerlink" title="JVM回收机制总结"></a>JVM回收机制总结</h1><p>java虚拟机中，数据类型分为两类：<strong>基本类型</strong>和<strong>引用类型</strong>，基本类型的值就是数值本身，引用类型表示的是是对某个对象的引用（存放的对象的地址）。</p>
 <h2 id="堆和栈"><a href="#堆和栈" class="headerlink" title="堆和栈"></a>堆和栈</h2><p><strong>栈是运行时的单位，而堆是存储的单位</strong>。</p>
 <p>也就是说栈是解决程序运行的问题，程序如何执行或者如何处理数据；而堆解决数据存储的问题，数据怎么存储，存储在哪里。</p>
@@ -489,36 +913,6 @@
     <span class="token punctuation">}</span>
 <span class="token comment" spellcheck="true">//  其大小为：空对象大小(8byte)+int大小(4byte)+Boolean大小(1byte)+空Object引用的大小 (4byte)=17byte。但是因为Java在对对象内存分配时都是以8的整数倍来分，因此大于17byte的最接近8的整数倍的是24，因此此对象 的大小为24byte。</span>
 </code></pre>
-<h1 id="运行时区数据结构"><a href="#运行时区数据结构" class="headerlink" title="运行时区数据结构"></a>运行时区数据结构</h1><p><img src="/2021/07/30/JVM/jvma.png"></p>
-<h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p><strong>程序计数寄存器</strong>：存储指令相关的信息， 指向下一条指令的地址。由执行引擎读取</p>
-<h2 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h2><p><strong>虚拟机栈</strong>：跨平台，指令集小，编译器易实现，内部保存栈帧.不存在GC、OOM,只会出现stackOverFlowError</p>
-<h3 id="设置栈的大小："><a href="#设置栈的大小：" class="headerlink" title="设置栈的大小："></a>设置栈的大小：</h3><p><strong>-Xss</strong>设置线程的最大栈空间。栈的大小决定了函数调用的最大可达深度</p>
-<p><img src="/2021/07/30/JVM/stackSize.png"></p>
-<h3 id="栈中的结构"><a href="#栈中的结构" class="headerlink" title="栈中的结构"></a>栈中的结构</h3><p>每个方法都对应一个栈帧，方法执行–入栈，方法结束–出栈</p>
-<h4 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h4><pre class=" language-bash"><code class="language-bash">LocalVariableTable:
-    Start  Length  Slot  Name   Signature
-      140      18    10     s   Ljava/lang/String<span class="token punctuation">;</span>
-        0     162     0  args   <span class="token punctuation">[</span>Ljava/lang/String<span class="token punctuation">;</span>
-        3     159     1 start_line   Ljava/lang/String<span class="token punctuation">;</span>
-</code></pre>
-<p>变量槽（slot）：32位以为的类型只占一个slot，64位的类型占两个slot（long，double）</p>
-<p>变量的分类：</p>
-<ul>
-<li>按照数据类型：<ul>
-<li>基本数据类型</li>
-<li>引用数据类型</li>
-</ul>
-</li>
-<li>类中声明的位置<ul>
-<li>成员变量：<ul>
-<li>类变量：linking的prepare阶段：赋默认值—》initial阶段，赋真实值</li>
-<li>实例变量：随着对象的创建，在堆空间中分配实例变量空间，进行默认赋值</li>
-</ul>
-</li>
-<li>局部变量：使用前，必须进行赋值，否则编译器报错</li>
-</ul>
-</li>
-</ul>
 <p>​    </p>
 
                 
