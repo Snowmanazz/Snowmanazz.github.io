@@ -444,6 +444,7 @@
 <p> <strong>yield() 运行-&gt;就绪</strong><br>Thread类的方法。当前线程调用yield方法会，暂停当前正在执行的线程对象，<strong>不会释放资源锁</strong>，不会让线程进入阻塞状态，<strong>让线程重回就绪状态</strong>（yield 方法只能使同优先级或更高优先级的线程有执行的机会）<br><img src="/2021/07/21/Thread/yield.png"></p>
 <p> <strong>join()</strong><br>join() 方法等待调用join方法的线程结束之后，程序再继续执行，<strong>其他线程（阻塞状态）无法运行</strong>，必须等待此线程完成之后才可以继续执行,执行完之后释放锁。<br><img src="/2021/07/21/Thread/join.png"></p>
 <p> <strong>wait() 运行-&gt;等待 和notify() 等待-&gt;就绪-&gt;运行（需要等其他线程执行完）</strong><br>Object类的方法。<strong>wait 过程中线程会释放对象锁</strong>，只有当其他线程调用 notify 才能唤醒此线程，然后等其他线程执行完后执行<strong>。wait 使用时必须先获取对象锁</strong>，<strong>即必须在</strong> <strong>synchronized 修饰的代码块中使用</strong><br><img src="/2021/07/21/Thread/wait.png"></p>
+<p><strong>调用wait判断时需要放在while循环中，否则将引起虚假唤醒，哪里等待就会在哪里唤醒</strong></p>
 <p> <strong>interrupt()</strong><br>一般使用的是interrupt来 <em><strong>请求</strong></em>终止线程(并不是真正的中断)<br>interrupt不会真正停止一个线程，它仅仅是给这个线程发了一个信号告诉它，它应该要结束了。具体到底中断还是继续运行，应该由被通知的线程自己处理。interrupt方法压根是不会对线程的状态造成影响的，它仅仅设置一个标志位罢了。</p>
 <h2 id="多线程"><a href="#多线程" class="headerlink" title="多线程"></a>多线程</h2><p>使用多线程的主要原因是提高系统的资源利用率。（java开启线程时调用的本地方法start0（））</p>
 <h3 id="线程安全问题"><a href="#线程安全问题" class="headerlink" title="线程安全问题"></a>线程安全问题</h3><p>多线程中，线程时交替并行的，一般会使用多个线程执行相同的代码，其中可能会有共同的变量或者一些组合操作，就很容易出现问题。<br>例如： 在多线程中执行++count：</p>
