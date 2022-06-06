@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Bug、笔记, Idea">
+    <meta name="keywords" content="redis, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Bug、笔记 | Idea</title>
+    <title>redis | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -222,12 +222,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/1.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Bug、笔记</h1>
+                    <h1 class="description center-align post-title">redis</h1>
                 </div>
             </div>
         </div>
@@ -343,8 +343,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/noter/">
-                                <span class="chip bg-color">noter</span>
+                            <a href="/tags/redis/">
+                                <span class="chip bg-color">redis</span>
+                            </a>
+                        
+                            <a href="/tags/redisTemplate/">
+                                <span class="chip bg-color">redisTemplate</span>
                             </a>
                         
                     </div>
@@ -359,7 +363,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2022-02-16
+                    2022-06-06
                 </div>
                 
 
@@ -368,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    616
+                    604
                 </div>
                 
 
@@ -390,71 +394,37 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Spring-Autowired注入对象为Null"><a href="#Spring-Autowired注入对象为Null" class="headerlink" title="Spring@Autowired注入对象为Null"></a>Spring@Autowired注入对象为Null</h1><h2 id="原因"><a href="#原因" class="headerlink" title="原因"></a>原因</h2><ol>
-<li>配置缺失，比如为开启注解扫描驱动、注入组件为注册；</li>
-<li>使用 new 关键字创建的对象不受spring容器管理，无法注入；</li>
-<li>注入静态变量, 静态变量/类变量不是对象的属性,而是一个类的属性,spring则是基于对象层面上的依赖注入。</li>
-</ol>
-<h2 id="静态注入的三种方式"><a href="#静态注入的三种方式" class="headerlink" title="静态注入的三种方式"></a>静态注入的三种方式</h2><p>一些工具类中可能会依赖Service层的对象，但工具类基本都是静态方法，对应的成员变量也应该声明为静态的。此实如果直接使用@Autowired进行依赖注入，再调用方法时会报NullpointerException。</p>
-<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Autowired</span>
-<span class="token keyword">private</span> <span class="token keyword">static</span> A a<span class="token punctuation">;</span>
-</code></pre>
-<p>静态变量/类变量不是对象的属性,而是一个类的属性,spring则是基于对象层面上的依赖注入。</p>
-<h3 id="Xml方式"><a href="#Xml方式" class="headerlink" title="Xml方式"></a>Xml方式</h3><pre class=" language-xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>bean</span> <span class="token attr-name">id</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>name<span class="token punctuation">"</span></span> <span class="token attr-name">class</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>com.*.*.Name<span class="token punctuation">"</span></span> <span class="token attr-name">init-method</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>init<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>
-   <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>property</span> <span class="token attr-name">name</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>a<span class="token punctuation">"</span></span> <span class="token attr-name">ref</span><span class="token attr-value"><span class="token punctuation">=</span><span class="token punctuation">"</span>a<span class="token punctuation">"</span></span><span class="token punctuation">/></span></span>
-<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>bean</span><span class="token punctuation">></span></span>
-</code></pre>
-<pre class=" language-java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Name</span> <span class="token punctuation">{</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> A a<span class="token punctuation">;</span>
-    <span class="token keyword">private</span> <span class="token keyword">static</span> Name name<span class="token punctuation">;</span>
-    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-        name <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
-        name<span class="token punctuation">.</span>a <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>a<span class="token punctuation">;</span>
-    <span class="token punctuation">}</span>
-<span class="token punctuation">}</span>
-</code></pre>
-<h3 id="PostConstruct方式"><a href="#PostConstruct方式" class="headerlink" title="@PostConstruct方式"></a>@PostConstruct方式</h3><pre class=" language-java"><code class="language-java">    <span class="token annotation punctuation">@Component</span>
-    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Name</span> <span class="token punctuation">{</span>
-        <span class="token annotation punctuation">@Autowired</span>
-        <span class="token keyword">private</span> <span class="token keyword">static</span> A a<span class="token punctuation">;</span>
-        <span class="token keyword">private</span> <span class="token keyword">static</span> Name name<span class="token punctuation">;</span>
-        <span class="token annotation punctuation">@PostConstruct</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
-            name <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
-            name<span class="token punctuation">.</span>a <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>a<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-</code></pre>
-<p>@PostConstruct 注解的方法在加载类的构造函数之后执行，也就是在加载了构造函数之后，执行init方法；</p>
-<h3 id="set方法上添加-Autowired注解"><a href="#set方法上添加-Autowired注解" class="headerlink" title="set方法上添加@Autowired注解"></a>set方法上添加@Autowired注解</h3><pre class=" language-java"><code class="language-java">    <span class="token annotation punctuation">@Component</span>
-    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Name</span> <span class="token punctuation">{</span>
-        <span class="token keyword">private</span> <span class="token keyword">static</span> A a<span class="token punctuation">;</span>
-        <span class="token annotation punctuation">@Autowired</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">setA</span><span class="token punctuation">(</span>A a<span class="token punctuation">)</span><span class="token punctuation">{</span>
-            Name<span class="token punctuation">.</span>a<span class="token operator">=</span>a<span class="token punctuation">;</span>
-        <span class="token punctuation">}</span>
-    <span class="token punctuation">}</span>
-</code></pre>
-<h1 id="秒杀系统常见问题"><a href="#秒杀系统常见问题" class="headerlink" title="秒杀系统常见问题"></a>秒杀系统常见问题</h1><h2 id="解决超卖问题"><a href="#解决超卖问题" class="headerlink" title="解决超卖问题"></a>解决超卖问题</h2><ol>
-<li>在sql加上判断防止数据变为负数</li>
-<li>数据库加唯一索引防止用户重复购买</li>
-<li>redis预减库存 降低数据库的访问， 内存标记减少redis访问</li>
-</ol>
-<h4 id="redis-的库存如何与数据库的库存保持一致"><a href="#redis-的库存如何与数据库的库存保持一致" class="headerlink" title="redis 的库存如何与数据库的库存保持一致"></a>redis 的库存如何与数据库的库存保持一致</h4><pre><code>redis的数量不是库存,它的作用仅仅只是为了阻挡多余的请求透穿到DB，起到一个保护的作用
-因为秒杀的商品有限，比如10个，让1万个请求区访问DB是没有意义的，因为最多也就只能10个
-请求下单成功，所有是不需要保持一致的
-</code></pre>
-<h3 id="SQL语句注意"><a href="#SQL语句注意" class="headerlink" title="SQL语句注意"></a>SQL语句注意</h3><ol>
-<li>避免全表扫描！会导致慢查询、数据连接池堵塞、考虑在where和order by的列上建索引<ol>
-<li>where子句对null判断</li>
-<li>在where子句中避免使用or、!=、&lt;&gt;、in、not in等操作符</li>
-<li>考虑全文检索</li>
-</ol>
-</li>
-<li>合理使用索引</li>
-<li>避免大事务操作，提高系统并发能力</li>
-<li>避免返回大量数据</li>
-</ol>
+                <h1 id="redis概述"><a href="#redis概述" class="headerlink" title="redis概述"></a>redis概述</h1><p>​    redis是一个免费开源、由C语言编写、支持网络交互、可基于内存也可持久化的Key-Value数据库。</p>
+<h1 id="redis数据类型"><a href="#redis数据类型" class="headerlink" title="redis数据类型"></a>redis数据类型</h1><p>​    redis数据存储格式都是k:v型，key永远是字符串，value有五种数据类型</p>
+<p><img src="/2022/06/06/redis/cc.png"></p>
+<h2 id="String—-gt-java-String"><a href="#String—-gt-java-String" class="headerlink" title="String—-&gt;java String"></a>String—-&gt;java String</h2><p>基本操作：<img src="/2022/06/06/redis/stringop.png"></p>
+<p>数值操作：<img src="/2022/06/06/redis/numop.png"></p>
+<p>String类型可以存字符串，当遇见加减操作时以整数形式存在。redis操作都是原子性的，无需考虑并发安全。</p>
+<p>时效性设置：<img src="/2022/06/06/redis/stringoptime.png"></p>
+<p>redis 控制数据的生命周期，通过数据是否失效控制业务行为，适用于所有具有时效性限定控制的操作。</p>
+<h2 id="Hash—-gt-HashMap"><a href="#Hash—-gt-HashMap" class="headerlink" title="Hash—-&gt;HashMap"></a>Hash—-&gt;HashMap</h2><p>基本操作：<img src="/2022/06/06/redis/hashop.png"><img src="/2022/06/06/redis/hashop2.png"></p>
+<h2 id="list—-gt-LinkedList"><a href="#list—-gt-LinkedList" class="headerlink" title="list—-&gt;LinkedList"></a>list—-&gt;LinkedList</h2><p>基本操作：<img src="/2022/06/06/redis/listop.png"></p>
+<p>list体现顺序，底层是双向链表，保存数据都是String，具有索引的概念。</p>
+<h2 id="set—-gt-HashSet"><a href="#set—-gt-HashSet" class="headerlink" title="set—-&gt;HashSet"></a>set—-&gt;HashSet</h2><p>基本操作：<img src="/2022/06/06/redis/setop.png"></p>
+<p>set不允许重复的数据</p>
+<h2 id="sorted-set—-gt-treeset"><a href="#sorted-set—-gt-treeset" class="headerlink" title="sorted_set—-&gt;treeset"></a>sorted_set—-&gt;treeset</h2><p>基本操作：<img src="/2022/06/06/redis/zsetop.png"></p>
+<p>zset内部编码是ziplist和skiplist，<strong>跳表是一种可以用来代替平衡树的数据结构</strong>，<strong>跳表使用概率平衡而不是严格的平衡，</strong>因此，与平衡树相比，跳表中<strong>插入和删除的算法要简单得多</strong>，并且<strong>速度要快得多</strong>。空间换时间。</p>
+<p><img src="/2022/06/06/redis/skiplist.png"></p>
+<p>如果添加/删除元素，除基层外其他层级的节点都需要重新选择，这里采用的利用随机选择的概率解决。t<br><img src="/2022/06/06/redis/skiplistr.png"></p>
+<p>而跳表在Java中对应ConcurrentSkipListMap</p>
+<h2 id="redis发布订阅"><a href="#redis发布订阅" class="headerlink" title="redis发布订阅"></a>redis发布订阅</h2><p>发布订阅工作流程：<img src="/2022/06/06/redis/ps.png"></p>
+<p><img src="/2022/06/06/redis/ps1.png"></p>
+<p>订阅名为test的channel，客户端会处于接受消息的阻塞状态，然后发布了一条this is test的消息到test上，客户端将显示消息。</p>
+<h2 id="redis消息队列–stream"><a href="#redis消息队列–stream" class="headerlink" title="redis消息队列–stream"></a>redis消息队列–stream</h2><p>​    Stream拥有很高的性能和内存利用效率，提供了消息的持久化存储，以及主从复制功能，从而解决网络断开、redis宕机、消息丢失等问题。</p>
+<p>​    Stream消息队列由消息本身、消费者、生产者和消费组组成。</p>
+<p><img src="/2022/06/06/redis/stream.png"></p>
+<ul>
+<li>**Stream Direction:**表示数据流，是一个消息链，将所有消息串联起来</li>
+<li>**Consumer Group:**消费组，一条StreamDirection上有多个ConsumerGroup，一个ConsumerGroup包含多个Consumer。</li>
+<li>**last_delivered_id:**消费者游标，每个ConsumerGroup都有一个last_delivered_id，任意消费者读取都将会使游标前移。</li>
+<li>**pending_ids:**消费者的状态变量，记录当前已被读取但没有被ACK的消息。</li>
+</ul>
+<p><strong>消息ID唯一，系统创建则为</strong>*</p>
 
                 
             </div>
@@ -481,7 +451,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://snowmanazz.github.io/2022/02/16/note/">http://snowmanazz.github.io/2022/02/16/note/</a>
+                    <a href="http://snowmanazz.github.io/2022/06/06/redis/">http://snowmanazz.github.io/2022/06/06/redis/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -519,8 +489,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/noter/">
-                                    <span class="chip bg-color">noter</span>
+                                <a href="/tags/redis/">
+                                    <span class="chip bg-color">redis</span>
+                                </a>
+                            
+                                <a href="/tags/redisTemplate/">
+                                    <span class="chip bg-color">redisTemplate</span>
                                 </a>
                             
                         </div>
@@ -566,9 +540,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2022/06/06/redis/">
                     <div class="card-image">
@@ -586,9 +561,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-06-06
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-06-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -597,6 +572,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -619,13 +595,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/11/29/rabbitMQ/">
+                <a href="/2022/02/16/note/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="rabbitMQ">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Bug、笔记">
                         
-                        <span class="card-title">rabbitMQ</span>
+                        <span class="card-title">Bug、笔记</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -636,7 +612,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-02-16
                             </span>
                         <span class="publish-author">
                             
@@ -649,12 +625,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/rabbitMQ/">
-                        <span class="chip bg-color">rabbitMQ</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
-                        <span class="chip bg-color">消息队列</span>
+                    <a href="/tags/noter/">
+                        <span class="chip bg-color">noter</span>
                     </a>
                     
                 </div>
