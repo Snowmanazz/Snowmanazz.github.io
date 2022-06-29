@@ -380,7 +380,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    1.8k
+                    1.9k
                 </div>
                 
 
@@ -413,6 +413,35 @@
 <li>数组由默认构造方法生成的空数组并且第一次添加数据。此时minCapacity等于默认的容量10.而后的数组扩容才是按照当前容量的1.5倍进行扩容；</li>
 <li>当扩容量（newCapacity）大于ArrayList数组定义的最大值后会调用hugeCapacity来进行判断。如果minCapacity已经大于Integer的最大值（溢出为负数）那么抛出OutOfMemoryError（内存溢出）否则的话根据与MAX_ARRAY_SIZE的比较情况确定是返回Integer最大值还是MAX_ARRAY_SIZE。这边也可以看到ArrayList允许的最大容量就是Integer的最大值（-2的31次方~2的31次方减1）。</li>
 </ul>
+<h5 id="fail-fast机制"><a href="#fail-fast机制" class="headerlink" title="fail-fast机制"></a>fail-fast机制</h5><p>在 Java Collection 中，为了防止在某个线程在对 Collection 进行迭代时，其他线程对该 Collection 进行结构上的修改。</p>
+<pre class=" language-java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">class</span> <span class="token class-name">Itr</span> <span class="token keyword">implements</span> <span class="token class-name">Iterator</span><span class="token operator">&lt;</span>E<span class="token operator">></span> <span class="token punctuation">{</span>
+    <span class="token keyword">int</span> cursor<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> lastRet <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token keyword">int</span> expectedModCount <span class="token operator">=</span> ArrayList<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>modCount<span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">hasNext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>cursor <span class="token operator">!=</span> ArrayList<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>size<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> E <span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token function">checkForComodification</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+    <span class="token punctuation">}</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>lastRet <span class="token operator">&lt;</span> <span class="token number">0</span><span class="token punctuation">)</span>
+            <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">checkForComodification</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>   
+        <span class="token comment" spellcheck="true">/** 省略此处代码 */</span>
+    <span class="token punctuation">}</span>
+    <span class="token comment" spellcheck="true">//检查是否被修改，根据modcount值是否相同，每次对list进行修改都会使modCount++</span>
+    <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">checkForComodification</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ArrayList<span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">.</span>modCount <span class="token operator">==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>expectedModCount<span class="token punctuation">)</span>
+            <span class="token keyword">return</span><span class="token punctuation">;</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">ConcurrentModificationException</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
 <h4 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList"></a>LinkedList</h4><p>双向链表，查询用Arralist，增删多用LinkedList </p>
 <h4 id="HashMap参考"><a href="#HashMap参考" class="headerlink" title="HashMap参考"></a>HashMap<a target="_blank" rel="noopener" href="https://yuanrengu.com/2020/ba184259.html">参考</a></h4><p>Map map = Collections.synchronizedMap(new HashMap(…))，实现线程同步，代替HashTable<br><img src="/2021/07/20/map/hashmapCode1.png"><br>table在第一次往HashMap中put元素的时候初始化。如果HashMap初始化的时候没有指定容量，那么初始化table的时候会使用默认的DEFAULT_INITIAL_CAPACITY参数，也就是16，作为table初始化时的长度。如果HashMap初始化的时候指定了容量，HashMap会把这个容量修改为2的倍数，然后创建对应长度的table。table在HashMap扩容的时候（如果长度达到了容器*转载因子（默认是0.75）），长度会翻倍。所以table的长度肯定是2的倍数。</p>
 <h5 id="HashMap实现原理"><a href="#HashMap实现原理" class="headerlink" title="HashMap实现原理"></a>HashMap实现原理</h5><p>HashMap类中的元素就是节点<br>HashMap通过key的hashCode来计算hash值，不同的hash值就存在数组中不同的位置，当多个元素的hash值相同时<br><img src="/2021/07/20/map/hashmapCode2.png"><br>Node类的基本属性有：</p>

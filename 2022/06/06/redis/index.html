@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    604
+                    929
                 </div>
                 
 
@@ -412,19 +412,68 @@
 <p><img src="/2022/06/06/redis/skiplist.png"></p>
 <p>如果添加/删除元素，除基层外其他层级的节点都需要重新选择，这里采用的利用随机选择的概率解决。t<br><img src="/2022/06/06/redis/skiplistr.png"></p>
 <p>而跳表在Java中对应ConcurrentSkipListMap</p>
-<h2 id="redis发布订阅"><a href="#redis发布订阅" class="headerlink" title="redis发布订阅"></a>redis发布订阅</h2><p>发布订阅工作流程：<img src="/2022/06/06/redis/ps.png"></p>
+<h1 id="redis发布订阅"><a href="#redis发布订阅" class="headerlink" title="redis发布订阅"></a>redis发布订阅</h1><p>发布订阅工作流程：<img src="/2022/06/06/redis/ps.png"></p>
 <p><img src="/2022/06/06/redis/ps1.png"></p>
 <p>订阅名为test的channel，客户端会处于接受消息的阻塞状态，然后发布了一条this is test的消息到test上，客户端将显示消息。</p>
-<h2 id="redis消息队列–stream"><a href="#redis消息队列–stream" class="headerlink" title="redis消息队列–stream"></a>redis消息队列–stream</h2><p>​    Stream拥有很高的性能和内存利用效率，提供了消息的持久化存储，以及主从复制功能，从而解决网络断开、redis宕机、消息丢失等问题。</p>
+<h1 id="redis消息队列–stream"><a href="#redis消息队列–stream" class="headerlink" title="redis消息队列–stream"></a>redis消息队列–stream</h1><p>​    Stream拥有很高的性能和内存利用效率，提供了消息的持久化存储，以及主从复制功能，从而解决网络断开、redis宕机、消息丢失等问题。</p>
 <p>​    Stream消息队列由消息本身、消费者、生产者和消费组组成。</p>
 <p><img src="/2022/06/06/redis/stream.png"></p>
 <ul>
-<li>**Stream Direction:**表示数据流，是一个消息链，将所有消息串联起来</li>
+<li><h1 id="Stream-Direction-表示数据流，是一个消息链，将所有消息串联起来"><a href="#Stream-Direction-表示数据流，是一个消息链，将所有消息串联起来" class="headerlink" title="**Stream Direction:**表示数据流，是一个消息链，将所有消息串联起来"></a>**Stream Direction:**表示数据流，是一个消息链，将所有消息串联起来</h1></li>
 <li>**Consumer Group:**消费组，一条StreamDirection上有多个ConsumerGroup，一个ConsumerGroup包含多个Consumer。</li>
 <li>**last_delivered_id:**消费者游标，每个ConsumerGroup都有一个last_delivered_id，任意消费者读取都将会使游标前移。</li>
 <li>**pending_ids:**消费者的状态变量，记录当前已被读取但没有被ACK的消息。</li>
 </ul>
 <p><strong>消息ID唯一，系统创建则为</strong>*</p>
+<h1 id="redis事务"><a href="#redis事务" class="headerlink" title="redis事务"></a>redis事务</h1><p>redis事务特性：</p>
+<ul>
+<li> <strong>单独隔离操作：</strong>事务中的命令会被序列化，按照顺序执行，不会被其他命令打断执行。</li>
+<li><strong>不保证原子性：</strong>如果命令执行失败，其他命令依旧执行，不支持事务回滚。</li>
+</ul>
+<p>基本操作：    <img src="/2022/06/06/redis/redistra.png"></p>
+<h1 id="redis分区"><a href="#redis分区" class="headerlink" title="redis分区"></a>redis分区</h1><p>分区可以提升服务器的性能，也能提高服务器的存储能力。</p>
+<ul>
+<li><strong>范围分区：</strong>将指定范围的key映射到指定的Redis实例中</li>
+<li><strong>哈希分区：</strong>不受key值类型影响</li>
+</ul>
+<h1 id="RedisTemplate操作redis"><a href="#RedisTemplate操作redis" class="headerlink" title="RedisTemplate操作redis"></a>RedisTemplate操作redis</h1><p>Spring 封装了 RedisTemplate 来操作 Redis，它支持所有的 Redis 原生的 API。在 RedisTemplate 中定义了对5种数据结构的操作方法。</p>
+<ul>
+<li><strong>opsForValue()：</strong>操作字符串。</li>
+<li><strong>opsForList()：</strong>操作列表。</li>
+<li><strong>opsForHash()：</strong>操作哈希。</li>
+<li><strong>opsForSet()：</strong>操作集合。</li>
+<li><strong>opsForZSet()：</strong>操作有序集合。</li>
+</ul>
+<p>RedisConfig类：</p>
+<pre class=" language-java"><code class="language-java"><span class="token annotation punctuation">@Configuration</span>
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RedisConfig</span> <span class="token punctuation">{</span>
+    <span class="token comment" spellcheck="true">/**
+     * redisTemplate 序列化使用的jdkSerializeable, 存储二进制字节码, 所以自定义序列化类
+     * @param redisConnectionFactory redis连接工厂类
+     * @return RedisTemplate
+     */</span>
+    <span class="token annotation punctuation">@Bean</span>
+    <span class="token keyword">public</span> RedisTemplate<span class="token operator">&lt;</span>Object<span class="token punctuation">,</span> Object<span class="token operator">></span> <span class="token function">redisTemplate</span><span class="token punctuation">(</span>RedisConnectionFactory redisConnectionFactory<span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        RedisTemplate<span class="token operator">&lt;</span>Object<span class="token punctuation">,</span> Object<span class="token operator">></span> redisTemplate <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">RedisTemplate</span><span class="token operator">&lt;</span><span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        redisTemplate<span class="token punctuation">.</span><span class="token function">setConnectionFactory</span><span class="token punctuation">(</span>redisConnectionFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 使用Jackson2JsonRedisSerialize 替换默认序列化</span>
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Jackson2JsonRedisSerializer</span><span class="token punctuation">(</span>Object<span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        ObjectMapper objectMapper <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ObjectMapper</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        objectMapper<span class="token punctuation">.</span><span class="token function">setVisibility</span><span class="token punctuation">(</span>PropertyAccessor<span class="token punctuation">.</span>ALL<span class="token punctuation">,</span> JsonAutoDetect<span class="token punctuation">.</span>Visibility<span class="token punctuation">.</span>ANY<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        objectMapper<span class="token punctuation">.</span><span class="token function">enableDefaultTyping</span><span class="token punctuation">(</span>ObjectMapper<span class="token punctuation">.</span>DefaultTyping<span class="token punctuation">.</span>NON_FINAL<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        jackson2JsonRedisSerializer<span class="token punctuation">.</span><span class="token function">setObjectMapper</span><span class="token punctuation">(</span>objectMapper<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment" spellcheck="true">// 设置value的序列 化规则和 key的序列化规则</span>
+        redisTemplate<span class="token punctuation">.</span><span class="token function">setKeySerializer</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StringRedisSerializer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        redisTemplate<span class="token punctuation">.</span><span class="token function">setValueSerializer</span><span class="token punctuation">(</span>jackson2JsonRedisSerializer<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        redisTemplate<span class="token punctuation">.</span><span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> redisTemplate<span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre>
 
                 
             </div>
