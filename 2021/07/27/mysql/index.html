@@ -368,7 +368,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    3.1k
+                    4.2k
                 </div>
                 
 
@@ -431,6 +431,52 @@
 <li>MyIASM引擎，B+树的数据结构中存储的内容实际上是实际数据的地址值。也就是说它的索引和实际数据是分开的，只不过使用索引指向了实际数据。这种索引的模式被称为非聚集索引。</li>
 <li>Innodb引擎的索引的数据结构也是B+树，只不过数据结构中存储的都是实际的数据，这种索引被称为聚集索引。</li>
 </ul>
+<h2 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h2><p>索引 可分为：全文索引、普通索引、唯一索引和主键索引，或者 聚簇索引、非聚簇索引</p>
+<h3 id="索引的创建"><a href="#索引的创建" class="headerlink" title="索引的创建"></a>索引的创建</h3><ul>
+<li><p>隐式创建</p>
+<ul>
+<li><p>创建表时有主键（primary key）则会自动创建主键索引</p>
+</li>
+<li><p>创建表时有唯一键（unique） 自动创建唯一索引</p>
+</li>
+<li><p>创建表时有外键约束（foreign key）自动创建联合索引</p>
+</li>
+</ul>
+</li>
+<li><p>显示创建</p>
+<ul>
+<li>普通索引 ：创建表时 index 索引名(字段名)</li>
+<li>唯一索引：unique index 索引名(字段名)</li>
+<li>联合索引：index 索引名(字段名1，字段名2)</li>
+<li>全文索引：fulltext index 索引名(字段名) 。全文索引用过于匹配大量数据时替换 like %% 的操作，采用match+against方式查询：select * from A where match(字段名，字段名) against (‘查询字符串’)</li>
+<li>表已经创建时，使用alter table 表名 add index /unique index /fulltext index  索引名(字段名)  创建索引 ，或者 create index /unique index /fulltext index  on 表名(字段名).</li>
+</ul>
+</li>
+</ul>
+<h3 id="索引查看"><a href="#索引查看" class="headerlink" title="索引查看"></a>索引查看</h3><ul>
+<li>show create table 表名； 显示出创建表的完整sql语句</li>
+<li>show index from 表名；显示该表所有索引信息</li>
+</ul>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><p>使用alter table 表名 drop  index /unique index /fulltext index  索引名(字段名)  创建索引 ，或者 drop index /unique index /fulltext index  on 表名(字段名).</p>
+<h3 id="索引的优缺点"><a href="#索引的优缺点" class="headerlink" title="索引的优缺点"></a>索引的优缺点</h3><ul>
+<li>优点： 提高查询效率（减少IO访问次数）、降低CPU使用率</li>
+<li>缺点：数据量大时，索引也会很大；频繁修改、少量数据、很少使用的字段不要添加索引；索引提高查询效率，但是降低 增删改效率；</li>
+</ul>
+<h3 id="适合添加索引的情况"><a href="#适合添加索引的情况" class="headerlink" title="适合添加索引的情况"></a>适合添加索引的情况</h3><ul>
+<li>字段数值有唯一性的限制</li>
+<li>频繁作为where查询条件的字段</li>
+<li>经常group by 和order by的字段</li>
+<li>去重distinct字段</li>
+<li>多表join连接操作</li>
+<li>多个字段都需要建索引时，联合索引优于单列索引</li>
+</ul>
+<p>不适合添加：</p>
+<ul>
+<li>在where中使用不到的字段</li>
+<li>数据量小</li>
+<li>有大量重复数据</li>
+<li>避免对经常更新的表创建过多索引</li>
+</ul>
 <h2 id="MySQL索引底层数据结构"><a href="#MySQL索引底层数据结构" class="headerlink" title="MySQL索引底层数据结构"></a>MySQL索引底层数据结构</h2><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/u013235478/article/details/50625677">详情访问</a><br> <strong>1.哈希表（哈希表是做数据快速检索的有效利器）</strong><br>哈希算法有个数据碰撞的问题，也就是哈希函数可能对不同的 key 会计算出同一个结果，比如 hash(7)可能跟 hash(199)计算出来的结果一样，也就是不同的 key 映射到同一个结果了，这就是碰撞问题。解决碰撞问题的一个常见处理方式就是链地址法，即用链表把碰撞的数据接连起来。计算哈希值之后，还需要检查该哈希值是否存在碰撞数据链表，有则一直遍历到链表尾，直达找到真正的 key 对应的数据为止。<br>使用哈希算法实现的索引虽然可以做到快速检索数据，但是没办法做数据高效范围查找，因此哈希索引是不适合作为 Mysql 的底层索引的数据结构。<br><img src="/2021/07/27/mysql/hash.png"><br> <strong>2.二叉查找树</strong><br>普通的二叉查找树有个致命缺点：极端情况下会退化为线性链表，二分查找也会退化为遍历查找，时间复杂退化为 O（N），检索性能急剧下降<br><img src="/2021/07/27/mysql/tree2.png"><br> <strong>3.AVL树</strong><br>现在考虑另一种更为严格的自平衡二叉树 AVL 树。因为 AVL 树是个绝对平衡的二叉树，因此他在调整二叉树的形态上消耗的性能会更多。<br><img src="/2021/07/27/mysql/avl.png"><br>总结一下 AVL 树的优点：</p>
 <ul>
 <li>不错的查找性能（O（logn）），不存在极端的低效查找的情况。</li>
@@ -453,7 +499,66 @@
 <li>非聚簇索引以非主键作为索引，其实现原理和聚簇索引类似，不同点在于，b+树的底层存储的是索引值以及对应主键id，然后根据主键id在聚簇索引中查询出数据，需要遍历两个b+树。</li>
 <li>联合索引 就是多个非主键构成的索引。</li>
 </ul>
-<h3 id="为什么使用b-树？"><a href="#为什么使用b-树？" class="headerlink" title="为什么使用b+树？"></a>为什么使用b+树？</h3><p>哈希查找虽然效率高，但是局限性大，不支持范围查询，避免不了全表扫描；二叉查找树在极端情况会产生链表；AVL树自平衡旋转过于耗时消耗性能；红黑树一个节点只有一个值，树高了，磁盘I/O访问变多，效率就变低；B树由于非叶子节点也保存数据，导致一次IO读不到更多的索引；因此出现了B+树，B+树特点数据都在叶子节点，数据之间是指针链接起来，B+树一页能保存更多的索引。</p>
+<h3 id="为什么使用b-树？"><a href="#为什么使用b-树？" class="headerlink" title="为什么使用b+树？"></a>为什么使用b+树？</h3><p><strong>磁盘I/O操作次数对索引的使用效率至关重要</strong></p>
+<p>哈希查找虽然效率高，但是局限性大，不支持范围查询，避免不了全表扫描；二叉查找树在极端情况会产生链表；AVL树自平衡旋转过于耗时消耗性能；红黑树一个节点只有一个值，树高了，磁盘I/O访问变多，效率就变低；B树由于非叶子节点也保存数据，导致一次IO读不到更多的索引；因此出现了B+树，B+树特点数据都在叶子节点，数据之间是指针链接起来，B+树一页能保存更多的索引。</p>
+<h2 id="MySQL-InnoDB的数据页结构"><a href="#MySQL-InnoDB的数据页结构" class="headerlink" title="MySQL InnoDB的数据页结构"></a>MySQL InnoDB的数据页结构</h2><p><strong>页是磁盘和内存之间交互的基本单位</strong></p>
+<p>默认大小是16kb,一个主键的大小4/8k所以每页可以存储大概1000条数据。</p>
+<h3 id="页的内部结构"><a href="#页的内部结构" class="headerlink" title="页的内部结构"></a>页的内部结构</h3><ul>
+<li>file header : 文件头</li>
+<li>page header: 页头</li>
+<li>infimum+Supremum: 最大最小记录</li>
+<li>user records ：用户记录</li>
+<li>free space  ：空闲空间</li>
+<li>page directory：页目录</li>
+<li>file trailer: 文件尾</li>
+</ul>
+<h2 id="MySql性能调优"><a href="#MySql性能调优" class="headerlink" title="MySql性能调优"></a>MySql性能调优</h2><ul>
+<li><strong>show status like ‘last_query_cost’</strong>; 查看最近一次sql的执行成本 </li>
+<li>定位执行慢的sql 。<strong>long_query_time</strong> 响应阈值 ，默认10s<ul>
+<li>开启慢查询日志：**set global slow_query_log = on; **查看是否启动成功 <strong>show variables like ‘%slow_query_log’</strong>;</li>
+<li><strong>mysqldumpslow -s t -t  5 /var/lib/mysql/xxxx.log</strong>查看慢查询日志5条记录并降序</li>
+</ul>
+</li>
+<li>分析查询语句。EXPLAIN</li>
+</ul>
+<ul>
+<li><p>创建索引</p>
+<ul>
+<li><p>尽量避免全表扫描，首先考虑where和order by涉及的列上建立索引</p>
+</li>
+<li><p>在经常需要检索的字段上加索引</p>
+</li>
+</ul>
+</li>
+<li><p>避免在索引上使用计算</p>
+</li>
+</ul>
+<p>效率低：</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> <span class="token keyword">user</span> <span class="token keyword">where</span> salary<span class="token operator">*</span><span class="token number">22</span><span class="token operator">></span><span class="token number">11000</span><span class="token punctuation">(</span>salary是索引列<span class="token punctuation">)</span>
+</code></pre>
+<p>效率高：</p>
+<pre class=" language-sql"><code class="language-sql"><span class="token keyword">select</span> <span class="token operator">*</span> <span class="token keyword">from</span> <span class="token keyword">user</span> <span class="token keyword">where</span> salary<span class="token operator">></span><span class="token number">11000</span><span class="token operator">/</span><span class="token number">22</span><span class="token punctuation">(</span>salary是索引列<span class="token punctuation">)</span>
+</code></pre>
+<ul>
+<li><p>使用预编译查询。程序中通常是根据用户的输入动态执行sql，这时应尽量<strong>使用参数化sql</strong>，不仅<strong>避免sql注入漏洞攻击</strong>，而且数据库会<strong>对这些sql进行预编译</strong>， 下次查询直接返回预编译的结果。</p>
+</li>
+<li><p>尽量将多条sql压缩到一条sql。每次执行sql都需要建立网络连接、进行权限校验、进行sql语句查询的优化、发送执行结果，是非常耗时的</p>
+</li>
+<li><p>用where替代having。避免使用HAVING字句，因为HAVING只会在检索出所有记录之后才对结果集进行过滤，而where则是在聚合前筛选记录</p>
+</li>
+<li><p>使用union all代替union</p>
+</li>
+<li><p>不能使用不等于（!= &lt;&gt;）或is null (is not null)，则自身和右侧索引全部失效</p>
+</li>
+<li><p>尽量不要使用类型转换（显示、隐式），否则索引失效</p>
+</li>
+<li><p>不要使用or，否则索引失效</p>
+</li>
+<li><p>使用explain分析SQL执行计划</p>
+</li>
+<li><p>避免使用IN和NOT IN。可能会导致引擎走全表扫描。优化：如果时连续值，可以采用Between。如果是子查询，可以使用exists。</p>
+</li>
+</ul>
 
                 
             </div>

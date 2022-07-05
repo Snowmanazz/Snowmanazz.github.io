@@ -372,7 +372,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    929
+                    976
                 </div>
                 
 
@@ -412,6 +412,7 @@
 <p><img src="/2022/06/06/redis/skiplist.png"></p>
 <p>如果添加/删除元素，除基层外其他层级的节点都需要重新选择，这里采用的利用随机选择的概率解决。t<br><img src="/2022/06/06/redis/skiplistr.png"></p>
 <p>而跳表在Java中对应ConcurrentSkipListMap</p>
+<h1 id="redis的好处"><a href="#redis的好处" class="headerlink" title="redis的好处"></a>redis的好处</h1><p>使用缓存的好处就是提升读写的性能，将热点数据存到redis中，可以缓解mysql的读取压力。数据存储在内存中</p>
 <h1 id="redis发布订阅"><a href="#redis发布订阅" class="headerlink" title="redis发布订阅"></a>redis发布订阅</h1><p>发布订阅工作流程：<img src="/2022/06/06/redis/ps.png"></p>
 <p><img src="/2022/06/06/redis/ps1.png"></p>
 <p>订阅名为test的channel，客户端会处于接受消息的阻塞状态，然后发布了一条this is test的消息到test上，客户端将显示消息。</p>
