@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="http入门, Idea">
+    <meta name="keywords" content="网络编程, Idea">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>http入门 | Idea</title>
+    <title>网络编程 | Idea</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -222,12 +222,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/8.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">http入门</h1>
+                    <h1 class="description center-align post-title">网络编程</h1>
                 </div>
             </div>
         </div>
@@ -347,6 +347,22 @@
                                 <span class="chip bg-color">http</span>
                             </a>
                         
+                            <a href="/tags/socket/">
+                                <span class="chip bg-color">socket</span>
+                            </a>
+                        
+                            <a href="/tags/ip/">
+                                <span class="chip bg-color">ip</span>
+                            </a>
+                        
+                            <a href="/tags/udp/">
+                                <span class="chip bg-color">udp</span>
+                            </a>
+                        
+                            <a href="/tags/tcp/">
+                                <span class="chip bg-color">tcp</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -368,7 +384,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    2.1k
+                    2.6k
                 </div>
                 
 
@@ -390,28 +406,138 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="什么是HTTP协议"><a href="#什么是HTTP协议" class="headerlink" title="什么是HTTP协议"></a>什么是HTTP协议</h2><p>http协议就是客户端和服务端交互的一种通讯的格式，主要让文档之间相互关联，形成超文本可以相互传阅</p>
+                <h1 id="网络通信的要素"><a href="#网络通信的要素" class="headerlink" title="网络通信的要素"></a>网络通信的要素</h1><ul>
+<li> ip地址和端口号</li>
+<li>网络通信协议：udp、tcp</li>
+</ul>
+<h2 id="IP"><a href="#IP" class="headerlink" title="IP"></a>IP</h2><p><strong>ip地址对应java类：InetAddress</strong></p>
+<p>ip地址分类：</p>
+<ul>
+<li>ipv4/ipv6。ipv4由四个字节组成，四个0-255。ipv6由128位，8个无符号整数</li>
+</ul>
+<h2 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h2><p>端口号表示计算机上一个程序的进程</p>
+<p>端口分类： </p>
+<ul>
+<li>共有端口   0-1023<ul>
+<li>HTTP：80</li>
+<li>HTTPS：443</li>
+<li>FTP：21</li>
+<li>Telent：23</li>
+</ul>
+</li>
+<li>程序注册端口：1024-49151<ul>
+<li>Tomcat：8080</li>
+<li>MySQL：3306</li>
+<li>Oracle：1521</li>
+</ul>
+</li>
+<li>动态、私有端口：49152-65535、</li>
+</ul>
+<pre class=" language-bash"><code class="language-bash">netstat-ano  <span class="token comment" spellcheck="true">#查询所有端口号情况</span>
+netstat-ano<span class="token operator">|</span>findstr<span class="token string">"5900"</span> <span class="token comment" spellcheck="true">#查看指定端口</span>
+tasklist<span class="token operator">|</span>findstr<span class="token string">"8696"</span> <span class="token comment" spellcheck="true">#查看指定端口进程</span>
+</code></pre>
+<h2 id="通信协议"><a href="#通信协议" class="headerlink" title="通信协议"></a>通信协议</h2><p>tcp/ip参考模型：<img src="/2021/08/30/http/socket.png"></p>
+<ul>
+<li>udp协议：用户数据报协议 user datagram protocol </li>
+<li>tcp协议：用户传输协议 transport control protocol</li>
+</ul>
+<h3 id="tcp和udp对比"><a href="#tcp和udp对比" class="headerlink" title="tcp和udp对比"></a>tcp和udp对比</h3><ul>
+<li><p>tcp 需要连接，稳定 。三次握手，四次挥手</p>
+<ul>
+<li><pre class=" language-bash"><code class="language-bash">三次挥手：
+    客户端发送请求连接
+    服务段接受请求后发送确认可以连接
+    客户端接受确认连接后连接服务端并发送数据
+</code></pre>
+</li>
+<li><pre class=" language-bash"><code class="language-bash">四次挥手：
+    客户端发送断开请求
+    服务端接受请求发送确认可以关闭（传输数据）
+    服务端再次发送确认可以关闭
+    客户端接收到两次确认可以关闭后关闭连接
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>udp 不需要连接，不稳定。例如：DDOS攻击</p>
+</li>
+</ul>
+<h3 id="tcp使用"><a href="#tcp使用" class="headerlink" title="tcp使用"></a>tcp使用</h3><ul>
+<li>客户端：</li>
+</ul>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//服务器地址</span>
+InetAddress address <span class="token operator">=</span> InetAddress<span class="token punctuation">.</span><span class="token function">getByName</span><span class="token punctuation">(</span><span class="token string">"127.0.0.1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//端口号</span>
+<span class="token keyword">int</span> port <span class="token operator">=</span> <span class="token number">9999</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//创建socket连接</span>
+socket<span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Socket</span><span class="token punctuation">(</span>address<span class="token punctuation">,</span>port<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//发送消息</span>
+os<span class="token operator">=</span> socket<span class="token punctuation">.</span><span class="token function">getOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+os<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span><span class="token string">"你好"</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<ul>
+<li>服务端：</li>
+</ul>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//创建地址</span>
+ServerSocket socket <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ServerSocket</span><span class="token punctuation">(</span><span class="token number">9999</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//监听客户端连接</span>
+Socket accept <span class="token operator">=</span> socket<span class="token punctuation">.</span><span class="token function">accept</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//读取客户端的消息</span>
+InputStream is <span class="token operator">=</span> accept<span class="token punctuation">.</span><span class="token function">getInputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ByteArrayOutputStream baos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ByteArrayOutputStream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//byte[] buffer = new byte[1024];</span>
+<span class="token comment" spellcheck="true">//int len ;</span>
+<span class="token comment" spellcheck="true">//while ((len = is.read())!=-1){</span>
+<span class="token comment" spellcheck="true">//  String msg = new String(buffer,0,len);</span>
+<span class="token comment" spellcheck="true">//  System.out.println(msg);</span>
+<span class="token comment" spellcheck="true">//}</span>
+<span class="token comment" spellcheck="true">//管道流接受消息</span>
+<span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">byte</span><span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token keyword">int</span> len<span class="token punctuation">;</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>len <span class="token operator">=</span> is<span class="token punctuation">.</span><span class="token function">read</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token operator">!=</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+   baos<span class="token punctuation">.</span><span class="token function">write</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span>len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>baos<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h3 id="udp使用"><a href="#udp使用" class="headerlink" title="udp使用"></a>udp使用</h3><pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//建立socket</span>
+DatagramSocket ds <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramSocket</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+<span class="token comment" spellcheck="true">//创建数据包</span>
+String msg <span class="token operator">=</span> <span class="token string">"你好！"</span><span class="token punctuation">;</span>
+InetAddress inetAddress <span class="token operator">=</span> InetAddress<span class="token punctuation">.</span><span class="token function">getByName</span><span class="token punctuation">(</span><span class="token string">"localhost"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+DatagramPacket dp <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramPacket</span><span class="token punctuation">(</span>msg<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span>msg<span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>length<span class="token punctuation">,</span>inetAddress<span class="token punctuation">,</span><span class="token number">9090</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ds<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>dp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<pre class=" language-java"><code class="language-java"><span class="token comment" spellcheck="true">//开放端口</span>
+DatagramSocket so <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramSocket</span><span class="token punctuation">(</span><span class="token number">9090</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment" spellcheck="true">//接受数据包</span>
+<span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> buffer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">byte</span><span class="token punctuation">[</span><span class="token number">1024</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+DatagramPacket datagramPacket <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DatagramPacket</span><span class="token punctuation">(</span>buffer<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> buffer<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span>
+so<span class="token punctuation">.</span><span class="token function">receive</span><span class="token punctuation">(</span>datagramPacket<span class="token punctuation">)</span><span class="token punctuation">;</span>
+System<span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">String</span><span class="token punctuation">(</span>datagramPacket<span class="token punctuation">.</span><span class="token function">getData</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+</code></pre>
+<h1 id="什么是HTTP协议"><a href="#什么是HTTP协议" class="headerlink" title="什么是HTTP协议"></a>什么是HTTP协议</h1><p>http协议就是客户端和服务端交互的一种通讯的格式，主要让文档之间相互关联，形成超文本可以相互传阅</p>
 <p> <strong>HTTP在计算机网络层的最上层——应用层</strong></p>
-<h3 id="网站通信过程"><a href="#网站通信过程" class="headerlink" title="网站通信过程"></a>网站通信过程</h3><p>我们在Web通信的过程中，除了HTTP协议，还需要其他协议：</p>
+<h2 id="网站通信过程"><a href="#网站通信过程" class="headerlink" title="网站通信过程"></a>网站通信过程</h2><p>我们在Web通信的过程中，除了HTTP协议，还需要其他协议：</p>
 <ul>
 <li>DNS：负责解析域名。访问网页时，往往是通过域名访问，而计算机通信是只认主机地址的，因此需要将域名解析成主机来进行访问</li>
 <li>HTTP:产生请求报文数据。在对web页面进行操作时，会产生http报文数据，请求对应的服务端进行响应</li>
 <li>TCP：分割HTTP数据，保证数据运输。TCP采用 <strong>三次握手保证数据的准确传输</strong></li>
 <li>IP：传输数据包，找到通信目的地地址。IP协议把我们尝试的数据包发送给对方，IP地址指明了节点被分配的地址，但IP地址可能会变换， <strong>因此使用ARP协议将IP地址反射为MAC地址</strong>.MAC地址是不会更改的，是网卡的固定地址</li>
 </ul>
-<h3 id="http是不保存状态的协议"><a href="#http是不保存状态的协议" class="headerlink" title="http是不保存状态的协议"></a>http是不保存状态的协议</h3><p>http是无状态的，它不对通信状态进行保存，不知道通信的对方是谁，这样是为了使http更简化。</p>
+<h2 id="http是不保存状态的协议"><a href="#http是不保存状态的协议" class="headerlink" title="http是不保存状态的协议"></a>http是不保存状态的协议</h2><p>http是无状态的，它不对通信状态进行保存，不知道通信的对方是谁，这样是为了使http更简化。</p>
 <p>但是为了知道访问的人是谁，就有了Cookie技术了：</p>
 <ul>
 <li>服务端想记住客户端，就会发送一个Cookie给客户端</li>
 <li>客户端会把Cookie存到本地，再次访问服务器时，浏览器会自动把客户端的Cookie带过去</li>
 </ul>
-<h3 id="常用的状态码"><a href="#常用的状态码" class="headerlink" title="常用的状态码"></a>常用的状态码</h3><h4 id="2xx"><a href="#2xx" class="headerlink" title="2xx"></a>2xx</h4><p>一般是请求成功</p>
+<h2 id="常用的状态码"><a href="#常用的状态码" class="headerlink" title="常用的状态码"></a>常用的状态码</h2><h3 id="2xx"><a href="#2xx" class="headerlink" title="2xx"></a>2xx</h3><p>一般是请求成功</p>
 <ul>
 <li>200 正常处理</li>
 <li>204 成功处理，但是服务器没有新数据返回，显示页面不刷新</li>
 <li>206 对服务器进行范围请求，只返回一部分数据</li>
 </ul>
-<h4 id="3xx"><a href="#3xx" class="headerlink" title="3xx"></a>3xx</h4><p>一般表示重定向</p>
+<h3 id="3xx"><a href="#3xx" class="headerlink" title="3xx"></a>3xx</h3><p>一般表示重定向</p>
 <ul>
 <li>301 请求的资源已分配到新的URI中，URL地址改变【永久重定向】</li>
 <li>302 请求的资源临时分配到新的URI中，URL地址临时改变【临时重定向】</li>
@@ -419,14 +545,14 @@
 <li>304 发送了附带请求，但不符合条件</li>
 <li>307 与302相同，但不会把POST请求变成GET</li>
 </ul>
-<h4 id="4xx"><a href="#4xx" class="headerlink" title="4xx"></a>4xx</h4><p>表示客户端出错</p>
+<h3 id="4xx"><a href="#4xx" class="headerlink" title="4xx"></a>4xx</h3><p>表示客户端出错</p>
 <ul>
 <li>400 请求报文语法出错</li>
 <li>401需要身份认证的</li>
 <li>403 没有权限访问</li>
 <li>404 服务器没有这个资源</li>
 </ul>
-<h4 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h4><p>表示服务器出错</p>
+<h3 id="5xx"><a href="#5xx" class="headerlink" title="5xx"></a>5xx</h3><p>表示服务器出错</p>
 <ul>
 <li>500 内部资源出错</li>
 <li>503 服务器正忙</li>
@@ -579,6 +705,22 @@
                             
                                 <a href="/tags/http/">
                                     <span class="chip bg-color">http</span>
+                                </a>
+                            
+                                <a href="/tags/socket/">
+                                    <span class="chip bg-color">socket</span>
+                                </a>
+                            
+                                <a href="/tags/ip/">
+                                    <span class="chip bg-color">ip</span>
+                                </a>
+                            
+                                <a href="/tags/udp/">
+                                    <span class="chip bg-color">udp</span>
+                                </a>
+                            
+                                <a href="/tags/tcp/">
+                                    <span class="chip bg-color">tcp</span>
                                 </a>
                             
                         </div>
