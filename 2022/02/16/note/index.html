@@ -368,7 +368,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    616
+                    1.5k
                 </div>
                 
 
@@ -455,6 +455,25 @@
 <li>避免大事务操作，提高系统并发能力</li>
 <li>避免返回大量数据</li>
 </ol>
+<h1 id="缓存击穿"><a href="#缓存击穿" class="headerlink" title="缓存击穿"></a>缓存击穿</h1><p>我们正常人在登录首页的时候，都是根据userID来命中数据，然而黑客的目的是破坏你的系统，黑客可以随机生成一堆userID,然后将这些请求怼到你的服务器上，这些请求在缓存中不存在，就会穿过缓存，直接怼到数据库上,从而造成数据库连接异常。</p>
+<h2 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h2><h3 id="互斥锁"><a href="#互斥锁" class="headerlink" title="互斥锁"></a>互斥锁</h3><p>使用互斥锁，该方法是比较普遍的做法，即在根据key获得的value值为空时，先锁上，再从数据库加载，加载完毕，释放锁。若其他线程发现获取锁失败，则睡眠50ms后重试。至于锁的类型，单机环境用并发包的Lock类型就行，集群环境则使用分布式锁( redis的setnx)</p>
+<h3 id="异步构建缓存"><a href="#异步构建缓存" class="headerlink" title="异步构建缓存"></a>异步构建缓存</h3><p>在这种方案下，构建缓存采取异步策略，会从线程池中取线程来异步构建缓存，从而不会让所有的请求直接怼到数据库上。该方案redis自己维护一个timeout，当timeout小于System.currentTimeMillis()时，则进行缓存更新，否则直接返回value值。</p>
+<h3 id="布隆过滤器"><a href="#布隆过滤器" class="headerlink" title="布隆过滤器"></a>布隆过滤器</h3><p>布隆过滤器的巨大用处就是，能够迅速判断一个元素是否在一个集合中。因此他有如下三个使用场景:</p>
+<ul>
+<li>网页爬虫对URL的去重，避免爬取相同的URL地址</li>
+<li>反垃圾邮件，从数十亿个垃圾邮件列表中判断某邮箱是否垃圾邮箱（同理，垃圾短信）</li>
+<li>缓存击穿，将已存在的缓存放到布隆过滤器中，当黑客访问不存在的缓存时迅速返回避免缓存及DB挂掉。</li>
+</ul>
+<h1 id="防御CSRF"><a href="#防御CSRF" class="headerlink" title="防御CSRF"></a>防御CSRF</h1><h2 id="使用POST代替GET"><a href="#使用POST代替GET" class="headerlink" title="使用POST代替GET"></a>使用POST代替GET</h2><p>​    一些程序员在开发的时候都是用GET、POST通用的函数来接收客户端的数据，这样也是某些接口有CSRF的原因之一，但是将全部接口都改成只允许POST方式访问，就能防范CSRF了吗？答案是：不能。只能说提高了一些成本。</p>
+<p>原本是GET方式访问的接口，攻击者只需要构造接口的URL参数让受害者点击即可。现在改成使用POST方式访问，攻击者只需要利用其他站点，在站点上布置一个POST请求，让用户点击。</p>
+<h2 id="检验HTTP-Referer"><a href="#检验HTTP-Referer" class="headerlink" title="检验HTTP Referer"></a>检验HTTP Referer</h2><p>​    HTTP Referer真是一个用于安全的字段，除了能防范CSRF，还能防JSONP劫持、盗链、站外提交等安全问题。但是HTTP Referer就一点问题都没有了吗？答案是：否定的，HTTP Referer只能检查点击的链接来源是来自站内还是站外，如果是GET方式的CSRF，那链接本身就是站内的，也就意味着检验HTTP Referer是无效的。</p>
+<h2 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h2><p>​    上面说的两种防御CSRF的方式，都有一定缺陷。但是使用验证码是完全可以做到防止CSRF的，因为验证码是用户在提交表单的时候，必须输入图片验证码，保证了服务器收到的是来自预期的请求。这里我补充一下，验证码功能必须没有缺陷才行，我之前测试过很多WEB站点，验证码或多或少有问题，这样不但不能防止CSRF，甚至会引发出其他漏洞被利用。</p>
+<h3 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h3><p>​    Token和验证码的原理非常相似，只不过在使用上，验证码是非常需要用户交互的，但是Token基本是无感知的。根据Token加入请求的方式，又可以分为三种类型：</p>
+<ul>
+<li>Cookie Token</li>
+<li>HTTP头自定义属性Token</li>
+<li>表单Token</li>
+</ul>
 
                 
             </div>
